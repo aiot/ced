@@ -1,0 +1,11 @@
+resources:
+  # - yaml/01-crd.yaml
+  - yaml/02-rbac.yaml
+  - yaml/03-config.yaml
+  - yaml/04-ca.yaml
+  - yaml/05-01-cert.yaml
+  - yaml/05-02-controller.yaml
+  - yaml/06-admission.yaml
+  # # todo: move this to kubeobs:metric:monitoring
+  # - yaml/07-prom.yaml
+  # - yaml/08-grafana.yaml

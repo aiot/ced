@@ -1,0 +1,60 @@
+---
+kind: Issuer
+apiVersion: cert-manager.io/v1
+metadata:
+  namespace: aiot-case
+  name: mqtt-edge-nanomq-self-signed
+spec:
+  selfSigned:
+    crlDistributionPoints:
+      - "https://aiot.hk"
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name mqtt-edge-nanomq-ca
+spec:
+  issuerRef:
+    kind: Issuer
+    group: cert-manager.io
+    name: mqtt-edge-nanomq-self-signed
+  commonName: *app-name
+  subject:
+    countries:
+      - "UNC"
+    provinces:
+      - "UNC"
+    localities:
+      - "UNC"
+    organizations:
+      - *app-namespace
+    organizationalUnits:
+      - "KubeStation:aiot@aiot.hk"
+  isCA: true
+  usages:
+    - digital signature
+    - key encipherment
+    - cert sign
+    - crl sign
+  encodeUsagesInRequest: true
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    encoding: PKCS1
+    rotationPolicy: Always
+  duration: {{kube.cert.signingDuration}}
+  renewBefore: 360h    # 15d
+  secretName: *app-name
+
+---
+kind: Issuer
+apiVersion: cert-manager.io/v1
+metadata:
+  namespace: aiot-case
+  name: mqtt-edge-nanomq
+spec:
+  ca:
+    secretName: mqtt-edge-nanomq-ca
+    crlDistributionPoints:
+      - "https://aiot.hk"

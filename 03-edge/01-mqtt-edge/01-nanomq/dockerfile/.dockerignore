@@ -1,0 +1,4 @@
+*.dockerfile
+build.sh
+readme.md
+.DS_Store

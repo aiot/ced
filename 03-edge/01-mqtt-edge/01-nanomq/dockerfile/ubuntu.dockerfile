@@ -1,0 +1,46 @@
+# https://github.com/emqx/nanomq/blob/NANOMQ_VERSION/deploy/docker/Dockerfile-slim
+
+# build nanomq bin
+FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/ubuntu:UBUNTU_VERSION as builder
+
+RUN \
+    set -ex && \
+    \
+    apt update -y && \
+    # install git
+    apt install -y --no-install-recommends git openssh-client && \
+    # install build dependence
+    apt install -y --no-install-recommends gcc g++ cmake ninja-build libmbedtls-dev && \
+    \
+    apt autoremove -y && \
+    rm -rfv /var/lib/apt/lists/* && \
+    \
+    # build bin
+    # https://github.com/emqx/nanomq/blob/NANOMQ_VERSION/README.md#compile--install
+    cd /root/ && \
+    git clone --recurse --tags https://github.com/emqx/nanomq.git && \
+    cd nanomq/ && \
+    git checkout NANOMQ_VERSION && \
+        mkdir -p -v build && \
+        cd build && \
+        cmake -G Ninja -DNNG_ENABLE_TLS=ON -DNOLOG=1 .. && \
+        ninja install && \
+    chown -v root:root /usr/local/bin/nanomq && \
+    chmod -v 755 /usr/local/bin/nanomq
+
+# build image
+FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/ubuntu:UBUNTU_VERSION
+
+RUN \
+    set -ex && \
+    \
+    apt update -y && \
+    apt install -y --no-install-recommends libatomic1 libmbedtls-dev && \
+    apt autoremove -y && \
+    rm -rfv /var/lib/apt/lists/*
+
+COPY \
+    --from='builder' /usr/local/bin/nanomq /usr/local/bin/
+
+# ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]
+CMD ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]

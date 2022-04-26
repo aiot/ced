@@ -1,0 +1,8 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: aiot-case
+  name: mqtt-edge-nanomq
+immutable: false
+data:
