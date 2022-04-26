@@ -136,7 +136,7 @@ spec:
               containerPort: &port-websocket-tls 8084
             - name: api
               protocol: TCP
-              containerPort: &port-api 8081
+              containerPort: &port-api 8082
           startupProbe:
             tcpSocket:
               port: *port-api

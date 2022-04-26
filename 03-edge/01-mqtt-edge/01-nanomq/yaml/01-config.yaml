@@ -31,7 +31,7 @@ data:
 
     # http api
     http_server.enable = true
-    http_server.port = 8081
+    http_server.port = 8082
     http_server.auth_type = BASIC
     http_server.username = mqtt-edge
     http_server.password = mqtt-edge
