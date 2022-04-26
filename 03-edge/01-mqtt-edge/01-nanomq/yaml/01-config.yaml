@@ -12,7 +12,7 @@ data:
     daemon = false
 
     # tcp
-    url = nmq-tcp://0.0.0.0:1883
+    url = nmq-tcp://127.0.0.1:1883
     tls.url = tls+nmq-tcp://0.0.0.0:8883
     tls.enable = true
     tls.keyfile = /etc/nanomq/pki/tls.key
@@ -23,7 +23,7 @@ data:
 
     # websocket
     websocket.enable = true
-    websocket.url = nmq-ws://0.0.0.0:8083/mqtt
+    websocket.url = nmq-ws://127.0.0.1:8083/mqtt
     websocket.tls_url = nmq-wss://0.0.0.0:8084/mqtt
 
     # auth
