@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-nanomqVersion='{{kubethings.aiot.edge.nanomq.app.version}}'
+nanomqVersion='{{kubethings.aiot.edge.nanomq.version}}'
 alpineVersion='{{kubefactory.infraImage.alpine.version}}'
 ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
-imageRepository='{{kubestore.image.repository}}'
+imageRepository='{{kubethings.image.repository}}'
 
 
 # build nanomq image

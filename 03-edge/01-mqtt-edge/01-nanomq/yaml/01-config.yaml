@@ -1,3 +1,4 @@
+# https://nanomq.io/docs/zh/latest/config-description.html
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -6,3 +7,70 @@ metadata:
   name: mqtt-edge-nanomq
 immutable: false
 data:
+  # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq.conf
+  broker.conf: |
+    daemon = false
+
+    # tcp
+    url = nmq-tcp://0.0.0.0:1883
+    tls.url = tls+nmq-tcp://0.0.0.0:8883
+    tls.enable = true
+    tls.keyfile = /etc/nanomq/pki/tls.key
+    tls.certfile = /etc/nanomq/pki/tls.crt
+    tls.cacertfile = /etc/nanomq/pki/ca.crt
+    tls.verify_peer = true
+    tls.fail_if_no_peer_cert = true
+
+    # websocket
+    websocket.enable = true
+    websocket.url = nmq-ws://0.0.0.0:8083/mqtt
+    websocket.tls_url = nmq-wss://0.0.0.0:8084/mqtt
+
+    # auth
+    allow_anonymous = false
+
+    # http api
+    http_server.enable = true
+    http_server.port = 8081
+    http_server.auth_type = basic
+    http_server.username = mqtt-edge
+    http_server.password = mqtt-edge
+
+  # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_auth_username.conf
+  user.conf: |
+    auth.1.login = device
+    auth.1.password = device
+
+    auth.1.login = mqttx
+    auth.1.password = mqttx
+
+  # warning: not support tls
+  # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_bridge.conf
+  bridge.conf: |
+    bridge.mqtt.bridge_mode = false
+
+    bridge.mqtt.address = mqtt-tcp://mqtt-cloud-emqx.${POD_NAMESPACE}.svc.cluster.local:1883
+    bridge.mqtt.proto_ver = 5
+    bridge.mqtt.username = edge
+    bridge.mqtt.password = edge
+    bridge.mqtt.keepalive = 60
+    bridge.mqtt.clean_start = true
+
+    bridge.mqtt.clientid = ${POD_NAMESPACE}-${NODE_IP}
+    bridge.mqtt.forwards = #
+    bridge.mqtt.subscription.1.topic = command
+    bridge.mqtt.subscription.1.qos=1
+
+  # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_web_hook.conf
+  webhook.conf: |
+    web.hook.enable = false
+
+# # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/README.md#nanomq-environment-variables
+# ---
+# kind: ConfigMap
+# apiVersion: v1
+# metadata:
+#   namespace: aiot-case
+#   name: mqtt-edge-nanomq-env
+# immutable: false
+# data:

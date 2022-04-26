@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-neuronVersion='{{kubethings.aiot.edge.neuron.app.version}}'
+neuronVersion='{{kubethings.aiot.edge.neuron.version}}'
 alpineVersion='{{kubefactory.infraImage.alpine.version}}'
 ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
-imageRepository='{{kubestore.image.repository}}'
+imageRepository='{{kubethings.image.repository}}'
 
 
 # build neuron image

@@ -60,8 +60,8 @@ spec:
             optional: true
 
       containers:
-        - image: {{kubestore.image.repository}}/nanomq:{{kubethings.aiot.edge.nanomq.app.version}}
-          imagePullPolicy: {{kubestore.image.pullPolicy}}
+        - image: {{kubethings.image.repository}}/nanomq:{{kubethings.aiot.edge.nanomq.version}}
+          imagePullPolicy: {{kubethings.image.pullPolicy}}
           name: *app-name
 
           volumeMounts:
@@ -111,37 +111,53 @@ spec:
           tty: false
           terminationMessagePolicy: FallbackToLogsOnError
           terminationMessagePath: /dev/termination-log
+          # https://nanomq.io/docs/zh/latest/toolkit.html#broker
           command:
             - /usr/local/bin/nanomq
+            - broker
+            - start
+            - --conf=/etc/nanomq/config/broker.conf
+            - --auth=/etc/nanomq/config/user.conf
+            - --bridge=/etc/nanomq/config/bridge.conf
+            - --webhook=/etc/nanomq/config/webhook.conf
 
           ports:
-            - name: admission
+            - name: tcp
               protocol: TCP
-              containerPort: 9443
-            - name: metric
+              containerPort: &port-tcp 1883
+            - name: tcp-tls
               protocol: TCP
-              containerPort: &port-metric 80
-          # startupProbe:
-          #   tcpSocket:
-          #     port: *port-metric
-          #   initialDelaySeconds: 0
-          #   periodSeconds: 5
-          #   timeoutSeconds: 2
-          #   successThreshold: 1
-          #   failureThreshold: 24
+              containerPort: &port-tcp-tls 8883
+            - name: websocket
+              protocol: TCP
+              containerPort: &port-websocket 8083
+            - name: websocket-tls
+              protocol: TCP
+              containerPort: &port-websocket-tls 8084
+            - name: api
+              protocol: TCP
+              containerPort: &port-api 8081
+          startupProbe:
+            tcpSocket:
+              port: *port-tcp-tls
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 24
           # readinessProbe:
           #   tcpSocket:
-          #     port: *port-metric
+          #     port: *port-tcp-tls
           #   initialDelaySeconds: 0
           #   periodSeconds: 5
           #   timeoutSeconds: 1
           #   successThreshold: 1
           #   failureThreshold: 1
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: *port-metric
-          #   initialDelaySeconds: 0
-          #   periodSeconds: 5
-          #   timeoutSeconds: 2
-          #   successThreshold: 1
-          #   failureThreshold: 2
+          livenessProbe:
+            tcpSocket:
+              port: *port-tcp-tls
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 2

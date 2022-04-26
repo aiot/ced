@@ -11,8 +11,8 @@ fi
 
 
 # label node
-{%- for item in groups['kubestore'] %}
-kubectl label node {{hostvars[item].kubeHostName}} node-role.kubernetes.io/kubestore='' --overwrite=true
+{%- for item in groups['kubethings'] %}
+kubectl label node {{hostvars[item].kubeHostName}} node-role.kubernetes.io/kubethings='' --overwrite=true
 {%- endfor %}
 
 
@@ -33,13 +33,13 @@ do
 done
 
 # create namespace
-appNamespace='{{kubestore.namespace}}'
+appNamespace='{{kubethings.namespace}}'
 kubectl get namespace -o name ${appNamespace} > /dev/null 2>&1
 if [[ $? != 0 ]]
 then
     kubectl create namespace ${appNamespace} --save-config=false
     # kubectl patch serviceaccount -n ${appNamespace} default --patch='{"automountServiceAccountToken": false}'
-    # kubectl patch serviceaccount -n ${appNamespace} default --patch='{"imagePullSecrets": [{"name": "{{kubestore.image.pullSecret}}"}]}'
+    # kubectl patch serviceaccount -n ${appNamespace} default --patch='{"imagePullSecrets": [{"name": "{{kubethings.image.pullSecret}}"}]}'
 fi
 
 # apply

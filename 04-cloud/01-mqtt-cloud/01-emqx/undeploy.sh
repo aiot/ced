@@ -19,7 +19,7 @@ done
 kubectl delete -f ${absolutePath}/yaml/01-crd.yaml --ignore-not-found=true
 
 # prune
-appNamespace='{{kubestore.namespace}}'
+appNamespace='{{kubethings.namespace}}'
 
 configAll=(
     ''

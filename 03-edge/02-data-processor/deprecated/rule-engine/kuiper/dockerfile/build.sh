@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-kuiperVersion='{{kubethings.aiot.edge.kuiper.app.version}}'
+kuiperVersion='{{kubethings.aiot.edge.kuiper.version}}'
 alpineVersion='{{kubefactory.infraImage.alpine.version}}'
 ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
-imageRepository='{{kubestore.image.repository}}'
+imageRepository='{{kubethings.image.repository}}'
 
 
 # build kuiper image

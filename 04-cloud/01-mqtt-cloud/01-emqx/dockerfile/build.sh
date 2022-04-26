@@ -4,7 +4,7 @@ emqxVersion='{{kubethings.aiot.cloud.emqx.app.version}}'
 emqxOperatorVersion='{{kubethings.aiot.cloud.emqx.version}}'
 alpineVersion='{{kubefactory.infraImage.alpine.version}}'
 ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
-imageRepository='{{kubestore.image.repository}}'
+imageRepository='{{kubethings.image.repository}}'
 
 
 # build emqx-operator image

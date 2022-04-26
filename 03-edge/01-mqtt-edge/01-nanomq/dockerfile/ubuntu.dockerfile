@@ -17,6 +17,8 @@ RUN \
     \
     # build bin
     # https://github.com/emqx/nanomq/blob/NANOMQ_VERSION/README.md#compile--install
+    # https://nanomq.io/docs/zh/latest/quick-start.html
+    # https://nanomq.io/docs/zh/latest/build-options.html
     cd /root/ && \
     git clone --recurse --tags https://github.com/emqx/nanomq.git && \
     cd nanomq/ && \
