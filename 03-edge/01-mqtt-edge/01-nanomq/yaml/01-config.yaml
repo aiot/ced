@@ -41,8 +41,8 @@ data:
     auth.1.login = device
     auth.1.password = device
 
-    auth.1.login = mqttx
-    auth.1.password = mqttx
+    auth.2.login = mqttx
+    auth.2.password = mqttx
 
   # warning: not support tls
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_bridge.conf
