@@ -60,7 +60,7 @@ spec:
             optional: true
 
       containers:
-        - image: {{kubethings.image.repository}}/nanomq:{{kubethings.aiot.edge.nanomq.version}}-debug
+        - image: {{kubethings.image.repository}}/nanomq:{{kubethings.aiot.edge.nanomq.version}}
           imagePullPolicy: {{kubethings.image.pullPolicy}}
           name: *app-name
 
@@ -117,7 +117,7 @@ spec:
             - broker
             - start
             - --conf=/etc/nanomq/config/broker.conf
-            - --auth=/etc/nanomq/config/user.conf
+            # - --auth=/etc/nanomq/config/user.conf
             - --bridge=/etc/nanomq/config/bridge.conf
             - --webhook=/etc/nanomq/config/webhook.conf
 
@@ -137,27 +137,27 @@ spec:
             - name: api
               protocol: TCP
               containerPort: &port-api 8082
-          startupProbe:
-            tcpSocket:
-              port: *port-api
-            initialDelaySeconds: 0
-            periodSeconds: 5
-            timeoutSeconds: 2
-            successThreshold: 1
-            failureThreshold: 24
-          # readinessProbe:
+          # startupProbe:
           #   tcpSocket:
-          #     port: *port-api
+          #     port: *port-tcp-tls
           #   initialDelaySeconds: 0
           #   periodSeconds: 5
-          #   timeoutSeconds: 1
+          #   timeoutSeconds: 2
           #   successThreshold: 1
-          #   failureThreshold: 1
-          livenessProbe:
-            tcpSocket:
-              port: *port-api
-            initialDelaySeconds: 0
-            periodSeconds: 5
-            timeoutSeconds: 2
-            successThreshold: 1
-            failureThreshold: 2
+          #   failureThreshold: 24
+          # # readinessProbe:
+          # #   tcpSocket:
+          # #     port: *port-tcp-tls
+          # #   initialDelaySeconds: 0
+          # #   periodSeconds: 5
+          # #   timeoutSeconds: 1
+          # #   successThreshold: 1
+          # #   failureThreshold: 1
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: *port-tcp-tls
+          #   initialDelaySeconds: 0
+          #   periodSeconds: 5
+          #   timeoutSeconds: 2
+          #   successThreshold: 1
+          #   failureThreshold: 2

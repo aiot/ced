@@ -30,6 +30,7 @@ data:
     allow_anonymous = false
 
     # http api
+    # warning: nanomq http api only listens on 127.0.0.1
     http_server.enable = true
     http_server.port = 8082
     http_server.auth_type = BASIC
