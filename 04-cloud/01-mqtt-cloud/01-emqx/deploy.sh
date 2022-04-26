@@ -11,8 +11,8 @@ fi
 
 
 # label node
-{%- for item in groups['kubethings'] %}
-kubectl label node {{hostvars[item].kubeHostName}} node-role.kubernetes.io/kubethings='' --overwrite=true
+{%- for item in groups['kubestore'] %}
+kubectl label node {{hostvars[item].kubeHostName}} node-role.kubernetes.io/kubestore='' --overwrite=true
 {%- endfor %}
 
 
