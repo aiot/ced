@@ -60,7 +60,7 @@ spec:
             optional: true
 
       containers:
-        - image: {{kubethings.image.repository}}/nanomq:{{kubethings.aiot.edge.nanomq.version}}
+        - image: {{kubethings.image.repository}}/nanomq:{{kubethings.aiot.edge.nanomq.version}}-debug
           imagePullPolicy: {{kubethings.image.pullPolicy}}
           name: *app-name
 
