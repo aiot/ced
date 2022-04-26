@@ -8,9 +8,9 @@ RUN \
     \
     apk update --allow-untrusted --purge --no-cache && \
     # install git
-    apk add --allow-untrusted --no-cache git openssh-client && \
+    apk add --allow-untrusted --upgrade --no-cache git openssh-client && \
     # install build dependence
-    apk add --allow-untrusted --no-cache gcc g++ cmake ninja mbedtls-dev && \
+    apk add --allow-untrusted --upgrade --no-cache gcc g++ cmake ninja mbedtls-dev && \
     \
     rm -rfv /var/cache/apk/* && \
     \
@@ -29,14 +29,13 @@ RUN \
 
 
 # build image
-# FROM {{kubefactory.domain.public.business}}/alpine:ALPINE_VERSION
 FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:ALPINE_VERSION
 
 RUN \
     set -ex && \
     \
     apk update --allow-untrusted --purge --no-cache && \
-    apk add --allow-untrusted --no-cache mbedtls-dev && \
+    apk add --allow-untrusted --upgrade --no-cache mbedtls-dev && \
     rm -rfv /var/cache/apk/*
 
 COPY \
@@ -46,7 +45,5 @@ COPY \
 COPY \
     --from='builder' /usr/local/bin/nanomq /usr/local/bin/
 
-# # ENTRYPOINT ["/bin/sh", "-c", "/usr/local/bin/nanomq broker --help"]
-# CMD ["/bin/sh", "-c", "/usr/local/bin/nanomq broker --help"]
 # ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]
 CMD ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]
