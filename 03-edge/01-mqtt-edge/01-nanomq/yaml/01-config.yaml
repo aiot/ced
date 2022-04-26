@@ -22,6 +22,7 @@ data:
     tls.fail_if_no_peer_cert = true
 
     # websocket
+    # bug: nanomq does not listens on websocket.tls_url
     websocket.enable = true
     websocket.url = nmq-ws://127.0.0.1:8083/mqtt
     websocket.tls_url = nmq-wss://0.0.0.0:8084/mqtt

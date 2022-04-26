@@ -60,7 +60,7 @@ spec:
             optional: true
 
       containers:
-        - image: {{kubethings.image.repository}}/nanomq:{{kubethings.aiot.edge.nanomq.version}}
+        - image: {{kubethings.image.repository}}/nanomq:{{kubethings.aiot.edge.nanomq.version}}-debug
           imagePullPolicy: {{kubethings.image.pullPolicy}}
           name: *app-name
 
@@ -117,7 +117,7 @@ spec:
             - broker
             - start
             - --conf=/etc/nanomq/config/broker.conf
-            # - --auth=/etc/nanomq/config/user.conf
+            - --auth=/etc/nanomq/config/user.conf
             - --bridge=/etc/nanomq/config/bridge.conf
             - --webhook=/etc/nanomq/config/webhook.conf
 
