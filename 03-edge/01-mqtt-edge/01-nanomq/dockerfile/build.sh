@@ -25,6 +25,25 @@ docker push ${imageRepository}/nanomq:${nanomqVersion}
 docker rmi ${imageRepository}/nanomq:${nanomqVersion}
 
 
+# build nanomq debug image
+sed --in-place \
+    --expression="s/NANOMQ_VERSION/${nanomqVersion}/g" \
+    --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
+    --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
+    alpine.debug.dockerfile
+
+docker build --pull --file='alpine.debug.dockerfile' --tag="${imageRepository}/nanomq:${nanomqVersion}-debug" .
+if [[ $? != 0 ]]
+then
+    exit 1
+fi
+
+docker push ${imageRepository}/nanomq:${nanomqVersion}-debug
+
+# docker rmi nanomq/nanomq:${nanomqVersion}-alpine
+docker rmi ${imageRepository}/nanomq:${nanomqVersion}-debug
+
+
 # # build nanomq-ubuntu image
 # sed --in-place \
 #     --expression="s/NANOMQ_VERSION/${nanomqVersion}/g" \

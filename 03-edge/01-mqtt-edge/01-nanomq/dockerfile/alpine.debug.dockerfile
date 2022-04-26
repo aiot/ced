@@ -24,7 +24,7 @@ RUN \
     git checkout NANOMQ_VERSION && \
         mkdir -p -v build && \
         cd build && \
-        cmake -G Ninja -DNNG_ENABLE_TLS=ON -DNOLOG=1 .. && \
+        cmake -G Ninja -DNNG_ENABLE_TLS=ON -DNOLOG=0 .. && \
         ninja install && \
     chown -v root:root /usr/lib/libgcc_s.so.1 /root/nanomq/build/nanolib/libnano_shared.so /usr/local/bin/nanomq && \
     chmod -v 755 /root/nanomq/build/nanolib/libnano_shared.so /usr/local/bin/nanomq

@@ -139,7 +139,7 @@ spec:
               containerPort: &port-api 8081
           startupProbe:
             tcpSocket:
-              port: *port-tcp-tls
+              port: *port-api
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
@@ -147,7 +147,7 @@ spec:
             failureThreshold: 24
           # readinessProbe:
           #   tcpSocket:
-          #     port: *port-tcp-tls
+          #     port: *port-api
           #   initialDelaySeconds: 0
           #   periodSeconds: 5
           #   timeoutSeconds: 1
@@ -155,7 +155,7 @@ spec:
           #   failureThreshold: 1
           livenessProbe:
             tcpSocket:
-              port: *port-tcp-tls
+              port: *port-api
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
