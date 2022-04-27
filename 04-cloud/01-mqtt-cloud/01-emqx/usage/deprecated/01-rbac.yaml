@@ -1,0 +1,40 @@
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/rbac.yaml
+
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  namespace: aiot-case
+  name: emqx
+# imagePullSecrets:
+#   - name: {{kubethings.image.pullSecret}}
+
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: aiot-case
+  name: emqx
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - get
+      - list
+      - watch
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: aiot-case
+  name: emqx
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: emqx
+subjects:
+  - kind: ServiceAccount
+    namespace: aiot-case
+    name: emqx

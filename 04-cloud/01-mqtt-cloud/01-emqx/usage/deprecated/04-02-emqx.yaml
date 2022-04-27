@@ -1,0 +1,310 @@
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/service.yaml
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name emqx
+  labels: &app-label
+    app.kubernetes.io/name: emqx
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: *app-namespace
+    app.kubernetes.io/managed-by: kube
+spec:
+  selector:
+    <<: *app-label
+  publishNotReadyAddresses: false
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 1883
+      targetPort: 1883
+    - name: tcp-tls
+      protocol: TCP
+      port: 8883
+      targetPort: 8883
+    - name: websocket
+      protocol: TCP
+      port: 8083
+      targetPort: 8083
+    - name: websocket-tls
+      protocol: TCP
+      port: 8084
+      targetPort: 8084
+    - name: api
+      protocol: TCP
+      port: 8081
+      targetPort: api
+    - name: dashboard
+      protocol: TCP
+      port: 18083
+      targetPort: dashboard
+  type: NodePort
+  sessionAffinity: None
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name emqx-headless
+  labels: &app-label
+    app.kubernetes.io/name: emqx
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: *app-namespace
+    app.kubernetes.io/managed-by: kube
+spec:
+  selector:
+    <<: *app-label
+  publishNotReadyAddresses: true
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 1883
+      targetPort: 1883
+    - name: tcp-tls
+      protocol: TCP
+      port: 8883
+      targetPort: 8883
+    - name: websocket
+      protocol: TCP
+      port: 8083
+      targetPort: 8083
+    - name: websocket-tls
+      protocol: TCP
+      port: 8084
+      targetPort: 8084
+    - name: api
+      protocol: TCP
+      port: 8081
+      targetPort: api
+    - name: dashboard
+      protocol: TCP
+      port: 18083
+      targetPort: dashboard
+    - name: ekka
+      protocol: TCP
+      port: 4370
+      targetPort: 4370
+  type: ClusterIP
+  clusterIP: None
+  sessionAffinity: None
+
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/StatefulSet.yaml
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name emqx
+  # annotations:
+  #   kubereloader.kubestation.aiot.hk/auto: "true"
+spec:
+  serviceName: emqx-headless
+
+  replicas: 3
+  selector:
+    matchLabels: &app-label
+      app.kubernetes.io/name: emqx
+      app.kubernetes.io/component: server
+      app.kubernetes.io/part-of: *app-namespace
+      app.kubernetes.io/managed-by: kube
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
+  revisionHistoryLimit: 5
+
+  volumeClaimTemplates:
+    - kind: PersistentVolumeClaim
+      apiVersion: v1
+      metadata:
+        name: data
+      spec:
+        storageClassName: {{kubestorage.remoteStorage.csi.ceph.rbd.storageClassName}}
+        resources:
+          requests:
+            storage: 221Mi
+          # limits:
+          #   storage: 221Mi
+        accessModes:
+          - ReadWriteOnce
+        volumeMode: Filesystem
+
+  template:
+    metadata:
+      labels:
+        <<: *app-label
+
+    spec:
+      serviceAccountName: emqx
+
+      terminationGracePeriodSeconds: 0
+      nodeSelector:
+        node-role.kubernetes.io/cloud: ""
+        node-role.kubernetes.io/aiot-case: ""
+      affinity:
+        # nodeAffinity:
+        #   preferredDuringSchedulingIgnoredDuringExecution:
+        #     - weight: 100
+        #       preference:
+        #         matchExpressions:
+        #           - key: node-role.kubernetes.io/aiot-case
+        #             values:
+        #               - ""
+        #             operator: In
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    <<: *app-label
+      tolerations:
+        - operator: Exists
+
+      hostIPC: false
+      hostPID: false
+      hostNetwork: false
+
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+
+      restartPolicy: Always
+
+      volumes:
+        - name: config
+          configMap:
+            name: emqx
+            items:
+              - key: loaded_modules
+                path: loaded_modules
+              - key: loaded_plugins
+                path: loaded_plugins
+              - key: acl.conf
+                path: acl.conf
+            defaultMode: 0644
+            optional: true
+
+      containers:
+        - image: emqx/emqx:{{kubethings.aiot.cloud.emqx.app.version}}
+          imagePullPolicy: {{kubethings.image.pullPolicy}}
+          name: *app-name
+
+          volumeMounts:
+            - name: emqx-loaded-modules
+              subPath: loaded_modules
+              mountPath: /opt/emqx/data/loaded_modules
+              readOnly: false
+            - name: emqx-loaded-plugins
+              subPath: loaded_plugins
+              mountPath: /opt/emqx/data/loaded_plugins
+              readOnly: false
+            - name: emqx-acl
+              subPath: acl.conf
+              mountPath: /opt/emqx/etc/acl.conf
+              readOnly: false
+
+            - name: data
+              mountPath: /opt/emqx/data
+              readOnly: false
+
+          envFrom:
+            - configMapRef:
+                name: emqx-env
+                optional: true
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+          securityContext:
+            runAsGroup: 1000
+            runAsUser: 1000
+            runAsNonRoot: false
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+
+          stdin: false
+          tty: false
+          terminationMessagePolicy: FallbackToLogsOnError
+          terminationMessagePath: /dev/termination-log
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /opt/emqx/bin/emqx_ctl
+                  - cluster
+                  - leave
+
+          ports:
+            - name: tcp
+              protocol: TCP
+              containerPort: &port-tcp 1883
+            - name: tcp-tls
+              protocol: TCP
+              containerPort: &port-tcp-tls 8883
+            - name: websocket
+              protocol: TCP
+              containerPort: &port-websocket 8083
+            - name: websocket-tls
+              protocol: TCP
+              containerPort: &port-websocket-tls 8084
+            - name: api
+              protocol: TCP
+              containerPort: &port-api 8081
+            - name: dashboard
+              protocol: TCP
+              containerPort: &port-dashboard 18083
+            - name: ekka
+              protocol: TCP
+              containerPort: &port-ekka 4370
+          startupProbe:
+            httpGet:
+              scheme: HTTP
+              port: *port-api
+              path: /status
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 24
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              port: *port-api
+              path: /status
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 1
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              port: *port-api
+              path: /status
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 2
