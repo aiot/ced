@@ -3,7 +3,7 @@
 > https://nanomq.io/docs/zh/latest/ <br/>
 https://github.com/emqx/nanomq
 
-## mqtt-broker
+## broker
 
 > https://nanomq.io/docs/zh/latest/toolkit.html#broker
 
@@ -17,7 +17,7 @@ https://github.com/emqx/nanomq
 
 > https://nanomq.io/docs/zh/latest/http-api.html
 
-## mqtt-client
+## client
 
 > https://nanomq.io/docs/zh/latest/toolkit.html#client
 

@@ -21,9 +21,9 @@ done
 appNamespace='aiot-case'
 
 certAll=(
-    'mqtt-edge-nanomq-ca'
-    'mqtt-edge-nanomq-cert'
-    'mqtt-edge-nanomq-client-cert-mqttx'
+    'nanomq-ca'
+    'nanomq-cert'
+    'nanomq-client-cert-mqttx'
 )
 for cert in ${certAll[*]}
 do

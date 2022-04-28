@@ -1,3 +1,5 @@
+# https://www.emqx.io/docs/zh/v4.4/getting-started/config.html
+# https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -6,20 +8,113 @@ metadata:
   name: emqx
 immutable: false
 data:
+  emqx.conf: |
+    listener.ssl.external = 8883
+    listener.ssl.external.keyfile =
+    listener.ssl.external.certfile =
+    listener.ssl.external.cacertfile =
+
+    allow_anonymous = false
+    acl_file =
+    acl_nomatch = deny
+    acl_deny_action = disconnect
+    enable_acl_cache = on
+    acl_cache_ttl = 1m
+
+    # https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html
+    cluster.name = mqtt-cloud
+    # cluster.discovery = k8s
+    # cluster.k8s.apiserver = https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
+    # cluster.k8s.app_name = emqx
+    # cluster.k8s.address_type = hostname
+    # cluster.k8s.service_name = emqx-headless
+    # cluster.k8s.namespace = aiot-case
+    # cluster.k8s.suffix = svc.cluster.local
+    cluster.autoheal = on
+    cluster.autoclean = 5m
+    cluster.proto_dist = inet_tls
+    node.ssl_dist_optfile =
+    rpc.enable_ssl = 5369
+    rpc.driver = ssl
+    rpc.default_client_driver = ssl
+    rpc.keyfile =
+    rpc.certfile =
+    rpc.cacertfile =
+
+    node.name =
+    node.cookie =
+    node.data_dir =
+    node.ssl_dist_optfile =
+
+    # https://www.emqx.io/docs/zh/v4.4/getting-started/log.html
+    log.to = console
+    log.level = info
+
+  # https://www.emqx.io/docs/zh/v4.4/advanced/internal-modules.html
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.loadedModules.yaml
   loaded_modules: |
-    {emqx_mod_acl_internal, true}. {emqx_mod_presence, true}. {emqx_mod_trace, false}. {emqx_mod_slow_subs, false}. {emqx_mod_delayed, false}. {emqx_mod_rewrite, false}. {emqx_mod_subscription, false}. {emqx_mod_topic_metrics, false}.
+    { emqx_mod_acl_internal, true }.
+    { emqx_mod_presence, true }.
+    { emqx_mod_slow_subs, true }.
+    { emqx_mod_rewrite, false }.
+    { emqx_mod_delayed, false }.
+    { emqx_mod_subscription, true }.
+    { emqx_mod_topic_metrics, true }.
+    { emqx_mod_trace, false }.
 
+  # https://www.emqx.io/docs/zh/v4.4/advanced/plugins.html
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.loadedPlugins.yaml
   loaded_plugins: |
-    {emqx_management, true}. {emqx_recon, true}. {emqx_retainer, true}. {emqx_dashboard, true}. {emqx_telemetry, true}. {emqx_rule_engine, true}. {emqx_bridge_mqtt, false}.
+    # https://www.emqx.io/docs/zh/v4.4/advanced/auth.html
+    # https://www.emqx.io/docs/zh/v4.4/advanced/acl.html
+    { emqx_auth_mnesia, true}.
+    { emqx_auth_jwt, true}.
+    { emqx_auth_pgsql, false}.
+    { emqx_auth_mysql, false}.
+    { emqx_auth_mongo, false}.
+    { emqx_auth_redis, false}.
+    { emqx_auth_ldap, false}.
+    { emqx_auth_http, false}.
 
+    { emqx_retainer, true }.
+    { emqx_bridge_mqtt, false }.
+    { emqx_web_hook, true}.
+    { emqx_rule_engine, true }.
+    { emqx_management, true }.
+    { emqx_dashboard, true }.
+    { emqx_prometheus, true }.
+    { emqx_recon, false }.
+
+    # https://www.emqx.io/docs/zh/v4.4/advanced/telemetry.html
+    { emqx_telemetry, false }.
+
+  # https://www.emqx.io/docs/zh/v4.4/advanced/auth-mnesia.html
+  auth_mnesia.conf: |
+    auth.mnesia.password_hash = sha256
+
+    auth.user.1.username = edge-app
+    auth.user.1.password = edge-app
+    auth.user.2.username = mqtt-edge
+    auth.user.2.password = mqtt-edge
+    auth.user.3.username = mqttx
+    auth.user.3.password = mqttx
+
+  # https://www.emqx.io/docs/zh/v4.4/advanced/auth-jwt.html
+  auth_jwt.conf: |
+
+  # https://www.emqx.io/docs/zh/v4.4/advanced/acl-file.html
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/etc/acl.conf
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.acl.yaml
   acl.conf: |
-    {allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
-    {allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"]}.
-    {deny, all, subscribe, ["$SYS/#", {eq, "#"}]}. {allow, all}.
+    { allow, {user, "dashboard"}, subscribe, ["$SYS/#"] }.
+    { allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"] }.
+    { deny, all, subscribe, ["$SYS/#", {eq, "#"}] }.
+    { allow, all}.
 
+  # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
+  dashboard.conf: |
+
+# https://www.emqx.io/docs/zh/v4.4/configuration/environment-variable.html
 # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.env.yaml
 ---
 kind: ConfigMap
@@ -29,11 +124,16 @@ metadata:
   name: emqx-env
 immutable: false
 data:
-  EMQX_CLUSTER__DISCOVERY: "k8s"
-  EMQX_CLUSTER__K8S__ADDRESS_TYPE: "hostname"
-  EMQX_CLUSTER__K8S__APISERVER: "https://kubernetes.default.svc:443"
-  EMQX_CLUSTER__K8S__APP_NAME: "emqx"
-  EMQX_CLUSTER__K8S__NAMESPACE: "aiot-case"
-  EMQX_CLUSTER__K8S__SERVICE_NAME: "emqx-headless"
-  EMQX_CLUSTER__K8S__SUFFIX: "svc.cluster.local"
-  EMQX_NAME: "emqx"
+  EMQX_NAME: emqx
+
+  # erlang node.name: erlang unique identifier
+  # EMQX_NODE_NAME: emqx@${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
+
+  # https://www.emqx.io/docs/zh/v4.4/getting-started/cluster.html
+  EMQX_CLUSTER__DISCOVERY: k8s
+  EMQX_CLUSTER__K8S__APISERVER: https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
+  EMQX_CLUSTER__K8S__APP_NAME: emqx
+  EMQX_CLUSTER__K8S__ADDRESS_TYPE: hostname
+  EMQX_CLUSTER__K8S__SERVICE_NAME: emqx-headless
+  EMQX_CLUSTER__K8S__NAMESPACE: aiot-case
+  EMQX_CLUSTER__K8S__SUFFIX: svc.cluster.local

@@ -3,12 +3,12 @@ kind: Certificate
 apiVersion: cert-manager.io/v1
 metadata:
   namespace: &app-namespace aiot-case
-  name: &app-name mqtt-edge-nanomq
+  name: &app-name nanomq
 spec:
   issuerRef:
     kind: Issuer
     group: cert-manager.io
-    name: mqtt-edge-nanomq
+    name: nanomq
   commonName: *app-name
   subject:
     countries:
@@ -29,11 +29,16 @@ spec:
   encodeUsagesInRequest: true
   dnsNames:
     - localhost
-    - mqtt-edge-nanomq
-    - mqtt-edge-nanomq.aiot-case
-    - mqtt-edge-nanomq.aiot-case.svc
-    - mqtt-edge-nanomq.aiot-case.svc.cluster.local
+    - nanomq
+    - nanomq.aiot-case
+    - nanomq.aiot-case.svc
+    - nanomq.aiot-case.svc.cluster.local
+    - "*.nanomq"
+    - "*.nanomq.aiot-case"
+    - "*.nanomq.aiot-case.svc"
+    - "*.nanomq.aiot-case.svc.cluster.local"
   ipAddresses:
+    # todo: should contain the node-ip of each nanomq instance
     - 127.0.0.1
   privateKey:
     algorithm: RSA
@@ -42,7 +47,7 @@ spec:
     rotationPolicy: Always
   duration: {{kube.cert.signingDuration}}
   renewBefore: 360h    # 15d
-  secretName: mqtt-edge-nanomq-cert
+  secretName: nanomq-cert
 
 
 ---
@@ -50,12 +55,12 @@ kind: Certificate
 apiVersion: cert-manager.io/v1
 metadata:
   namespace: &app-namespace aiot-case
-  name: &app-name mqtt-edge-nanomq-client-mqttx
+  name: &app-name nanomq-client-mqttx
 spec:
   issuerRef:
     kind: Issuer
     group: cert-manager.io
-    name: mqtt-edge-nanomq
+    name: nanomq
   commonName: *app-name
   subject:
     countries:
@@ -80,4 +85,4 @@ spec:
     rotationPolicy: Always
   duration: {{kube.cert.signingDuration}}
   renewBefore: 360h    # 15d
-  secretName: mqtt-edge-nanomq-client-cert-mqttx
+  secretName: nanomq-client-cert-mqttx

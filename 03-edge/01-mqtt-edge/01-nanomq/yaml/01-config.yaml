@@ -4,7 +4,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   namespace: aiot-case
-  name: mqtt-edge-nanomq
+  name: nanomq
 immutable: false
 data:
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq.conf
@@ -73,6 +73,6 @@ data:
 # apiVersion: v1
 # metadata:
 #   namespace: aiot-case
-#   name: mqtt-edge-nanomq-env
+#   name: nanomq-env
 # immutable: false
 # data:

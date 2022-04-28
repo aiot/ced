@@ -85,6 +85,10 @@ spec:
       protocol: TCP
       port: 4370
       targetPort: 4370
+    - name: ekka-rpc
+      protocol: TCP
+      port: 5370
+      targetPort: 5370
   type: ClusterIP
   clusterIP: None
   sessionAffinity: None
@@ -173,6 +177,7 @@ spec:
 
       restartPolicy: Always
 
+      # https://www.emqx.io/docs/zh/v4.4/getting-started/directory.html
       volumes:
         - name: config
           configMap:
@@ -278,6 +283,9 @@ spec:
             - name: ekka
               protocol: TCP
               containerPort: &port-ekka 4370
+            - name: ekka-rpc
+              protocol: TCP
+              containerPort: &port-ekka-rpc 5370
           startupProbe:
             httpGet:
               scheme: HTTP

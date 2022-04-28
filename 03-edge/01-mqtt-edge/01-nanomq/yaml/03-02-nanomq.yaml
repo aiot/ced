@@ -3,13 +3,13 @@ kind: DaemonSet
 apiVersion: apps/v1
 metadata:
   namespace: &app-namespace aiot-case
-  name: &app-name mqtt-edge-nanomq
+  name: &app-name nanomq
   # annotations:
   #   kubereloader.kubestation.aiot.hk/auto: "true"
 spec:
   selector:
     matchLabels: &app-label
-      app.kubernetes.io/name: mqtt-edge-nanomq
+      app.kubernetes.io/name: nanomq
       app.kubernetes.io/component: server
       app.kubernetes.io/part-of: *app-namespace
       app.kubernetes.io/managed-by: kube
@@ -49,13 +49,13 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: mqtt-edge-nanomq
+            name: nanomq
             defaultMode: 0644
             optional: true
 
         - name: cert
           secret:
-            secretName: mqtt-edge-nanomq-cert
+            secretName: nanomq-cert
             defaultMode: 0644
             optional: true
 
@@ -75,7 +75,7 @@ spec:
 
           # envFrom:
           #   - configMapRef:
-          #       name: mqtt-edge-nanomq-env
+          #       name: nanomq-env
           #       optional: true
           env:
             - name: NODE_NAME

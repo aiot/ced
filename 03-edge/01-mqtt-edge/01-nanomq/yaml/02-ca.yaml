@@ -3,7 +3,7 @@ kind: Issuer
 apiVersion: cert-manager.io/v1
 metadata:
   namespace: aiot-case
-  name: mqtt-edge-nanomq-self-signed
+  name: nanomq-self-signed
 spec:
   selfSigned:
     crlDistributionPoints:
@@ -13,12 +13,12 @@ kind: Certificate
 apiVersion: cert-manager.io/v1
 metadata:
   namespace: &app-namespace aiot-case
-  name: &app-name mqtt-edge-nanomq-ca
+  name: &app-name nanomq-ca
 spec:
   issuerRef:
     kind: Issuer
     group: cert-manager.io
-    name: mqtt-edge-nanomq-self-signed
+    name: nanomq-self-signed
   commonName: *app-name
   subject:
     countries:
@@ -52,9 +52,9 @@ kind: Issuer
 apiVersion: cert-manager.io/v1
 metadata:
   namespace: aiot-case
-  name: mqtt-edge-nanomq
+  name: nanomq
 spec:
   ca:
-    secretName: mqtt-edge-nanomq-ca
+    secretName: nanomq-ca
     crlDistributionPoints:
       - "https://aiot.hk"
