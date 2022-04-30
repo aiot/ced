@@ -1,7 +1,7 @@
 # https://github.com/emqx/nanomq/blob/NANOMQ_VERSION/deploy/docker/Dockerfile-alpine
 
-# build nanomq bin
-FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:ALPINE_VERSION as builder
+# build bin
+FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:ALPINE_VERSION AS builder
 
 RUN \
     set -ex && \

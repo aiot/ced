@@ -7,23 +7,23 @@ ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
 imageRepository='{{kubethings.image.repository}}'
 
 
-# build emqx-operator image
-sed --in-place \
-    --expression="s/EMQX_OPERATOR_VERSION/${emqxOperatorVersion}/g" \
-    --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
-    --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
-    operator.dockerfile
+# # build emqx-operator image
+# sed --in-place \
+#     --expression="s/EMQX_OPERATOR_VERSION/${emqxOperatorVersion}/g" \
+#     --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
+#     --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
+#     operator.dockerfile
 
-docker build --pull --file='operator.dockerfile' --tag="${imageRepository}/emqx-operator:${emqxOperatorVersion}" .
-if [[ $? != 0 ]]
-then
-    exit 1
-fi
+# docker build --pull --file='operator.dockerfile' --tag="${imageRepository}/emqx-operator:${emqxOperatorVersion}" .
+# if [[ $? != 0 ]]
+# then
+#     exit 1
+# fi
 
-docker push ${imageRepository}/emqx-operator:${emqxOperatorVersion}
+# docker push ${imageRepository}/emqx-operator:${emqxOperatorVersion}
 
-docker rmi emqx/emqx-operator-controller:${emqxOperatorVersion}
-docker rmi ${imageRepository}/emqx-operator:${emqxOperatorVersion}
+# docker rmi emqx/emqx-operator-controller:${emqxOperatorVersion}
+# docker rmi ${imageRepository}/emqx-operator:${emqxOperatorVersion}
 
 
 # build emqx image
@@ -45,23 +45,23 @@ docker rmi emqx/emqx:${emqxVersion}
 docker rmi ${imageRepository}/emqx:${emqxVersion}
 
 
-# # build emqx-edge image
-# sed --in-place \
-#     --expression="s/EMQX_EDGE_VERSION/${emqxEdgeVersion}/g" \
-#     --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
-#     --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
-#     emqx-edge.dockerfile
+# build emqx-edge image
+sed --in-place \
+    --expression="s/EMQX_EDGE_VERSION/${emqxEdgeVersion}/g" \
+    --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
+    --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
+    emqx-edge.dockerfile
 
-# docker build --pull --file='emqx-edge.dockerfile' --tag="${imageRepository}/emqx-edge:${emqxEdgeVersion}" .
-# if [[ $? != 0 ]]
-# then
-#     exit 1
-# fi
+docker build --pull --file='emqx-edge.dockerfile' --tag="${imageRepository}/emqx-edge:${emqxEdgeVersion}" .
+if [[ $? != 0 ]]
+then
+    exit 1
+fi
 
-# docker push ${imageRepository}/emqx-edge:${emqxEdgeVersion}
+docker push ${imageRepository}/emqx-edge:${emqxEdgeVersion}
 
-# docker rmi emqx/emqx-edge:${emqxEdgeVersion}
-# docker rmi ${imageRepository}/emqx-edge:${emqxEdgeVersion}
+docker rmi emqx/emqx-edge:${emqxEdgeVersion}
+docker rmi ${imageRepository}/emqx-edge:${emqxEdgeVersion}
 
 
 #

@@ -1,7 +1,7 @@
 # https://github.com/emqx/nanomq/blob/NANOMQ_VERSION/deploy/docker/Dockerfile-slim
 
-# build nanomq bin
-FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/ubuntu:UBUNTU_VERSION as builder
+# build bin
+FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/ubuntu:UBUNTU_VERSION AS builder
 
 RUN \
     set -ex && \

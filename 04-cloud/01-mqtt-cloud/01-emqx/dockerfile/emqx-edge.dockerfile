@@ -1,0 +1,46 @@
+# get pkg
+FROM emqx/emqx-edge:EMQX_VERSION AS getpkg
+
+USER 0
+
+RUN \
+    set -ex && \
+    \
+    emqxVersion='EMQX_VERSION' && \
+    rm -rfv \
+        /opt/emqx/bin/emqx.cmd \
+        /opt/emqx/bin/emqx-${emqxVersion} \
+        /opt/emqx/bin/emqx_ctl.cmd \
+        /opt/emqx/bin/emqx_ctl-${emqxVersion} \
+        /opt/emqx/bin/nodetool-${emqxVersion} \
+        /opt/emqx/bin/cuttlefish-${emqxVersion} \
+        /opt/emqx/bin/install_upgrade.escript-${emqxVersion} && \
+    ln -sfv /opt/emqx/bin/emqx /opt/emqx/bin/emqx-${emqxVersion} && \
+    mv -fv /opt/emqx/bin/emqx_ctl /opt/emqx/bin/emqx-ctl && \
+    ln -sfv /opt/emqx/bin/emqx-ctl /opt/emqx/bin/emqx_ctl && \
+    ln -sfv /opt/emqx/bin/emqx-ctl /opt/emqx/bin/emqx_ctl-${emqxVersion} && \
+    ln -sfv /opt/emqx/bin/nodetool /opt/emqx/bin/nodetool-${emqxVersion} && \
+    mv -fv /opt/emqx/bin/node_dump /opt/emqx/bin/node-dump && \
+    ln -sfv /opt/emqx/bin/node-dump /opt/emqx/bin/node_dump && \
+    ln -sfv /opt/emqx/bin/cuttlefish /opt/emqx/bin/cuttlefish-${emqxVersion} && \
+    mv -fv /opt/emqx/bin/install_upgrade.escript /opt/emqx/bin/install-upgrade.escript && \
+    lv -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript && \
+    lv -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript-${emqxVersion} && \
+    chown -R root:root /opt/emqx/
+
+# build image
+FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:ALPINE_VERSION
+
+WORKDIR /opt/emqx/
+
+COPY \
+    --from='getpkg' /opt/emqx/ /opt/emqx/
+
+RUN \
+    set -ex && \
+    # \
+    # apk update --allow-untrusted --purge --no-cache && \
+    # apk add --allow-untrusted --upgrade --no-cache openssl libstdc++ ncurses-libs && \
+    # rm -rfv /var/cache/apk/* && \
+    \
+    ln -sfv /opt/emqx/bin/* /usr/local/bin/
