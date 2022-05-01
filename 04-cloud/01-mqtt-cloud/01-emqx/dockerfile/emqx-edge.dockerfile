@@ -38,10 +38,10 @@ COPY \
 
 RUN \
     set -ex && \
-    # \
-    # apk update --allow-untrusted --purge --no-cache && \
-    # apk add --allow-untrusted --upgrade --no-cache openssl libstdc++ ncurses-libs && \
-    # rm -rfv /var/cache/apk/* && \
+    \
+    apk update --allow-untrusted --purge --no-cache && \
+    apk add --allow-untrusted --upgrade --no-cache openssl ncurses-libs libstdc++ && \
+    rm -rfv /var/cache/apk/* && \
     \
     ln -sfv /opt/emqx/bin/* /usr/local/bin/
 
