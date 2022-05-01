@@ -24,8 +24,8 @@ RUN \
     ln -sfv /opt/emqx/bin/node-dump /opt/emqx/bin/node_dump && \
     ln -sfv /opt/emqx/bin/cuttlefish /opt/emqx/bin/cuttlefish-${emqxVersion} && \
     mv -fv /opt/emqx/bin/install_upgrade.escript /opt/emqx/bin/install-upgrade.escript && \
-    lv -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript && \
-    lv -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript-${emqxVersion} && \
+    ln -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript && \
+    ln -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript-${emqxVersion} && \
     chown -R root:root /opt/emqx/
 
 # build image
