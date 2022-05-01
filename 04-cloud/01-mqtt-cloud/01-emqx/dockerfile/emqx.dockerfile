@@ -47,5 +47,5 @@ RUN \
     \
     ln -sfv /opt/emqx/bin/* /usr/local/bin/
 
-# ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]
-CMD ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]
+# ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/emqx --help"]
+CMD ["/bin/bash", "-c", "/usr/local/bin/emqx --help"]

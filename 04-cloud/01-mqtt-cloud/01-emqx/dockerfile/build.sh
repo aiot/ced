@@ -47,21 +47,21 @@ docker rmi ${imageRepository}/emqx:${emqxVersion}
 
 # build emqx-edge image
 sed --in-place \
-    --expression="s/EMQX_EDGE_VERSION/${emqxEdgeVersion}/g" \
+    --expression="s/EMQX_VERSION/${emqxVersion}/g" \
     --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
     --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
     emqx-edge.dockerfile
 
-docker build --pull --file='emqx-edge.dockerfile' --tag="${imageRepository}/emqx-edge:${emqxEdgeVersion}" .
+docker build --pull --file='emqx-edge.dockerfile' --tag="${imageRepository}/emqx-edge:${emqxVersion}" .
 if [[ $? != 0 ]]
 then
     exit 1
 fi
 
-docker push ${imageRepository}/emqx-edge:${emqxEdgeVersion}
+docker push ${imageRepository}/emqx-edge:${emqxVersion}
 
-docker rmi emqx/emqx-edge:${emqxEdgeVersion}
-docker rmi ${imageRepository}/emqx-edge:${emqxEdgeVersion}
+docker rmi emqx/emqx-edge:${emqxVersion}
+docker rmi ${imageRepository}/emqx-edge:${emqxVersion}
 
 
 #
