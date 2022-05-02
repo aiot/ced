@@ -34,11 +34,15 @@ spec:
     - name: api
       protocol: TCP
       port: 8081
-      targetPort: api
+      targetPort: 8081
     - name: dashboard
       protocol: TCP
       port: 18083
-      targetPort: dashboard
+      targetPort: 18083
+    - name: dashboard-https
+      protocol: TCP
+      port: 18084
+      targetPort: 18084
   type: NodePort
   sessionAffinity: None
 ---
@@ -76,11 +80,7 @@ spec:
     - name: api
       protocol: TCP
       port: 8081
-      targetPort: api
-    - name: dashboard
-      protocol: TCP
-      port: 18083
-      targetPort: dashboard
+      targetPort: 8081
     - name: ekka
       protocol: TCP
       port: 4370
@@ -177,18 +177,22 @@ spec:
 
       restartPolicy: Always
 
-      # https://www.emqx.io/docs/zh/v4.4/getting-started/directory.html
       volumes:
         - name: config
           configMap:
             name: emqx
             items:
-              - key: loaded_modules
-                path: loaded_modules
-              - key: loaded_plugins
-                path: loaded_plugins
+              - key: emqx.conf
+                path: emqx.conf
+              - key: ssl-dist.conf
+                path: ssl-dist.conf
               - key: acl.conf
                 path: acl.conf
+
+              - key: loaded-modules
+                path: loaded-modules
+              - key: loaded-plugins
+                path: loaded-plugins
             defaultMode: 0644
             optional: true
 
@@ -198,21 +202,29 @@ spec:
           name: *app-name
 
           volumeMounts:
-            - name: emqx-loaded-modules
-              subPath: loaded_modules
-              mountPath: /opt/emqx/data/loaded_modules
+            - name: config
+              subPath: emqx.conf
+              mountPath: /opt/emqx/etc/emqx.conf
               readOnly: false
-            - name: emqx-loaded-plugins
-              subPath: loaded_plugins
-              mountPath: /opt/emqx/data/loaded_plugins
+            - name: config
+              subPath: ssl-dist.conf
+              mountPath: /opt/emqx/etc/ssl_dist.conf
               readOnly: false
-            - name: emqx-acl
+            - name: config
               subPath: acl.conf
               mountPath: /opt/emqx/etc/acl.conf
               readOnly: false
 
             - name: data
               mountPath: /opt/emqx/data
+              readOnly: false
+            - name: config
+              subPath: loaded-modules
+              mountPath: /opt/emqx/data/loaded_modules
+              readOnly: false
+            - name: config
+              subPath: loaded-plugins
+              mountPath: /opt/emqx/data/loaded_plugins
               readOnly: false
 
           envFrom:
@@ -265,6 +277,9 @@ spec:
             - name: tcp
               protocol: TCP
               containerPort: &port-tcp 1883
+            - name: tcp-internal
+              protocol: TCP
+              containerPort: &port-tcp-internal 11883
             - name: tcp-tls
               protocol: TCP
               containerPort: &port-tcp-tls 8883

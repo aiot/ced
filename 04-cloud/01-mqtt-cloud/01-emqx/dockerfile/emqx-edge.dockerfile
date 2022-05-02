@@ -1,4 +1,5 @@
 # get pkg
+# https://www.emqx.io/docs/zh/v4.4/getting-started/directory.html
 FROM emqx/emqx-edge:EMQX_VERSION AS getpkg
 
 USER 0
@@ -28,6 +29,7 @@ RUN \
     ln -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript-${emqxVersion} && \
     chown -R root:root /opt/emqx/
 
+
 # build image
 FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:ALPINE_VERSION
 
@@ -45,5 +47,5 @@ RUN \
     \
     ln -sfv /opt/emqx/bin/* /usr/local/bin/
 
-# ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/emqx --help"]
-CMD ["/bin/bash", "-c", "/usr/local/bin/emqx --help"]
+# ENTRYPOINT ["/bin/bash", "-c", "/opt/emqx/bin/emqx start"]
+CMD ["/bin/bash", "-c", "/opt/emqx/bin/emqx start"]
