@@ -4,6 +4,8 @@ mqtt-cloud 是 cloud-app 的数据源.
 
 ## 功能
 
+> https://docs.emqx.com/zh/enterprise/v4.4/introduction/checklist.html
+
 - 支持证书认证
 
     - mqtt-cloud 作为 server 时, 支持 client(如 edge-app、mqtt-edge) 使用证书认证

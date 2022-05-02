@@ -1,3 +1,5 @@
+# https://www.emqx.io/docs/zh/v4.4/tutorial/deploy.html
+
 # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/service.yaml
 ---
 kind: Service
@@ -186,8 +188,30 @@ spec:
                 path: emqx.conf
               - key: ssl-dist.conf
                 path: ssl-dist.conf
+
+              - key: auth-mnesia.conf
+                path: auth-mnesia.conf
+              - key: auth-jwt.conf
+                path: auth-jwt.conf
               - key: acl.conf
                 path: acl.conf
+
+              - key: retainer.conf
+                path: retainer.conf
+              - key: bridge-mqtt.conf
+                path: bridge-mqtt.conf
+              - key: webhook.conf
+                path: webhook.conf
+              - key: rule-engine.conf
+                path: rule-engine.conf
+
+              - key: api.conf
+                path: api.conf
+              - key: dashboard.conf
+                path: dashboard.conf
+
+              - key: prometheus.conf
+                path: prometheus.conf
 
               - key: loaded-modules
                 path: loaded-modules
@@ -210,9 +234,49 @@ spec:
               subPath: ssl-dist.conf
               mountPath: /opt/emqx/etc/ssl_dist.conf
               readOnly: false
+
+            - name: config
+              subPath: auth-mnesia.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_auth_mnesia.conf
+              readOnly: false
+            - name: config
+              subPath: auth-jwt.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_auth_jwt.conf
+              readOnly: false
             - name: config
               subPath: acl.conf
               mountPath: /opt/emqx/etc/acl.conf
+              readOnly: false
+
+            - name: config
+              subPath: retainer.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_retainer.conf
+              readOnly: false
+            - name: config
+              subPath: bridge-mqtt.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_bridge_mqtt.conf
+              readOnly: false
+            - name: config
+              subPath: webhook.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_web_hook.conf
+              readOnly: false
+            - name: config
+              subPath: rule-engine.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_rule_engine.conf
+              readOnly: false
+
+            - name: config
+              subPath: api.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_management.conf
+              readOnly: false
+            - name: config
+              subPath: dashboard.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_dashboard.conf
+              readOnly: false
+
+            - name: config
+              subPath: prometheus.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_prometheus.conf
               readOnly: false
 
             - name: data

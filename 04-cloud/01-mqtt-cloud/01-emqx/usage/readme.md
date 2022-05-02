@@ -6,10 +6,10 @@ https://github.com/emqx/emqx
 
 ## broker
 
-- start
+> https://www.emqx.io/docs/zh/v4.4/getting-started/start.html <br/>
+https://www.emqx.io/docs/zh/v4.4/getting-started/command-line.html
 
-    > https://www.emqx.io/docs/zh/v4.4/getting-started/start.html <br/>
-    https://www.emqx.io/docs/zh/v4.4/getting-started/command-line.html
+- start
 
     ```bash
     emqx start

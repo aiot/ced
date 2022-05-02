@@ -1,5 +1,7 @@
 # https://www.emqx.io/docs/zh/v4.4/getting-started/config.html
+# https://docs.emqx.com/zh/enterprise/v4.4/getting-started/config.html
 # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html
+# https://www.emqx.io/docs/zh/v4.4/tutorial/tune.html
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -41,6 +43,7 @@ data:
     enable_acl_cache = on
     acl_cache_ttl = 1m
 
+    # https://www.emqx.io/docs/zh/v4.4/getting-started/cluster.html
     # https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html
     cluster.name = mqtt-cloud
     # cluster.discovery = k8s
@@ -73,10 +76,15 @@ data:
     log.formatter = text
     log.level = info
 
-  # https://www.emqx.io/docs/zh/v4.4/advanced/auth-mnesia.html
-  # https://github.com/emqx/emqx/tree/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_auth_mnesia
+  ssl-dist.conf: |
+
+
+  # authentication: https://www.emqx.io/docs/zh/v4.4/advanced/auth.html
+  # authorization: https://www.emqx.io/docs/zh/v4.4/advanced/acl.html
+
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_auth_mnesia/etc/emqx_auth_mnesia.conf
-  emqx_auth_mnesia.conf: |
+  # https://www.emqx.io/docs/zh/v4.4/advanced/auth-mnesia.html
+  auth-mnesia.conf: |
     auth.mnesia.password_hash = sha256
 
     auth.user.1.username = edge-app
@@ -86,14 +94,12 @@ data:
     auth.user.3.username = mqttx
     auth.user.3.password = mqttx
 
-  # https://www.emqx.io/docs/zh/v4.4/advanced/auth-jwt.html
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_auth_jwt
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_auth_jwt/etc/emqx_auth_jwt.conf
-  emqx_auth_jwt.conf: |
+  # https://www.emqx.io/docs/zh/v4.4/advanced/auth-jwt.html
+  auth-jwt.conf: |
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/etc/acl.conf
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.acl.yaml
-  # https://docs.emqx.com/zh/enterprise/v4.4/modules/internal_acl.html
   # https://www.emqx.io/docs/zh/v4.4/advanced/acl-file.html
   acl.conf: |
     { allow, {user, "dashboard"}, subscribe, ["$SYS/#"] }.
@@ -101,25 +107,28 @@ data:
     { deny, all, subscribe, ["$SYS/#", {eq, "#"}] }.
     { allow, all}.
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_retainer
+
+  # retain message
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_retainer/etc/emqx_retainer.conf
-  emqx_retainer.conf: |
+  # https://www.emqx.io/docs/zh/v4.4/advanced/retained.html
+  retainer.conf: |
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_bridge_mqtt
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_bridge_mqtt/etc/emqx_bridge_mqtt.conf
-  emqx_bridge_mqtt.conf: |
+  # https://www.emqx.io/docs/zh/v4.4/advanced/bridge.html
+  # https://www.emqx.io/docs/zh/v4.4/bridge/bridge.html
+  # https://www.emqx.io/docs/zh/v4.4/bridge/bridge-mqtt.html
+  bridge-mqtt.conf: |
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_rule_engine
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
-  emqx_rule_engine.conf: |
-
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_web_hook
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_web_hook/etc/emqx_web_hook.conf
-  emqx_web_hook.conf: |
+  # https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
+  webhook.conf: |
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_management
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
+  rule-engine.conf: |
+
+
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_management/etc/emqx_management.conf
-  emqx_management.conf: |
+  api.conf: |
     management.application.default_secret = mqtt-cloud
     management.default_application.id = mqtt-cloud
     management.default_application.secret = mqtt-cloud
@@ -135,49 +144,53 @@ data:
     management.listener.https.fail_if_no_peer_cert = true
 
   # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
-  emqx_dashboard.conf: |
+  dashboard.conf: |
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_prometheus
+
+  # prometheus agent
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_prometheus/etc/emqx_prometheus.conf
-  emqx_prometheus.conf: |
+  # metric: https://www.emqx.io/docs/zh/v4.4/advanced/metrics-and-stats.html
+  # topic metric: https://www.emqx.io/docs/zh/v4.4/advanced/topic-metrics.html
+  # alert: https://www.emqx.io/docs/zh/v4.4/advanced/alarms.html
+  # grafana: https://www.emqx.io/docs/zh/v4.4/tutorial/prometheus.html
+  prometheus.conf: |
     prometheus.push.gateway.server =
-
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_recon
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_recon/etc/emqx_recon.conf
-  emqx_recon.conf: |
 
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/data/loaded_modules.tmpl
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.loadedModules.yaml
   # https://docs.emqx.com/zh/enterprise/v4.4/modules/modules.html
-  # https://www.emqx.io/docs/zh/v4.4/advanced/internal-modules.html
   loaded-modules: |
 
     # acl
     { emqx_mod_acl_internal, true }.
     # online and offline notification
+    # https://docs.emqx.com/zh/enterprise/v4.4/modules/presence.html
     { emqx_mod_presence, true }.
     # topic rewrite
+    # https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
     { emqx_mod_rewrite, false }.
     # delayed publish
+    # https://www.emqx.io/docs/zh/v4.4/advanced/delay-publish.html
     { emqx_mod_delayed, false }.
     # mqtt subscription
+    # https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
     { emqx_mod_subscription, true }.
     # slow subscriptions statistics
+    # https://docs.emqx.com/zh/enterprise/v4.4/modules/slow_subscribers_statistics.html
     { emqx_mod_slow_subs, true }.
     # topic metric
     { emqx_mod_topic_metrics, true }.
     # trace
-    { emqx_mod_trace, false }.
+    # https://docs.emqx.com/zh/enterprise/v4.4/modules/tracer.html
+    { emqx_mod_trace, true }.
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/data/loaded_plugins.tmpl
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.loadedPlugins.yaml
   # https://docs.emqx.com/zh/enterprise/v4.4/advanced/plugins.html
-  # https://www.emqx.io/docs/zh/v4.4/advanced/plugins.html
   loaded-plugins: |
 
-    # authentication: https://www.emqx.io/docs/zh/v4.4/advanced/auth.html
-    # authorization: https://www.emqx.io/docs/zh/v4.4/advanced/acl.html
+    # authentication and authorization
     { emqx_auth_mnesia, true}.
     { emqx_auth_jwt, true}.
     { emqx_auth_pgsql, false}.
@@ -187,13 +200,19 @@ data:
     { emqx_auth_ldap, false}.
     { emqx_auth_http, false}.
 
-    # message storage
+    # retain message
     { emqx_retainer, true }.
     # message bridge
-    { emqx_bridge_mqtt, false }.
+    { emqx_bridge_mqtt, true }.
+    # message persistence
+    # https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
     # webhook
     { emqx_web_hook, true}.
     # rule engine based sql
+    # https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
+    # https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
+    # https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_pgsql.html
+    # https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_pgsql.html
     { emqx_rule_engine, true }.
 
     # api
@@ -201,12 +220,14 @@ data:
     # dashboard
     { emqx_dashboard, true }.
 
-    #
+    # prometheus agent
     { emqx_prometheus, true }.
     # https://www.emqx.io/docs/zh/v4.4/advanced/telemetry.html
     { emqx_telemetry, false }.
 
+
     # performance debugging
+    # https://docs.emqx.com/zh/enterprise/v4.4/modules/recon.html
     { emqx_recon, false }.
 
 # https://www.emqx.io/docs/zh/v4.4/configuration/environment-variable.html
@@ -225,7 +246,6 @@ data:
   # # erlang node.name: erlang unique identifier
   # EMQX_NODE_NAME: emqx@${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
 
-  # https://www.emqx.io/docs/zh/v4.4/getting-started/cluster.html
   EMQX_CLUSTER__DISCOVERY: k8s
   EMQX_CLUSTER__K8S__APISERVER: https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
   EMQX_CLUSTER__K8S__APP_NAME: emqx
