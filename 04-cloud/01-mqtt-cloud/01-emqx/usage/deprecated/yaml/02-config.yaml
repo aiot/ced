@@ -76,7 +76,27 @@ data:
     log.formatter = text
     log.level = info
 
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/etc/ssl_dist.conf
   ssl-dist.conf: |
+
+    [
+      {
+        server,
+        [
+          { keyfile, "etc/certs/tls.key" },
+          { certfile, "etc/certs/tls.crt" },
+          { cacertfile, "etc/certs/ca.crt" },
+          { secure_renegotiate, true },
+          { depth, 0 }
+        ]
+      },
+      {
+        client,
+        [
+          { secure_renegotiate, true }
+        ]
+      }
+    ].
 
 
   # authentication: https://www.emqx.io/docs/zh/v4.4/advanced/auth.html
@@ -102,10 +122,6 @@ data:
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.acl.yaml
   # https://www.emqx.io/docs/zh/v4.4/advanced/acl-file.html
   acl.conf: |
-    { allow, {user, "dashboard"}, subscribe, ["$SYS/#"] }.
-    { allow, {ipaddr, "127.0.0.1"}, pubsub, ["$SYS/#", "#"] }.
-    { deny, all, subscribe, ["$SYS/#", {eq, "#"}] }.
-    { allow, all}.
 
 
   # retain message
