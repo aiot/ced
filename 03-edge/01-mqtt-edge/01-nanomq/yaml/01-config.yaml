@@ -49,19 +49,22 @@ data:
   # warning: not support tls
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_bridge.conf
   bridge.conf: |
-    bridge.mqtt.bridge_mode = false
-
-    bridge.mqtt.address = mqtt-tcp://mqtt-cloud-emqx.${POD_NAMESPACE}.svc.cluster.local:1883
+    bridge.mqtt.address = mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
     bridge.mqtt.proto_ver = 5
-    bridge.mqtt.username = edge
-    bridge.mqtt.password = edge
+    bridge.mqtt.username = mqtt-edge
+    bridge.mqtt.password = mqtt-edge
     bridge.mqtt.keepalive = 60
     bridge.mqtt.clean_start = true
 
-    bridge.mqtt.clientid = ${POD_NAMESPACE}-${NODE_IP}
-    bridge.mqtt.forwards = #
-    bridge.mqtt.subscription.1.topic = command
+    bridge.mqtt.clientid = ${POD_NAMESPACE}-${NODE_NAME}-${NODE_IP}
+    bridge.mqtt.bridge_mode = true
+    # publish(push) message to mqtt-cloud
+    bridge.mqtt.forwards = device001/#,device002/#
+    # subscribe(pull) message from mqtt-cloud
+    bridge.mqtt.subscription.1.topic = command/device001
     bridge.mqtt.subscription.1.qos=1
+    bridge.mqtt.subscription.2.topic = command/device002
+    bridge.mqtt.subscription.2.qos=1
 
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_web_hook.conf
   webhook.conf: |

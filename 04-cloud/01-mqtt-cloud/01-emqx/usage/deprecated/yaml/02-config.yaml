@@ -118,6 +118,7 @@ data:
     auth.user.3.password = mqttx
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_auth_jwt/etc/emqx_auth_jwt.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-auth-jwt
   # https://www.emqx.io/docs/zh/v4.4/advanced/auth-jwt.html
   auth-jwt.conf: |
 
@@ -129,6 +130,7 @@ data:
 
   # retain message
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_retainer/etc/emqx_retainer.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-retainer
   # https://www.emqx.io/docs/zh/v4.4/advanced/retained.html
   retainer.conf: |
     retainer.storage_type = disc_only
@@ -138,20 +140,57 @@ data:
     retainer.stop_publish_clear_msg = false
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_bridge_mqtt/etc/emqx_bridge_mqtt.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-bridge-mqtt
   # https://www.emqx.io/docs/zh/v4.4/advanced/bridge.html
   # https://www.emqx.io/docs/zh/v4.4/bridge/bridge.html
   # https://www.emqx.io/docs/zh/v4.4/bridge/bridge-mqtt.html
   bridge-mqtt.conf: |
+    bridge.mqtt.aws.start_type = manual
+
+    bridge.mqtt.mqtt-cloud.address = mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
+    bridge.mqtt.mqtt-cloud.proto_ver = mqttv5
+    bridge.mqtt.mqtt-cloud.ssl = on
+    bridge.mqtt.mqtt-cloud.verify = true
+    bridge.mqtt.mqtt-cloud.server_name_indication = disable
+    bridge.mqtt.mqtt-cloud.keyfile = etc/certs/mqtt-cloud.client.tls.key
+    bridge.mqtt.mqtt-cloud.certfile = etc/certs/mqtt-cloud.client.tls..crt
+    bridge.mqtt.mqtt-cloud.cacertfile = etc/certs/mqtt-cloud.ca.crt
+    bridge.mqtt.mqtt-cloud.username = mqtt-edge
+    bridge.mqtt.mqtt-cloud.password = mqtt-edge
+    bridge.mqtt.mqtt-cloud.keepalive = 60s
+    bridge.mqtt.mqtt-cloud.reconnect_interval = 20s
+    bridge.mqtt.mqtt-cloud.clean_start = true
+
+    bridge.mqtt.mqtt-cloud.clientid = ${POD_NAMESPACE}-${NODE_NAME}-${NODE_IP}
+    bridge.mqtt.mqtt-cloud.bridge_mode = true
+    # publish(push) message to mqtt-cloud
+    bridge.mqtt.mqtt-cloud.forwards = device001/#,device002/#
+    bridge.mqtt.mqtt-cloud.batch_size = 64
+    bridge.mqtt.mqtt-cloud.max_inflight_batches = 64
+    bridge.mqtt.mqtt-cloud.retry_interval = 10s
+    # subscribe(pull) message from mqtt-cloud
+    bridge.mqtt.mqtt-cloud.subscription.1.topic = command/device001
+    bridge.mqtt.mqtt-cloud.subscription.1.qos = 1
+    bridge.mqtt.mqtt-cloud.subscription.2.topic = command/device002
+    bridge.mqtt.mqtt-cloud.subscription.2.qos = 1
+
+    # cache
+    bridge.mqtt.mqtt-cloud.queue.replayq_dir = data/bridge/
+    bridge.mqtt.mqtt-cloud.queue.replayq_seg_bytes = 128MB
+    bridge.mqtt.mqtt-cloud.queue.max_total_size = 2048MB
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_web_hook/etc/emqx_web_hook.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-web-hook
   # https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
   webhook.conf: |
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
   rule-engine.conf: |
 
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_management/etc/emqx_management.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
   api.conf: |
     management.application.default_secret = mqtt-cloud
     management.default_application.id = mqtt-cloud
@@ -168,6 +207,7 @@ data:
     management.listener.https.fail_if_no_peer_cert = true
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/lib-ce/emqx_dashboard/etc/emqx_dashboard.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-dashboard
   # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
   dashboard.conf: |
     dashboard.listener.http.inet6 = false
@@ -192,8 +232,9 @@ data:
     # dashboard.default_user.password = mqtt-cloud
 
 
-  # prometheus agent
+  # prometheus agent for pushing metrics to prometheus-push-gateway
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_prometheus/etc/emqx_prometheus.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-prometheus
   # metric: https://www.emqx.io/docs/zh/v4.4/advanced/metrics-and-stats.html
   # topic metric: https://www.emqx.io/docs/zh/v4.4/advanced/topic-metrics.html
   # alert: https://www.emqx.io/docs/zh/v4.4/advanced/alarms.html
@@ -248,7 +289,7 @@ data:
     # retain message
     { emqx_retainer, true }.
     # message bridge
-    { emqx_bridge_mqtt, true }.
+    { emqx_bridge_mqtt, false }.
     # message persistence
     # https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
     # webhook
@@ -265,7 +306,7 @@ data:
     # dashboard
     { emqx_dashboard, true }.
 
-    # prometheus agent
+    # prometheus agent for pushing metrics to prometheus-push-gateway
     { emqx_prometheus, true }.
     # https://www.emqx.io/docs/zh/v4.4/advanced/telemetry.html
     { emqx_telemetry, false }.
