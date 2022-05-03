@@ -248,10 +248,10 @@ spec:
               subPath: auth-mnesia.conf
               mountPath: /opt/emqx/etc/plugins/emqx_auth_mnesia.conf
               readOnly: false
-            - name: config
-              subPath: auth-jwt.conf
-              mountPath: /opt/emqx/etc/plugins/emqx_auth_jwt.conf
-              readOnly: false
+            # - name: config
+            #   subPath: auth-jwt.conf
+            #   mountPath: /opt/emqx/etc/plugins/emqx_auth_jwt.conf
+            #   readOnly: false
             # - name: config
             #   subPath: acl.conf
             #   mountPath: /opt/emqx/etc/acl.conf

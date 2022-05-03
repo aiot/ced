@@ -131,6 +131,11 @@ data:
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_retainer/etc/emqx_retainer.conf
   # https://www.emqx.io/docs/zh/v4.4/advanced/retained.html
   retainer.conf: |
+    retainer.storage_type = disc_only
+    retainer.max_payload_size = 256KB
+    retainer.max_retained_messages = 0
+    retainer.expiry_interval = 16m
+    retainer.stop_publish_clear_msg = false
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_bridge_mqtt/etc/emqx_bridge_mqtt.conf
   # https://www.emqx.io/docs/zh/v4.4/advanced/bridge.html
