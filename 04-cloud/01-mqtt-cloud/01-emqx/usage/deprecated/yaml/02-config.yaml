@@ -183,6 +183,26 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-web-hook
   # https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
   webhook.conf: |
+    # send notify to some http server
+    web.hook.url = https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local
+    web.hook.ssl.verify = false
+    web.hook.ssl.server_name_indication = disable
+    # web.hook.ssl.keyfile =
+    # web.hook.ssl.certfile =
+    # web.hook.ssl.cacertfile =
+    web.hook.headers.content-type = application/json
+    web.hook.body.encoding_of_payload_field = plain
+    web.hook.enable_pipelining = true
+    web.hook.pool_size = 32
+
+    # event
+    # web.hook.rule.<hook-name>.<number> = <event>
+    # client online
+    # web.hook.rule.client.connected.1 = {"action": "on_client_connected"}
+    # client offline
+    # web.hook.rule.client.disconnected.1 = {"action": "on_client_disconnected"}
+    # server receives the ACK message that sent by client
+    # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
