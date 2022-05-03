@@ -5,62 +5,39 @@ alpineVersion='{{kubefactory.infraImage.alpine.version}}'
 ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
 imageRepository='{{kubethings.image.repository}}'
 
+buildImage() {
+    sed --in-place \
+        --expression="s/NANOMQ_VERSION/${nanomqVersion}/g" \
+        --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
+        --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
+        $1
+
+    docker build --pull --file="$1" --tag="$2" .
+    if [[ $? != 0 ]]
+    then
+        exit 1
+    fi
+
+    docker push $2
+    docker rmi $2
+}
+
 
 # build nanomq image
-sed --in-place \
-    --expression="s/NANOMQ_VERSION/${nanomqVersion}/g" \
-    --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
-    --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
-    alpine.dockerfile
-
-docker build --pull --file='alpine.dockerfile' --tag="${imageRepository}/nanomq:${nanomqVersion}" .
-if [[ $? != 0 ]]
-then
-    exit 1
-fi
-
-docker push ${imageRepository}/nanomq:${nanomqVersion}
-
+buildImage alpine.dockerfile ${imageRepository}/nanomq:${nanomqVersion}
 # docker rmi nanomq/nanomq:${nanomqVersion}-alpine
-docker rmi ${imageRepository}/nanomq:${nanomqVersion}
 
 
 # build nanomq debug image
-sed --in-place \
-    --expression="s/NANOMQ_VERSION/${nanomqVersion}/g" \
-    --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
-    --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
-    alpine.debug.dockerfile
-
-docker build --pull --file='alpine.debug.dockerfile' --tag="${imageRepository}/nanomq:${nanomqVersion}-debug" .
-if [[ $? != 0 ]]
-then
-    exit 1
-fi
-
-docker push ${imageRepository}/nanomq:${nanomqVersion}-debug
-
+cp -rfv alpine.dockerfile alpine.debug.dockerfile
+sed -i 's/DNOLOG=1/DNOLOG=0/g' /etc/bash_completion.d/ccli
+buildImage alpine.debug.dockerfile ${imageRepository}/nanomq:${nanomqVersion}-debug
 # docker rmi nanomq/nanomq:${nanomqVersion}-alpine
-docker rmi ${imageRepository}/nanomq:${nanomqVersion}-debug
 
 
 # # build nanomq-ubuntu image
-# sed --in-place \
-#     --expression="s/NANOMQ_VERSION/${nanomqVersion}/g" \
-#     --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
-#     --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
-#     ubuntu.dockerfile
-
-# docker build --pull --file='ubuntu.dockerfile' --tag="${imageRepository}/nanomq-ubuntu:${nanomqVersion}-${ubuntuVersion}" .
-# if [[ $? != 0 ]]
-# then
-#     exit 1
-# fi
-
-# docker push ${imageRepository}/nanomq-ubuntu:${nanomqVersion}-${ubuntuVersion}
-
+# buildImage ubuntu.dockerfile ${imageRepository}/nanomq-ubuntu:${nanomqVersion}-${ubuntuVersion}
 # # docker rmi nanomq/nanomq:${nanomqVersion}-slim
-# docker rmi ${imageRepository}/nanomq-ubuntu:${nanomqVersion}-${ubuntuVersion}
 
 
 #
