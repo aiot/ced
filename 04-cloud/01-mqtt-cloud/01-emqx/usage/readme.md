@@ -17,6 +17,8 @@ https://www.emqx.io/docs/zh/v4.4/getting-started/command-line.html
 
 ### cli: command-line-interface
 
+> https://www.emqx.io/docs/zh/v4.4/advanced/cli.html
+
 - health check
 
     - cluster
@@ -40,3 +42,7 @@ https://www.emqx.io/docs/zh/v4.4/getting-started/command-line.html
 > https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
 
 ## client
+
+## architecture
+
+> https://www.emqx.io/docs/zh/v4.4/design/design.html

@@ -230,8 +230,8 @@ data:
     # https://docs.emqx.com/zh/enterprise/v4.4/modules/recon.html
     { emqx_recon, false }.
 
-# https://www.emqx.io/docs/zh/v4.4/configuration/environment-variable.html
 # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.env.yaml
+# https://www.emqx.io/docs/zh/v4.4/configuration/environment-variable.html
 ---
 kind: ConfigMap
 apiVersion: v1
