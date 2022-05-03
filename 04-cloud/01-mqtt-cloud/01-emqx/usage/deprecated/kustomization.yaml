@@ -1,0 +1,6 @@
+resources:
+  - yaml/01-rbac.yaml
+  - yaml/02-config.yaml
+  - yaml/03-ca.yaml
+  - yaml/04-01-cert.yaml
+  - yaml/04-02-emqx.yaml
