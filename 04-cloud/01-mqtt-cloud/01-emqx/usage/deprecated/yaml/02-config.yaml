@@ -152,7 +152,7 @@ data:
   # metric: https://www.emqx.io/docs/zh/v4.4/advanced/metrics-and-stats.html
   # topic metric: https://www.emqx.io/docs/zh/v4.4/advanced/topic-metrics.html
   # alert: https://www.emqx.io/docs/zh/v4.4/advanced/alarms.html
-  # grafana: https://www.emqx.io/docs/zh/v4.4/tutorial/prometheus.html
+  # grafana: https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_prometheus/grafana_template/
   prometheus.conf: |
     prometheus.push.gateway.server =
 
@@ -240,11 +240,8 @@ metadata:
   name: emqx-env
 immutable: false
 data:
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/docker/
-  EMQX_NAME: emqx
-  EMQX_HOST: ${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
-  # # erlang node.name: erlang unique identifier
-  # EMQX_NODE_NAME: emqx@${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
+  # erlang node.name: erlang unique identifier
+  EMQX_NODE__NAME: emqx@${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
 
   EMQX_CLUSTER__DISCOVERY: k8s
   EMQX_CLUSTER__K8S__APISERVER: https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}

@@ -49,5 +49,5 @@ RUN \
     \
     ln -sfv /opt/emqx/bin/* /usr/local/bin/
 
-# ENTRYPOINT ["/bin/bash", "-c", "/opt/emqx/bin/emqx start"]
-CMD ["/bin/bash", "-c", "/opt/emqx/bin/emqx start"]
+# ENTRYPOINT ["/bin/bash", "-c", "/opt/emqx/bin/emqx foreground"]
+CMD ["/bin/bash", "-c", "/opt/emqx/bin/emqx foreground"]
