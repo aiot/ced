@@ -5,41 +5,30 @@ alpineVersion='{{kubefactory.infraImage.alpine.version}}'
 ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
 imageRepository='{{kubethings.image.repository}}'
 
+buildImage() {
+    sed --in-place \
+        --expression="s/NEURON_VERSION/${neuronVersion}/g" \
+        --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
+        --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
+        $1
+
+    docker build --pull --file="$1" --tag="$2" .
+    if [[ $? != 0 ]]
+    then
+        exit 1
+    fi
+
+    docker push $2
+    docker rmi $2
+}
+
 
 # build neuron image
-sed --in-place \
-    --expression="s/NEURON_VERSION/${neuronVersion}/g" \
-    --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
-    --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
-    alpine.dockerfile
-
-docker build --pull --file='alpine.dockerfile' --tag="${imageRepository}/neuron:${neuronVersion}" .
-if [[ $? != 0 ]]
-then
-    exit 1
-fi
-
-docker push ${imageRepository}/neuron:${neuronVersion}
-
-docker rmi ${imageRepository}/neuron:${neuronVersion}
+buildImage alpine.dockerfile ${imageRepository}/neuron:${neuronVersion}
 
 
 # build neuron-ubuntu image
-sed --in-place \
-    --expression="s/NEURON_VERSION/${neuronVersion}/g" \
-    --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
-    --expression="s/UBUNTU_VERSION/${ubuntuVersion}/g" \
-    ubuntu.dockerfile
-
-docker build --pull --file='ubuntu.dockerfile' --tag="${imageRepository}/neuron-ubuntu:${neuronVersion}-${ubuntuVersion}" .
-if [[ $? != 0 ]]
-then
-    exit 1
-fi
-
-docker push ${imageRepository}/neuron-ubuntu:${neuronVersion}-${ubuntuVersion}
-
-docker rmi ${imageRepository}/neuron-ubuntu:${neuronVersion}-${ubuntuVersion}
+buildImage ubuntu.dockerfile ${imageRepository}/neuron-ubuntu:${neuronVersion}-${ubuntuVersion}
 
 
 #
