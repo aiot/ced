@@ -220,6 +220,12 @@ spec:
             defaultMode: 0644
             optional: true
 
+        - name: cert
+          secret:
+            secretName: emqx-cert
+            defaultMode: 0644
+            optional: true
+
       containers:
         - image: emqx/emqx:{{kubethings.aiot.cloud.emqx.app.version}}
           imagePullPolicy: {{kubethings.image.pullPolicy}}
@@ -234,6 +240,9 @@ spec:
               subPath: ssl-dist.conf
               mountPath: /opt/emqx/etc/ssl_dist.conf
               readOnly: false
+            - name: cert
+              mountPath: /opt/emqx/etc/certs/
+              readOnly: true
 
             - name: config
               subPath: auth-mnesia.conf
@@ -317,9 +326,18 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
 
+            - name: EMQX_DASHBOARD__DEFAULT__USER__LOGIN
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: EMQX_DASHBOARD__DEFAULT__USER__PASSWORD
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+
           securityContext:
-            runAsGroup: 1000
-            runAsUser: 1000
+            runAsGroup: 0
+            runAsUser: 0
             runAsNonRoot: false
             privileged: false
             allowPrivilegeEscalation: false
