@@ -207,6 +207,15 @@ data:
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
   rule-engine.conf: |
+    rule_engine.ignore_sys_message = on
+
+    rule_engine.events.client_connected = on, qos1
+    rule_engine.events.client_disconnected = on, qos1
+    rule_engine.events.session_subscribed = off
+    rule_engine.events.session_unsubscribed = off
+    rule_engine.events.message_delivered = off
+    rule_engine.events.message_acked = on, qos1
+    rule_engine.events.message_dropped = off
 
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_management/etc/emqx_management.conf
