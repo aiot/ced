@@ -326,11 +326,23 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
 
-            - name: EMQX_DASHBOARD__DEFAULT__USER__LOGIN
+            - name: EMQX_MANAGEMENT__APPLICATION__DEFAULT_SECRET
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: EMQX_DASHBOARD__DEFAULT__USER__PASSWORD
+            - name: EMQX_MANAGEMENT__DEFAULT_APPLICATION__ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: EMQX_MANAGEMENT__DEFAULT_APPLICATION__SECRET
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: EMQX_DASHBOARD__DEFAULT_USER__LOGIN
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: EMQX_DASHBOARD__DEFAULT_USER__PASSWORD
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace

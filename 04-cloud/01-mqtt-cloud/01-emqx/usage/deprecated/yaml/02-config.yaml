@@ -221,34 +221,45 @@ data:
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_management/etc/emqx_management.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
   api.conf: |
-    management.application.default_secret = mqtt-cloud
-    management.default_application.id = mqtt-cloud
-    management.default_application.secret = mqtt-cloud
-
     # management.listener.http = 8081
-    # management.listener.http.max_clients = 512
+    # management.listener.http.inet6 = false
+    # management.listener.http.ipv6_v6only = false
+    # management.listener.http.acceptors = 8
+    # management.listener.http.max_clients = 1024
+    # management.listener.http.backlog = 1024
+    # management.listener.http.send_timeout = 15s
+    # management.listener.http.send_timeout_close = on
     management.listener.https = 8081
-    management.listener.https.max_clients = 512
-    management.listener.https.keyfile =
-    management.listener.https.certfile =
-    management.listener.https.cacertfile =
+    management.listener.https.inet6 = false
+    management.listener.https.ipv6_v6only = false
+    management.listener.https.keyfile = etc/certs/tls.key
+    management.listener.https.certfile = etc/certs/tls.crt
+    management.listener.https.cacertfile = etc/certs/ca.crt
     management.listener.https.verify = verify_peer
     management.listener.https.fail_if_no_peer_cert = true
+    management.listener.https.acceptors = 8
+    management.listener.https.max_clients = 1024
+    management.listener.https.backlog = 1024
+    management.listener.https.send_timeout = 15s
+    management.listener.https.send_timeout_close = on
+
+    # management.application.default_secret = mqtt-cloud
+    # management.default_application.id = mqtt-cloud
+    # management.default_application.secret = mqtt-cloud
+    management.max_row_limit = 10240
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/lib-ce/emqx_dashboard/etc/emqx_dashboard.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-dashboard
   # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
   dashboard.conf: |
+    dashboard.listener.http = 18083
     dashboard.listener.http.inet6 = false
     dashboard.listener.http.ipv6_v6only = false
-    dashboard.listener.http = 18083
     dashboard.listener.http.acceptors = 8
     dashboard.listener.http.max_clients = 128
+    dashboard.listener.https = 18084
     dashboard.listener.https.inet6 = false
     dashboard.listener.https.ipv6_v6only = false
-    dashboard.listener.https = 18084
-    dashboard.listener.https.acceptors = 8
-    dashboard.listener.https.max_clients = 128
     dashboard.listener.https.keyfile = etc/certs/tls.key
     dashboard.listener.https.certfile = etc/certs/tls.crt
     dashboard.listener.https.cacertfile = etc/certs/ca.crt
@@ -256,6 +267,8 @@ data:
     dashboard.listener.https.fail_if_no_peer_cert = false
     dashboard.listener.https.secure_renegotiate = on
     dashboard.listener.https.reuse_sessions = on
+    dashboard.listener.https.acceptors = 8
+    dashboard.listener.https.max_clients = 128
 
     # dashboard.default_user.login = mqtt-cloud
     # dashboard.default_user.password = mqtt-cloud
