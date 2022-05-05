@@ -31,7 +31,7 @@ buildImage() {
 
 
 # build emqx image
-buildImage emqx.dockerfile docker push ${imageRepository}/emqx:${emqxVersion}
+buildImage emqx.dockerfile ${imageRepository}/emqx:${emqxVersion}
 docker rmi emqx/emqx:${emqxVersion}
 
 
