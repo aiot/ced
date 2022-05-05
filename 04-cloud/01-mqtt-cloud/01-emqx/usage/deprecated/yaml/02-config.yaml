@@ -282,7 +282,8 @@ data:
   # alert: https://www.emqx.io/docs/zh/v4.4/advanced/alarms.html
   # grafana: https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_prometheus/grafana_template/
   prometheus.conf: |
-    prometheus.push.gateway.server =
+    prometheus.push.gateway.server = https://prom-push-gateway.${POD_NAMESPACE}.svc.cluster.local:9091
+    prometheus.interval = 15000
 
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/data/loaded_modules.tmpl
@@ -349,7 +350,7 @@ data:
     { emqx_dashboard, true }.
 
     # prometheus agent for pushing metrics to prometheus-push-gateway
-    { emqx_prometheus, true }.
+    { emqx_prometheus, false }.
     # https://www.emqx.io/docs/zh/v4.4/advanced/telemetry.html
     { emqx_telemetry, false }.
 
