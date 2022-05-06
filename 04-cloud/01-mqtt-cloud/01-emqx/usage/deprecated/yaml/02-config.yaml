@@ -36,17 +36,20 @@ data:
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/etc/emqx.conf
   emqx.conf: |
 
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#mqtt
     # CONFIG_SECTION_BGN=mqtt
-    mqtt.max_packet_size = 1MB
+    flapping_detect_policy = 30, 1m, 5m
     mqtt.max_clientid_len = 65535
-    mqtt.max_topic_levels = 128
+    mqtt.max_packet_size = 1MB
     mqtt.max_qos_allowed = 2
+    mqtt.max_topic_levels = 128
     mqtt.max_topic_alias = 65535
+    mqtt.strict_mode = false
     mqtt.retain_available = true
+    mqtt.response_information = server-received
     mqtt.wildcard_subscription = true
     mqtt.shared_subscription = true
     mqtt.ignore_loop_deliver = false
-    mqtt.strict_mode = false
     # CONFIG_SECTION_END=mqtt
 
     # https://www.emqx.io/docs/zh/v4.4/getting-started/cluster.html
@@ -106,6 +109,17 @@ data:
     # CONFIG_SECTION_END=rpc
 
     # CONFIG_SECTION_BGN=zones
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#zoneinternal
+    zone.internal.bypass_auth_plugins = true
+    zone.internal.allow_anonymous = true
+    zone.internal.enable_acl = off
+    zone.internal.acl_deny_action = ignore
+    zone.internal.max_subscriptions = 0
+    zone.internal.wildcard_subscription = true
+    zone.internal.shared_subscription = true
+    zone.internal.strict_mode = false
+    zone.internal.enable_stats = on
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#zoneexternal
     # CONFIG_SECTION_END=zones
 
     # CONFIG_SECTION_BGN=listeners
