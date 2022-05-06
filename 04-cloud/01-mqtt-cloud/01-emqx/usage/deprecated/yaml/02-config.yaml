@@ -52,6 +52,11 @@ data:
     mqtt.ignore_loop_deliver = false
     # CONFIG_SECTION_END=mqtt
 
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#broker
+    # CONFIG_SECTION_BGN=broker
+    broker.shared_dispatch_ack_enabled = true
+    # CONFIG_SECTION_END=broker
+
     # https://www.emqx.io/docs/zh/v4.4/getting-started/cluster.html
     # https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#cluster
@@ -293,14 +298,30 @@ data:
     module.slow_subs.top_k_num = 30
     # CONFIG_SECTION_END=modules
 
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#plugins
     # CONFIG_SECTION_BGN=plugins
     plugins.etc_dir = etc/plugins/
     plugins.expand_plugins_dir = etc/plugins/
     plugins.loaded_file = data/loaded_plugins
     # CONFIG_SECTION_END=plugins
 
-    # CONFIG_SECTION_BGN=sys-metric
-    # CONFIG_SECTION_END=sys-metric
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#monitor
+    # CONFIG_SECTION_BGN=sys_mon
+    os_mon.mem_check_interval = 60s
+    os_mon.sysmem_high_watermark = 85%
+    os_mon.procmem_high_watermark = 5%
+    os_mon.cpu_check_interval = 60s
+    os_mon.cpu_high_watermark = 85%
+    os_mon.cpu_low_watermark = 75%
+    sysmon.busy_port = true
+    sysmon.busy_dist_port = true
+    vm_mon.check_interval = 30s
+    vm_mon.process_high_watermark = 85%
+    vm_mon.process_low_watermark = 75%
+    alarm.actions = log,publish
+    alarm.validity_period = 24h
+    alarm.size_limit = 256
+    # CONFIG_SECTION_END=sys_mon
 
     # https://www.emqx.io/docs/zh/v4.4/getting-started/log.html
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#log
