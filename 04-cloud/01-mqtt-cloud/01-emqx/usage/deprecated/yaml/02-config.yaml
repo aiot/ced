@@ -103,9 +103,9 @@ data:
     rpc.socket_keepalive_idle = 300s
     rpc.socket_keepalive_count = 5
     rpc.socket_keepalive_interval = 60s
-    rpc.socket_buffer = 1MB
     rpc.socket_sndbuf = 1MB
     rpc.socket_recbuf = 1MB
+    rpc.socket_buffer = 1MB
     # CONFIG_SECTION_END=rpc
 
     # CONFIG_SECTION_BGN=zones
@@ -140,7 +140,7 @@ data:
     zone.external.wildcard_subscription = true
     zone.external.shared_subscription = true
     zone.external.max_subscriptions = 0
-    zone.external.retry_interval = 15s
+    zone.external.retry_interval = 10s
     zone.external.idle_timeout = 15s
     zone.external.session_expiry_interval = 60m
     zone.external.server_keepalive = 200s
@@ -151,7 +151,42 @@ data:
     # CONFIG_SECTION_END=zones
 
     # CONFIG_SECTION_BGN=listeners
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#tcpinternal
+    listener.tcp.internal = 127.0.0.1:11883
+    listener.tcp.internal.acceptors = 8
+    listener.tcp.internal.zone = internal
+    listener.tcp.internal.max_connections = 1048576
+    listener.tcp.internal.max_conn_rate = 1024
+    listener.tcp.internal.active_n = 1024
+    listener.tcp.internal.backlog = 1024
+    listener.tcp.internal.send_timeout = 5s
+    listener.tcp.internal.send_timeout_close = on
+    listener.tcp.internal.recbuf = 64KB
+    listener.tcp.internal.sndbuf = 64KB
+    listener.tcp.internal.buffer = 16KB
+    listener.tcp.internal.reuseaddr = true
+    listener.tcp.internal.nodelay = false
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#tcpexternal
     listener.tcp.external = 0.0.0.0:1883
+    listener.tcp.external.acceptors = 8
+    listener.tcp.external.zone = external
+    listener.tcp.external.access.1 = allow all
+    listener.tcp.external.max_connections = 1048576
+    listener.tcp.external.max_conn_rate = 1024
+    listener.tcp.external.active_n = 1024
+    listener.tcp.external.send_timeout = 15s
+    listener.tcp.external.send_timeout_close = on
+    # listener.tcp.external.recbuf = 2KB
+    # listener.tcp.external.sndbuf = 2KB
+    # listener.tcp.external.buffer = 2KB
+    listener.tcp.external.backlog = 1024
+    listener.tcp.external.reuseaddr = true
+    listener.tcp.external.nodelay = true
+    listener.tcp.external.peer_cert_as_clientid = cn
+    listener.tcp.external.peer_cert_as_username = cn
+    listener.tcp.external.proxy_protocol = on
+    listener.tcp.external.proxy_protocol_timeout = 5s
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#tlsexternal
     listener.ssl.external = 0.0.0.0:8883
     listener.ssl.external.keyfile =
     listener.ssl.external.certfile =
@@ -160,11 +195,13 @@ data:
     listener.ssl.external.fail_if_no_peer_cert = true
     listener.ssl.external.peer_cert_as_username = cn
     listener.ssl.external.peer_cert_as_clientid = cn
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#wsexternal
     listener.ws.external = 8083
     listener.ws.external.mqtt_path = /mqtt
     listener.ws.external.peer_cert_as_username = cn
     listener.ws.external.peer_cert_as_clientid = cn
     listener.ws.external.compress = true
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#wssexternal
     listener.wss.external = 8084
     listener.wss.external.mqtt_path = /mqtt
     listener.wss.external.verify = verify_peer
@@ -176,14 +213,15 @@ data:
     listener.wss.external.cacertfile =
     # CONFIG_SECTION_END=listeners
 
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#authacl
     # CONFIG_SECTION_BGN=authacl
-    allow_anonymous = false
     acl_file = etc/acl.conf
+    allow_anonymous = false
     acl_nomatch = deny
     acl_deny_action = disconnect
     enable_acl_cache = on
-    acl_cache_max_size = 32
     acl_cache_ttl = 1m
+    acl_cache_max_size = 32
     # CONFIG_SECTION_END=authacl
 
     # CONFIG_SECTION_BGN=modules
