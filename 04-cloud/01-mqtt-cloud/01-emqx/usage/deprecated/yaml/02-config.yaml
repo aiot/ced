@@ -51,6 +51,7 @@ data:
 
     # https://www.emqx.io/docs/zh/v4.4/getting-started/cluster.html
     # https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#cluster
     # CONFIG_SECTION_BGN=cluster
     cluster.name = mqtt-cloud
     # cluster.discovery = k8s
@@ -60,27 +61,26 @@ data:
     # cluster.k8s.service_name = emqx-headless
     # cluster.k8s.namespace = aiot-case
     # cluster.k8s.suffix = svc.cluster.local
-    cluster.autoheal = on
-    cluster.autoclean = 5m
     cluster.proto_dist = inet_tls
+    cluster.autoheal = on
+    cluster.autoclean = 300s
     # CONFIG_SECTION_END=cluster
 
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#node
     # CONFIG_SECTION_BGN=node
     # node.name = emqx@${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
-    # node.cookie = mqtt-cloud
-    node.data_dir = data
-    node.ssl_dist_optfile =
-    node.process_limit = 2097152
-    node.max_ports = 1048576
-    node.heartbeat = on
-    node.async_threads = 4
-    node.dist_buffer_size = 8MB
-    node.max_ets_tables = 262144
-    node.global_gc_interval = 15m
-    node.crash_dump = log/crash.dump
-    node.ssl_dist_optfile = etc/ssl_dist.conf
     node.dist_listen_min = 6369
     node.dist_listen_max = 6369
+    node.ssl_dist_optfile = etc/ssl_dist.conf
+    node.async_threads = 8
+    node.process_limit = 2097152
+    node.max_ports = 1048576
+    node.dist_buffer_size = 8MB
+    node.global_gc_interval = 15m
+    node.heartbeat = off
+    # node.cookie = mqtt-cloud
+    node.data_dir = data
+    node.crash_dump = log/crash.dump
     # CONFIG_SECTION_END=node
 
     # CONFIG_SECTION_BGN=rpc
@@ -91,9 +91,9 @@ data:
     rpc.enable_ssl = 5369
     rpc.driver = ssl
     rpc.default_client_driver = ssl
-    rpc.keyfile =
-    rpc.certfile =
-    rpc.cacertfile =
+    rpc.keyfile = etc/pki/tls.key
+    rpc.certfile = etc/pki/tls.crt
+    rpc.cacertfile = etc/pki/ca.crt
     # CONFIG_SECTION_END=rpc
 
     # CONFIG_SECTION_BGN=zones
@@ -136,13 +136,22 @@ data:
     # CONFIG_SECTION_END=auth
 
     # CONFIG_SECTION_BGN=modules
+    modules.loaded_file = data/loaded_modules
+    module.presence.qos = 1
+    module.slow_subs.threshold = 300ms
+    module.slow_subs.stats_type = whole
+    module.slow_subs.expire_interval = 10m
+    module.slow_subs.top_k_num = 30
     # CONFIG_SECTION_END=modules
 
     # CONFIG_SECTION_BGN=plugins
+    plugins.etc_dir = etc/plugins/
+    plugins.expand_plugins_dir = etc/plugins/
+    plugins.loaded_file = data/loaded_plugins
     # CONFIG_SECTION_END=plugins
 
-    # CONFIG_SECTION_BGN=sys
-    # CONFIG_SECTION_END=sys
+    # CONFIG_SECTION_BGN=sys-metric
+    # CONFIG_SECTION_END=sys-metric
 
     # https://www.emqx.io/docs/zh/v4.4/getting-started/log.html
     # CONFIG_SECTION_BGN=logger
@@ -370,6 +379,7 @@ data:
     prometheus.interval = 15000
 
 
+  # note: module configuration is located in emqx.conf
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/data/loaded_modules.tmpl
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.loadedModules.yaml
   # https://docs.emqx.com/zh/enterprise/v4.4/modules/modules.html
@@ -380,20 +390,20 @@ data:
     # online and offline notification
     # https://docs.emqx.com/zh/enterprise/v4.4/modules/presence.html
     { emqx_mod_presence, true }.
-    # topic rewrite
-    # https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
-    { emqx_mod_rewrite, false }.
-    # delayed publish
-    # https://www.emqx.io/docs/zh/v4.4/advanced/delay-publish.html
-    { emqx_mod_delayed, false }.
     # mqtt subscription
     # https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
     { emqx_mod_subscription, true }.
+    # topic rewrite
+    # https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
+    { emqx_mod_rewrite, true }.
+    # delayed publish
+    # https://www.emqx.io/docs/zh/v4.4/advanced/delay-publish.html
+    { emqx_mod_delayed, false }.
+    # topic metric
+    { emqx_mod_topic_metrics, true }.
     # slow subscriptions statistics
     # https://docs.emqx.com/zh/enterprise/v4.4/modules/slow_subscribers_statistics.html
     { emqx_mod_slow_subs, true }.
-    # topic metric
-    { emqx_mod_topic_metrics, true }.
     # trace
     # https://docs.emqx.com/zh/enterprise/v4.4/modules/tracer.html
     { emqx_mod_trace, true }.

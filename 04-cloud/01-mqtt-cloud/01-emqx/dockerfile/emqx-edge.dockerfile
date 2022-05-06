@@ -27,6 +27,8 @@ RUN \
     mv -fv /opt/emqx/bin/install_upgrade.escript /opt/emqx/bin/install-upgrade.escript && \
     ln -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript && \
     ln -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript-${emqxVersion} && \
+    cp -rfv /opt/emqx/etc/emqx.conf /opt/emqx/etc/emqx.ref.conf && \
+    mkdir -p -v /opt/emqx/etc/emqx.conf.d/ && \
     rm -rfv /opt/emqx/etc/certs && \
     mkdir -p -v /opt/emqx/etc/pki/ && \
     ln -sfv /opt/emqx/etc/pki /opt/emqx/etc/certs && \
