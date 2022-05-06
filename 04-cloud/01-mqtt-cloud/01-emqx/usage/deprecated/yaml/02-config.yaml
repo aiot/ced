@@ -1,7 +1,30 @@
 # https://www.emqx.io/docs/zh/v4.4/getting-started/config.html
 # https://docs.emqx.com/zh/enterprise/v4.4/getting-started/config.html
-# https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html
 # https://www.emqx.io/docs/zh/v4.4/tutorial/tune.html
+
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.env.yaml
+# https://www.emqx.io/docs/zh/v4.4/configuration/environment-variable.html
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: emqx-env
+immutable: false
+data:
+  EMQX_CLUSTER__DISCOVERY: k8s
+  EMQX_CLUSTER__K8S__APISERVER: https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
+  EMQX_CLUSTER__K8S__APP_NAME: emqx
+  EMQX_CLUSTER__K8S__ADDRESS_TYPE: hostname
+  EMQX_CLUSTER__K8S__SERVICE_NAME: emqx-headless
+  EMQX_CLUSTER__K8S__NAMESPACE: *app-namespace
+  EMQX_CLUSTER__K8S__SUFFIX: svc.cluster.local
+
+  # # erlang node.name(erlang unique identifier) will be generated automatically
+  # EMQX_NODE__NAME: emqx@${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
+  EMQX_NODE__COOKIE: *app-namespace
+
+# https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -12,6 +35,71 @@ immutable: false
 data:
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/etc/emqx.conf
   emqx.conf: |
+
+    # CONFIG_SECTION_BGN=mqtt
+    mqtt.max_packet_size = 1MB
+    mqtt.max_clientid_len = 65535
+    mqtt.max_topic_levels = 128
+    mqtt.max_qos_allowed = 2
+    mqtt.max_topic_alias = 65535
+    mqtt.retain_available = true
+    mqtt.wildcard_subscription = true
+    mqtt.shared_subscription = true
+    mqtt.ignore_loop_deliver = false
+    mqtt.strict_mode = false
+    # CONFIG_SECTION_END=mqtt
+
+    # https://www.emqx.io/docs/zh/v4.4/getting-started/cluster.html
+    # https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html
+    # CONFIG_SECTION_BGN=cluster
+    cluster.name = mqtt-cloud
+    # cluster.discovery = k8s
+    # cluster.k8s.apiserver = https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
+    # cluster.k8s.app_name = emqx
+    # cluster.k8s.address_type = hostname
+    # cluster.k8s.service_name = emqx-headless
+    # cluster.k8s.namespace = aiot-case
+    # cluster.k8s.suffix = svc.cluster.local
+    cluster.autoheal = on
+    cluster.autoclean = 5m
+    cluster.proto_dist = inet_tls
+    # CONFIG_SECTION_END=cluster
+
+    # CONFIG_SECTION_BGN=node
+    # node.name = emqx@${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
+    # node.cookie = mqtt-cloud
+    node.data_dir = data
+    node.ssl_dist_optfile =
+    node.process_limit = 2097152
+    node.max_ports = 1048576
+    node.heartbeat = on
+    node.async_threads = 4
+    node.dist_buffer_size = 8MB
+    node.max_ets_tables = 262144
+    node.global_gc_interval = 15m
+    node.crash_dump = log/crash.dump
+    node.ssl_dist_optfile = etc/ssl_dist.conf
+    node.dist_listen_min = 6369
+    node.dist_listen_max = 6369
+    # CONFIG_SECTION_END=node
+
+    # CONFIG_SECTION_BGN=rpc
+    rpc.mode = async
+    rpc.async_batch_size = 256
+    rpc.port_discovery = stateless
+    rpc.tcp_server_port = 5369
+    rpc.enable_ssl = 5369
+    rpc.driver = ssl
+    rpc.default_client_driver = ssl
+    rpc.keyfile =
+    rpc.certfile =
+    rpc.cacertfile =
+    # CONFIG_SECTION_END=rpc
+
+    # CONFIG_SECTION_BGN=zones
+    # CONFIG_SECTION_END=zones
+
+    # CONFIG_SECTION_BGN=listeners
     listener.tcp.external = 0.0.0.0:1883
     listener.ssl.external = 0.0.0.0:8883
     listener.ssl.external.keyfile =
@@ -35,46 +123,34 @@ data:
     listener.wss.external.keyfile =
     listener.wss.external.certfile =
     listener.wss.external.cacertfile =
+    # CONFIG_SECTION_END=listeners
 
+    # CONFIG_SECTION_BGN=auth
     allow_anonymous = false
-    acl_file =
+    acl_file = etc/acl.conf
     acl_nomatch = deny
     acl_deny_action = disconnect
     enable_acl_cache = on
+    acl_cache_max_size = 32
     acl_cache_ttl = 1m
+    # CONFIG_SECTION_END=auth
 
-    # https://www.emqx.io/docs/zh/v4.4/getting-started/cluster.html
-    # https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html
-    cluster.name = mqtt-cloud
-    # cluster.discovery = k8s
-    # cluster.k8s.apiserver = https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
-    # cluster.k8s.app_name = emqx
-    # cluster.k8s.address_type = hostname
-    # cluster.k8s.service_name = emqx-headless
-    # cluster.k8s.namespace = aiot-case
-    # cluster.k8s.suffix = svc.cluster.local
-    cluster.autoheal = on
-    cluster.autoclean = 5m
-    cluster.proto_dist = inet_tls
+    # CONFIG_SECTION_BGN=modules
+    # CONFIG_SECTION_END=modules
 
-    node.name =
-    node.cookie = mqtt-cloud
-    node.data_dir =
-    node.ssl_dist_optfile =
-    node.process_limit = 2097152
-    node.max_ports = 1048576
+    # CONFIG_SECTION_BGN=plugins
+    # CONFIG_SECTION_END=plugins
 
-    rpc.enable_ssl = 5369
-    rpc.driver = ssl
-    rpc.default_client_driver = ssl
-    rpc.keyfile =
-    rpc.certfile =
-    rpc.cacertfile =
+    # CONFIG_SECTION_BGN=sys
+    # CONFIG_SECTION_END=sys
 
     # https://www.emqx.io/docs/zh/v4.4/getting-started/log.html
+    # CONFIG_SECTION_BGN=logger
     log.to = console
     log.formatter = text
+    log.single_line = true
     log.level = info
+    # CONFIG_SECTION_END=logger
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/etc/ssl_dist.conf
   ssl-dist.conf: |
@@ -83,9 +159,9 @@ data:
       {
         server,
         [
-          { keyfile, "etc/certs/tls.key" },
-          { certfile, "etc/certs/tls.crt" },
-          { cacertfile, "etc/certs/ca.crt" },
+          { keyfile, "etc/pki/tls.key" },
+          { certfile, "etc/pki/tls.crt" },
+          { cacertfile, "etc/pki/ca.crt" },
           { secure_renegotiate, true },
           { depth, 0 }
         ]
@@ -93,9 +169,9 @@ data:
       {
         client,
         [
-          { keyfile, "etc/certs/tls.key" },
-          { certfile, "etc/certs/tls.crt" },
-          { cacertfile, "etc/certs/ca.crt" },
+          { keyfile, "etc/pki/tls.key" },
+          { certfile, "etc/pki/tls.crt" },
+          { cacertfile, "etc/pki/ca.crt" },
           { secure_renegotiate, true }
         ]
       }
@@ -108,6 +184,7 @@ data:
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_auth_mnesia/etc/emqx_auth_mnesia.conf
   # https://www.emqx.io/docs/zh/v4.4/advanced/auth-mnesia.html
   auth-mnesia.conf: |
+
     auth.mnesia.password_hash = sha256
 
     auth.user.1.username = edge-app
@@ -133,6 +210,7 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-retainer
   # https://www.emqx.io/docs/zh/v4.4/advanced/retained.html
   retainer.conf: |
+
     retainer.storage_type = disc_only
     retainer.max_payload_size = 256KB
     retainer.max_retained_messages = 0
@@ -145,6 +223,7 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/bridge/bridge.html
   # https://www.emqx.io/docs/zh/v4.4/bridge/bridge-mqtt.html
   bridge-mqtt.conf: |
+
     bridge.mqtt.aws.start_type = manual
 
     bridge.mqtt.mqtt-cloud.address = mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
@@ -152,9 +231,9 @@ data:
     bridge.mqtt.mqtt-cloud.ssl = on
     bridge.mqtt.mqtt-cloud.verify = true
     bridge.mqtt.mqtt-cloud.server_name_indication = disable
-    bridge.mqtt.mqtt-cloud.keyfile = etc/certs/mqtt-cloud.client.tls.key
-    bridge.mqtt.mqtt-cloud.certfile = etc/certs/mqtt-cloud.client.tls..crt
-    bridge.mqtt.mqtt-cloud.cacertfile = etc/certs/mqtt-cloud.ca.crt
+    bridge.mqtt.mqtt-cloud.keyfile = etc/pki/mqtt-cloud.client.tls.key
+    bridge.mqtt.mqtt-cloud.certfile = etc/pki/mqtt-cloud.client.tls..crt
+    bridge.mqtt.mqtt-cloud.cacertfile = etc/pki/mqtt-cloud.ca.crt
     bridge.mqtt.mqtt-cloud.username = mqtt-edge
     bridge.mqtt.mqtt-cloud.password = mqtt-edge
     bridge.mqtt.mqtt-cloud.keepalive = 60s
@@ -183,6 +262,7 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-web-hook
   # https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
   webhook.conf: |
+
     # send notify to some http server
     web.hook.url = https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local
     web.hook.ssl.verify = false
@@ -207,6 +287,7 @@ data:
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
   rule-engine.conf: |
+
     rule_engine.ignore_sys_message = on
 
     rule_engine.events.client_connected = on, qos1
@@ -221,6 +302,7 @@ data:
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_management/etc/emqx_management.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
   api.conf: |
+
     # management.listener.http = 8081
     # management.listener.http.inet6 = false
     # management.listener.http.ipv6_v6only = false
@@ -232,9 +314,9 @@ data:
     management.listener.https = 8081
     management.listener.https.inet6 = false
     management.listener.https.ipv6_v6only = false
-    management.listener.https.keyfile = etc/certs/tls.key
-    management.listener.https.certfile = etc/certs/tls.crt
-    management.listener.https.cacertfile = etc/certs/ca.crt
+    management.listener.https.keyfile = etc/pki/tls.key
+    management.listener.https.certfile = etc/pki/tls.crt
+    management.listener.https.cacertfile = etc/pki/ca.crt
     management.listener.https.verify = verify_peer
     management.listener.https.fail_if_no_peer_cert = true
     management.listener.https.acceptors = 8
@@ -252,6 +334,7 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-dashboard
   # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
   dashboard.conf: |
+
     dashboard.listener.http = 18083
     dashboard.listener.http.inet6 = false
     dashboard.listener.http.ipv6_v6only = false
@@ -260,9 +343,9 @@ data:
     dashboard.listener.https = 18084
     dashboard.listener.https.inet6 = false
     dashboard.listener.https.ipv6_v6only = false
-    dashboard.listener.https.keyfile = etc/certs/tls.key
-    dashboard.listener.https.certfile = etc/certs/tls.crt
-    dashboard.listener.https.cacertfile = etc/certs/ca.crt
+    dashboard.listener.https.keyfile = etc/pki/tls.key
+    dashboard.listener.https.certfile = etc/pki/tls.crt
+    dashboard.listener.https.cacertfile = etc/pki/ca.crt
     dashboard.listener.https.verify = verify_none
     dashboard.listener.https.fail_if_no_peer_cert = false
     dashboard.listener.https.secure_renegotiate = on
@@ -282,6 +365,7 @@ data:
   # alert: https://www.emqx.io/docs/zh/v4.4/advanced/alarms.html
   # grafana: https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_prometheus/grafana_template/
   prometheus.conf: |
+
     prometheus.push.gateway.server = https://prom-push-gateway.${POD_NAMESPACE}.svc.cluster.local:9091
     prometheus.interval = 15000
 
@@ -354,28 +438,6 @@ data:
     # https://www.emqx.io/docs/zh/v4.4/advanced/telemetry.html
     { emqx_telemetry, false }.
 
-
     # performance debugging
     # https://docs.emqx.com/zh/enterprise/v4.4/modules/recon.html
     { emqx_recon, false }.
-
-# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.env.yaml
-# https://www.emqx.io/docs/zh/v4.4/configuration/environment-variable.html
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  namespace: aiot-case
-  name: emqx-env
-immutable: false
-data:
-  # erlang node.name: erlang unique identifier
-  EMQX_NODE__NAME: emqx@${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
-
-  EMQX_CLUSTER__DISCOVERY: k8s
-  EMQX_CLUSTER__K8S__APISERVER: https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
-  EMQX_CLUSTER__K8S__APP_NAME: emqx
-  EMQX_CLUSTER__K8S__ADDRESS_TYPE: hostname
-  EMQX_CLUSTER__K8S__SERVICE_NAME: emqx-headless
-  EMQX_CLUSTER__K8S__NAMESPACE: aiot-case
-  EMQX_CLUSTER__K8S__SUFFIX: svc.cluster.local

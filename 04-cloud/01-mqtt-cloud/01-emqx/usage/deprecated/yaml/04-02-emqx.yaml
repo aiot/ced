@@ -241,7 +241,7 @@ spec:
               mountPath: /opt/emqx/etc/ssl_dist.conf
               readOnly: false
             - name: cert
-              mountPath: /opt/emqx/etc/certs/
+              mountPath: /opt/emqx/etc/pki/
               readOnly: true
 
             - name: config
