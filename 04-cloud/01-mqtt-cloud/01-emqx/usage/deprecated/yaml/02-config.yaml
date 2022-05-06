@@ -83,17 +83,26 @@ data:
     node.crash_dump = log/crash.dump
     # CONFIG_SECTION_END=node
 
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#rpc
     # CONFIG_SECTION_BGN=rpc
     rpc.mode = async
-    rpc.async_batch_size = 256
+    rpc.async_batch_size = 512
     rpc.port_discovery = stateless
-    rpc.tcp_server_port = 5369
-    rpc.enable_ssl = 5369
     rpc.driver = ssl
     rpc.default_client_driver = ssl
     rpc.keyfile = etc/pki/tls.key
     rpc.certfile = etc/pki/tls.crt
     rpc.cacertfile = etc/pki/ca.crt
+    rpc.connect_timeout = 10s
+    rpc.authentication_timeout = 5s
+    rpc.send_timeout = 5s
+    rpc.call_receive_timeout = 15s
+    rpc.socket_keepalive_idle = 300s
+    rpc.socket_keepalive_count = 5
+    rpc.socket_keepalive_interval = 60s
+    rpc.socket_buffer = 1MB
+    rpc.socket_sndbuf = 1MB
+    rpc.socket_recbuf = 1MB
     # CONFIG_SECTION_END=rpc
 
     # CONFIG_SECTION_BGN=zones
@@ -125,7 +134,7 @@ data:
     listener.wss.external.cacertfile =
     # CONFIG_SECTION_END=listeners
 
-    # CONFIG_SECTION_BGN=auth
+    # CONFIG_SECTION_BGN=authacl
     allow_anonymous = false
     acl_file = etc/acl.conf
     acl_nomatch = deny
@@ -133,7 +142,7 @@ data:
     enable_acl_cache = on
     acl_cache_max_size = 32
     acl_cache_ttl = 1m
-    # CONFIG_SECTION_END=auth
+    # CONFIG_SECTION_END=authacl
 
     # CONFIG_SECTION_BGN=modules
     modules.loaded_file = data/loaded_modules
