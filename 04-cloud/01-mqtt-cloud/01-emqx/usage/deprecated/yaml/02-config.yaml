@@ -303,11 +303,16 @@ data:
     # CONFIG_SECTION_END=sys-metric
 
     # https://www.emqx.io/docs/zh/v4.4/getting-started/log.html
+    # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#log
     # CONFIG_SECTION_BGN=logger
     log.to = console
     log.formatter = text
     log.single_line = true
+    log.chars_limit = -1
+    log.max_depth = unlimited
     log.level = info
+    log.dir = log
+    log.rotation = on
     # CONFIG_SECTION_END=logger
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/etc/ssl_dist.conf
