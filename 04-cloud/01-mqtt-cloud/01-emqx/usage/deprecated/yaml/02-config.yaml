@@ -589,14 +589,14 @@ data:
   loaded-plugins: |
 
     # authentication and authorization
-    { emqx_auth_mnesia, true}.
-    { emqx_auth_jwt, true}.
-    { emqx_auth_pgsql, false}.
-    { emqx_auth_mysql, false}.
-    { emqx_auth_mongo, false}.
-    { emqx_auth_redis, false}.
-    { emqx_auth_ldap, false}.
-    { emqx_auth_http, false}.
+    { emqx_auth_mnesia, true }.
+    { emqx_auth_jwt, true }.
+    { emqx_auth_pgsql, false }.
+    { emqx_auth_mysql, false }.
+    { emqx_auth_mongo, false }.
+    { emqx_auth_redis, false }.
+    { emqx_auth_ldap, false }.
+    { emqx_auth_http, false }.
 
     # retain message
     { emqx_retainer, true }.
@@ -605,7 +605,7 @@ data:
     # message persistence
     # https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
     # webhook
-    { emqx_web_hook, true}.
+    { emqx_web_hook, true }.
     # rule engine based sql
     # https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
     # https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
