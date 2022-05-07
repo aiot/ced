@@ -49,7 +49,6 @@ spec:
   renewBefore: 360h    # 15d
   secretName: nanomq-cert
 
-
 ---
 kind: Certificate
 apiVersion: cert-manager.io/v1

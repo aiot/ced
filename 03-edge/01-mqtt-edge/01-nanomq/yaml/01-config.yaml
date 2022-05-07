@@ -1,3 +1,13 @@
+# # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/README.md#nanomq-environment-variables
+# ---
+# kind: ConfigMap
+# apiVersion: v1
+# metadata:
+#   namespace: aiot-case
+#   name: nanomq-env
+# immutable: false
+# data:
+
 # https://nanomq.io/docs/zh/latest/config-description.html
 ---
 kind: ConfigMap
@@ -100,13 +110,3 @@ data:
     # web.hook.rule.client.disconnected.1 = {"action": "on_client_disconnected"}
     # server receives the ACK message that sent by client
     # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
-
-# # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/README.md#nanomq-environment-variables
-# ---
-# kind: ConfigMap
-# apiVersion: v1
-# metadata:
-#   namespace: aiot-case
-#   name: nanomq-env
-# immutable: false
-# data:
