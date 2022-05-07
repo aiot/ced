@@ -561,27 +561,27 @@ data:
   # https://docs.emqx.com/zh/enterprise/v4.4/modules/modules.html
   loaded-modules: |
 
-    # acl
+    % acl
     { emqx_mod_acl_internal, true }.
-    # online and offline notification
-    # https://docs.emqx.com/zh/enterprise/v4.4/modules/presence.html
+    % online and offline notification
+    % https://docs.emqx.com/zh/enterprise/v4.4/modules/presence.html
     { emqx_mod_presence, true }.
-    # mqtt subscription
-    # https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
+    % mqtt subscription
+    % https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
     { emqx_mod_subscription, true }.
-    # topic rewrite
-    # https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
+    % topic rewrite
+    % https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
     { emqx_mod_rewrite, true }.
-    # delayed publish
-    # https://www.emqx.io/docs/zh/v4.4/advanced/delay-publish.html
+    % delayed publish
+    % https://www.emqx.io/docs/zh/v4.4/advanced/delay-publish.html
     { emqx_mod_delayed, false }.
-    # topic metric
+    % topic metric
     { emqx_mod_topic_metrics, true }.
-    # slow subscriptions statistics
-    # https://docs.emqx.com/zh/enterprise/v4.4/modules/slow_subscribers_statistics.html
+    % slow subscriptions statistics
+    % https://docs.emqx.com/zh/enterprise/v4.4/modules/slow_subscribers_statistics.html
     { emqx_mod_slow_subs, true }.
-    # trace
-    # https://docs.emqx.com/zh/enterprise/v4.4/modules/tracer.html
+    % trace
+    % https://docs.emqx.com/zh/enterprise/v4.4/modules/tracer.html
     { emqx_mod_trace, true }.
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/data/loaded_plugins.tmpl
@@ -589,7 +589,7 @@ data:
   # https://docs.emqx.com/zh/enterprise/v4.4/advanced/plugins.html
   loaded-plugins: |
 
-    # authentication and authorization
+    % authentication and authorization
     { emqx_auth_mnesia, true }.
     { emqx_auth_jwt, true }.
     { emqx_auth_pgsql, false }.
@@ -599,31 +599,31 @@ data:
     { emqx_auth_ldap, false }.
     { emqx_auth_http, false }.
 
-    # retain message
+    % retain message
     { emqx_retainer, true }.
-    # message bridge
+    % message bridge
     { emqx_bridge_mqtt, false }.
-    # message persistence
-    # https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
-    # webhook
+    % message persistence
+    % https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
+    % webhook
     { emqx_web_hook, true }.
-    # rule engine based sql
-    # https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
-    # https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
-    # https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_pgsql.html
-    # https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_pgsql.html
+    % rule engine based sql
+    % https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
+    % https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
+    % https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_pgsql.html
+    % https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_pgsql.html
     { emqx_rule_engine, true }.
 
-    # api
+    % api
     { emqx_management, true }.
-    # dashboard
+    % dashboard
     { emqx_dashboard, true }.
 
-    # prometheus agent for pushing metrics to prometheus-push-gateway
+    % prometheus agent for pushing metrics to prometheus-push-gateway
     { emqx_prometheus, false }.
-    # https://www.emqx.io/docs/zh/v4.4/advanced/telemetry.html
+    % https://www.emqx.io/docs/zh/v4.4/advanced/telemetry.html
     { emqx_telemetry, false }.
 
-    # performance debugging
-    # https://docs.emqx.com/zh/enterprise/v4.4/modules/recon.html
+    % performance debugging
+    % https://docs.emqx.com/zh/enterprise/v4.4/modules/recon.html
     { emqx_recon, false }.
