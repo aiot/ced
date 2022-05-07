@@ -7,6 +7,9 @@
 #   name: nanomq-env
 # immutable: false
 # data:
+#   NANOMQ_CONF_PATH: /etc/nanomq/config/broker.conf
+#   NANOMQ_AUTH_CONF_PATH: /etc/nanomq/config/auth.conf
+#   NANOMQ_BRIDGE_CONF_PATH: /etc/nanomq/config/bridge.conf
 
 # https://nanomq.io/docs/zh/latest/config-description.html
 ---
@@ -48,7 +51,6 @@ data:
     allow_anonymous = false
 
     # http api
-    # warning: nanomq http api only listens on 127.0.0.1
     http_server.enable = true
     http_server.port = 8082
     http_server.auth_type = basic
