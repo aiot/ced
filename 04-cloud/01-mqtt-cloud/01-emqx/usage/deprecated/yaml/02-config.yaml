@@ -172,7 +172,7 @@ data:
     listener.tcp.internal.reuseaddr = true
     listener.tcp.internal.nodelay = false
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#tcpexternal
-    listener.tcp.external = 0.0.0.0:1883
+    listener.tcp.external = 127.0.0.1:1883
     listener.tcp.external.peer_cert_as_clientid = cn
     listener.tcp.external.peer_cert_as_username = cn
     listener.tcp.external.acceptors = 16
@@ -215,7 +215,7 @@ data:
     listener.ssl.external.proxy_protocol = on
     listener.ssl.external.proxy_protocol_timeout = 5s
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#wsexternal
-    listener.ws.external = 0.0.0.0:8083
+    listener.ws.external = 127.0.0.1:8083
     listener.ws.external.mqtt_path = /mqtt
     listener.ws.external.peer_cert_as_username = cn
     listener.ws.external.peer_cert_as_clientid = cn
@@ -408,7 +408,7 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/bridge/bridge-mqtt.html
   bridge-mqtt.conf: |
 
-    bridge.mqtt.aws.start_type = manual
+    bridge.mqtt.mqtt-cloud.start_type = manual
 
     bridge.mqtt.mqtt-cloud.address = mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
     bridge.mqtt.mqtt-cloud.proto_ver = mqttv5
@@ -487,7 +487,7 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
   api.conf: |
 
-    # management.listener.http = 8081
+    # management.listener.http = 127.0.0.1:8081
     # management.listener.http.inet6 = false
     # management.listener.http.ipv6_v6only = false
     # management.listener.http.acceptors = 8
@@ -495,7 +495,7 @@ data:
     # management.listener.http.backlog = 1024
     # management.listener.http.send_timeout = 15s
     # management.listener.http.send_timeout_close = on
-    management.listener.https = 8081
+    management.listener.https = 0.0.0.0:8081
     management.listener.https.inet6 = false
     management.listener.https.ipv6_v6only = false
     management.listener.https.keyfile = etc/pki/tls.key
@@ -519,12 +519,12 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
   dashboard.conf: |
 
-    dashboard.listener.http = 18083
+    dashboard.listener.http = 127.0.0.1:18083
     dashboard.listener.http.inet6 = false
     dashboard.listener.http.ipv6_v6only = false
     dashboard.listener.http.acceptors = 8
     dashboard.listener.http.max_clients = 128
-    dashboard.listener.https = 18084
+    dashboard.listener.https = 0.0.0.0:18084
     dashboard.listener.https.inet6 = false
     dashboard.listener.https.ipv6_v6only = false
     dashboard.listener.https.keyfile = etc/pki/tls.key

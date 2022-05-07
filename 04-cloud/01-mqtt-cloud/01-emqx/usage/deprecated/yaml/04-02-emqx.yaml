@@ -17,18 +17,18 @@ spec:
     <<: *app-label
   publishNotReadyAddresses: false
   ports:
-    - name: tcp
-      protocol: TCP
-      port: 1883
-      targetPort: 1883
+    # - name: tcp
+    #   protocol: TCP
+    #   port: 1883
+    #   targetPort: 1883
     - name: tcp-tls
       protocol: TCP
       port: 8883
       targetPort: 8883
-    - name: websocket
-      protocol: TCP
-      port: 8083
-      targetPort: 8083
+    # - name: websocket
+    #   protocol: TCP
+    #   port: 8083
+    #   targetPort: 8083
     - name: websocket-tls
       protocol: TCP
       port: 8084
@@ -37,10 +37,10 @@ spec:
       protocol: TCP
       port: 8081
       targetPort: 8081
-    - name: dashboard
-      protocol: TCP
-      port: 18083
-      targetPort: 18083
+    # - name: dashboard
+    #   protocol: TCP
+    #   port: 18083
+    #   targetPort: 18083
     - name: dashboard-https
       protocol: TCP
       port: 18084
@@ -63,18 +63,18 @@ spec:
     <<: *app-label
   publishNotReadyAddresses: true
   ports:
-    - name: tcp
-      protocol: TCP
-      port: 1883
-      targetPort: 1883
+    # - name: tcp
+    #   protocol: TCP
+    #   port: 1883
+    #   targetPort: 1883
     - name: tcp-tls
       protocol: TCP
       port: 8883
       targetPort: 8883
-    - name: websocket
-      protocol: TCP
-      port: 8083
-      targetPort: 8083
+    # - name: websocket
+    #   protocol: TCP
+    #   port: 8083
+    #   targetPort: 8083
     - name: websocket-tls
       protocol: TCP
       port: 8084
@@ -363,17 +363,21 @@ spec:
           #   preStop:
           #     exec:
           #       command:
-          #         - /opt/emqx/bin/emqx-ctl
-          #         - cluster
-          #         - leave
+          #         - /bin/bash
+          #         - -c
+          #         - |-
+          #           /opt/emqx/bin/emqx-ctl cluster leave
+          command:
+            - /opt/emqx/bin/emqx
+            - foreground
 
           ports:
-            - name: tcp
-              protocol: TCP
-              containerPort: &port-tcp 1883
             - name: tcp-internal
               protocol: TCP
               containerPort: &port-tcp-internal 11883
+            - name: tcp
+              protocol: TCP
+              containerPort: &port-tcp 1883
             - name: tcp-tls
               protocol: TCP
               containerPort: &port-tcp-tls 8883
