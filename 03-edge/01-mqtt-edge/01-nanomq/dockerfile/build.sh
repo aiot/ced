@@ -30,7 +30,7 @@ buildImage alpine.dockerfile ${imageRepository}/nanomq:${nanomqVersion}
 
 # build nanomq debug image
 cp -rfv alpine.dockerfile alpine.debug.dockerfile
-sed -i 's/DNOLOG=1/DNOLOG=0/g' /etc/bash_completion.d/ccli
+sed -i 's/DNOLOG=1/DNOLOG=0/g' alpine.debug.dockerfile
 buildImage alpine.debug.dockerfile ${imageRepository}/nanomq:${nanomqVersion}-debug
 # docker rmi nanomq/nanomq:${nanomqVersion}-alpine
 
