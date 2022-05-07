@@ -10,7 +10,7 @@ RUN \
     # install git
     apt install -y --no-install-recommends git openssh-client && \
     # install build dependence
-    apt install -y --no-install-recommends gcc g++ cmake ninja-build libmbedtls-dev && \
+    apt install -y --no-install-recommends gcc g++ cmake ninja-build libmbedtls-dev sqlite && \
     \
     apt autoremove -y && \
     rm -rfv /var/lib/apt/lists/* && \
@@ -25,10 +25,10 @@ RUN \
     git checkout NANOMQ_VERSION && \
         mkdir -p -v build && \
         cd build && \
-        cmake -G Ninja -DNNG_ENABLE_TLS=ON -DNOLOG=1 .. && \
+        cmake -G Ninja -DENABLE_JWT=ON -DNNG_ENABLE_TLS=ON -DNOLOG=1 .. && \
         ninja install && \
-    chown -v root:root /usr/local/bin/nanomq && \
-    chmod -v 755 /usr/local/bin/nanomq
+    chown -v root:root /root/nanomq/build/nanomq/nanomq && \
+    chmod -v 755 /root/nanomq/build/nanomq/nanomq
 
 # build image
 FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/ubuntu:UBUNTU_VERSION
@@ -37,12 +37,12 @@ RUN \
     set -ex && \
     \
     apt update -y && \
-    apt install -y --no-install-recommends libatomic1 libmbedtls-dev && \
+    apt install -y --no-install-recommends libatomic1 libmbedtls-dev sqlite && \
     apt autoremove -y && \
     rm -rfv /var/lib/apt/lists/*
 
 COPY \
-    --from='builder' /usr/local/bin/nanomq /usr/local/bin/
+    --from='builder' /root/nanomq/build/nanomq/nanomq /usr/local/bin/
 
 # ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]
 CMD ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]

@@ -30,7 +30,7 @@ RUN \
     cp -rfv /opt/emqx/etc/emqx.conf /opt/emqx/etc/emqx.ref.conf && \
     mkdir -p -v /opt/emqx/etc/emqx.conf.d/ && \
     rm -rfv /opt/emqx/etc/certs && \
-    mkdir -p -v /opt/emqx/etc/pki/ && \
+    mkdir -p -v /opt/emqx/etc/pki/ /opt/emqx/etc/pki/jwt/ && \
     ln -sfv /opt/emqx/etc/pki /opt/emqx/etc/certs && \
     chown -R root:root /opt/emqx/
 

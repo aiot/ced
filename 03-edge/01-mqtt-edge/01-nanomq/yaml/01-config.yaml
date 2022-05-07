@@ -10,14 +10,21 @@ data:
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq.conf
   broker.conf: |
     daemon = false
+    num_taskq_thread = 8
+    max_taskq_thread = 16
+    parallel = 64
+
+    # mqtt
+    property_size = 32
+    msq_len = 128
 
     # tcp
     url = nmq-tcp://127.0.0.1:1883
     tls.url = tls+nmq-tcp://0.0.0.0:8883
-    tls.enable = true
     tls.keyfile = /etc/nanomq/pki/tls.key
     tls.certfile = /etc/nanomq/pki/tls.crt
     tls.cacertfile = /etc/nanomq/pki/ca.crt
+    tls.enable = true
     tls.verify_peer = true
     tls.fail_if_no_peer_cert = true
 
@@ -34,12 +41,15 @@ data:
     # warning: nanomq http api only listens on 127.0.0.1
     http_server.enable = true
     http_server.port = 8082
-    http_server.auth_type = BASIC
+    http_server.auth_type = basic
     http_server.username = mqtt-edge
     http_server.password = mqtt-edge
+    # http_server.auth_type = jwt
+    # http_server.jwt.private.keyfile = /etc/nanomq/pki/jwt/rsa-256.key
+    # http_server.jwt.public.keyfile = /etc/nanomq/pki/jwt/rsa-256.pub
 
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_auth_username.conf
-  user.conf: |
+  auth.conf: |
     auth.1.login = device
     auth.1.password = device
 
@@ -49,6 +59,8 @@ data:
   # warning: not support tls
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_bridge.conf
   bridge.conf: |
+    bridge.mqtt.parallel = 64
+
     bridge.mqtt.address = mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
     bridge.mqtt.proto_ver = 5
     bridge.mqtt.username = mqtt-edge
@@ -69,6 +81,25 @@ data:
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_web_hook.conf
   webhook.conf: |
     web.hook.enable = false
+
+    web.hook.url = https://nanomq-webhook-server.${POD_NAMESPACE}.svc.cluster.local
+    web.hook.ssl.verify = false
+    web.hook.ssl.server_name_indication = false
+    # web.hook.ssl.keyfile=
+    # web.hook.ssl.certfile=
+    # web.hook.ssl.cacertfile
+    web.hook.headers.content-type = application/json
+    web.hook.body.encoding_of_payload_field = plain
+    web.hook.pool_size = 32
+
+    # event
+    # web.hook.rule.<hook-name>.<number> = <event>
+    # client online
+    # web.hook.rule.client.connected.1 = {"action": "on_client_connected"}
+    # client offline
+    # web.hook.rule.client.disconnected.1 = {"action": "on_client_disconnected"}
+    # server receives the ACK message that sent by client
+    # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
 
 # # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/README.md#nanomq-environment-variables
 # ---

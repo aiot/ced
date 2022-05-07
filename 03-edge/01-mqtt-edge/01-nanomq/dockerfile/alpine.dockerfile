@@ -10,7 +10,7 @@ RUN \
     # install git
     apk add --allow-untrusted --upgrade --no-cache git openssh-client && \
     # install build dependence
-    apk add --allow-untrusted --upgrade --no-cache gcc g++ cmake ninja mbedtls-dev && \
+    apk add --allow-untrusted --upgrade --no-cache gcc g++ cmake ninja mbedtls-dev sqlite && \
     \
     rm -rfv /var/cache/apk/* && \
     \
@@ -24,10 +24,10 @@ RUN \
     git checkout NANOMQ_VERSION && \
         mkdir -p -v build && \
         cd build && \
-        cmake -G Ninja -DNNG_ENABLE_TLS=ON -DNOLOG=1 .. && \
+        cmake -G Ninja -DENABLE_JWT=ON -DNNG_ENABLE_TLS=ON -DNOLOG=1 .. && \
         ninja install && \
-    chown -v root:root /usr/lib/libgcc_s.so.1 /root/nanomq/build/nanolib/libnano_shared.so /usr/local/bin/nanomq && \
-    chmod -v 755 /root/nanomq/build/nanolib/libnano_shared.so /usr/local/bin/nanomq
+    chown -v root:root /usr/lib/libgcc_s.so.1 /root/nanomq/build/nanolib/libnano_shared.so /root/nanomq/build/nanomq/nanomq && \
+    chmod -v 755 /root/nanomq/build/nanolib/libnano_shared.so /root/nanomq/build/nanomq/nanomq
 
 
 # build image
@@ -37,7 +37,7 @@ RUN \
     set -ex && \
     \
     apk update --allow-untrusted --purge --no-cache && \
-    apk add --allow-untrusted --upgrade --no-cache mbedtls-dev && \
+    apk add --allow-untrusted --upgrade --no-cache mbedtls-dev sqlite && \
     rm -rfv /var/cache/apk/*
 
 COPY \
@@ -45,7 +45,7 @@ COPY \
 COPY \
     --from='builder' /root/nanomq/build/nanolib/libnano_shared.so /usr/lib/
 COPY \
-    --from='builder' /usr/local/bin/nanomq /usr/local/bin/
+    --from='builder' /root/nanomq/build/nanomq/nanomq /usr/local/bin/
 
 # ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]
 CMD ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]
