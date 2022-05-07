@@ -82,6 +82,7 @@ data:
     node.ssl_dist_optfile = etc/ssl_dist.conf
     node.async_threads = 8
     node.process_limit = 2097152
+    node.max_ets_tables = 2097152
     node.max_ports = 1048576
     node.dist_buffer_size = 8MB
     node.global_gc_interval = 15m
@@ -175,7 +176,7 @@ data:
     listener.tcp.external = 127.0.0.1:1883
     listener.tcp.external.peer_cert_as_clientid = cn
     listener.tcp.external.peer_cert_as_username = cn
-    listener.tcp.external.acceptors = 16
+    listener.tcp.external.acceptors = 8
     listener.tcp.external.zone = external
     listener.tcp.external.access.1 = allow all
     listener.tcp.external.max_connections = 1048576
