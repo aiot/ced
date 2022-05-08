@@ -33,7 +33,11 @@ spec:
       protocol: TCP
       port: 8084
       targetPort: 8084
-    - name: api
+    # - name: api
+    #   protocol: TCP
+    #   port: 8080
+    #   targetPort: 8080
+    - name: api-https
       protocol: TCP
       port: 8081
       targetPort: 8081
@@ -79,10 +83,6 @@ spec:
       protocol: TCP
       port: 8084
       targetPort: 8084
-    - name: api
-      protocol: TCP
-      port: 8081
-      targetPort: 8081
     - name: ekka
       protocol: TCP
       port: 4370
@@ -401,10 +401,16 @@ spec:
               containerPort: &port-websocket-tls 8084
             - name: api
               protocol: TCP
-              containerPort: &port-api 8081
+              containerPort: &port-api 8080
+            - name: api-https
+              protocol: TCP
+              containerPort: &port-api-https 8081
             - name: dashboard
               protocol: TCP
               containerPort: &port-dashboard 18083
+            - name: dashboard-https
+              protocol: TCP
+              containerPort: &port-dashboard-https 18084
             - name: ekka
               protocol: TCP
               containerPort: &port-ekka 4370
@@ -414,6 +420,7 @@ spec:
           startupProbe:
             httpGet:
               scheme: HTTP
+              host: 127.0.0.1
               port: *port-api
               path: /status
             initialDelaySeconds: 0
@@ -424,6 +431,7 @@ spec:
           readinessProbe:
             httpGet:
               scheme: HTTP
+              host: 127.0.0.1
               port: *port-api
               path: /status
             initialDelaySeconds: 0
@@ -434,6 +442,7 @@ spec:
           livenessProbe:
             httpGet:
               scheme: HTTP
+              host: 127.0.0.1
               port: *port-api
               path: /status
             initialDelaySeconds: 0
