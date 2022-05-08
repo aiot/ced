@@ -368,8 +368,19 @@ spec:
           #         - |-
           #           /opt/emqx/bin/emqx-ctl cluster leave
           command:
-            - /opt/emqx/bin/emqx
-            - foreground
+            - /bin/bash
+            - -c
+            - |-
+              export EMQX_NODE__NAME="${EMQX_CLUSTER__K8S__APP_NAME}@${POD_NAME}.emqx-headless.${POD_NAMESPACE}.svc.cluster.local"
+
+              export EMQX_BRIDGE__MQTT__MQTTCLOUD__ADDRESS="mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883"
+              export EMQX_BRIDGE__MQTT__MQTTCLOUD__CLIENTID="${POD_NAMESPACE}-${NODE_NAME}-${NODE_IP}"
+
+              export EMQX_WEB__HOOK__URL="https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local"
+
+              export EMQX_PROMETHEUS__PUSH__GATEWAY__SERVER="https://prom-push-gateway.${POD_NAMESPACE}.svc.cluster.local:9091"
+
+              /opt/emqx/bin/emqx foreground
 
           ports:
             - name: tcp-internal

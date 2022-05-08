@@ -20,7 +20,7 @@ data:
   EMQX_CLUSTER__K8S__NAMESPACE: *app-namespace
   EMQX_CLUSTER__K8S__SUFFIX: svc.cluster.local
 
-  # # erlang node.name(erlang unique identifier) will be generated automatically
+  # # erlang unique identifier
   # EMQX_NODE__NAME: emqx@${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
   EMQX_NODE__COOKIE: *app-namespace
 
@@ -409,39 +409,39 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/bridge/bridge-mqtt.html
   bridge-mqtt.conf: |
 
-    bridge.mqtt.mqtt-cloud.start_type = manual
+    bridge.mqtt.mqttcloud.start_type = manual
 
-    bridge.mqtt.mqtt-cloud.address = mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
-    bridge.mqtt.mqtt-cloud.proto_ver = mqttv5
-    bridge.mqtt.mqtt-cloud.ssl = on
-    bridge.mqtt.mqtt-cloud.verify = true
-    bridge.mqtt.mqtt-cloud.server_name_indication = disable
-    bridge.mqtt.mqtt-cloud.keyfile = etc/pki/mqtt-cloud.client.tls.key
-    bridge.mqtt.mqtt-cloud.certfile = etc/pki/mqtt-cloud.client.tls..crt
-    bridge.mqtt.mqtt-cloud.cacertfile = etc/pki/mqtt-cloud.ca.crt
-    bridge.mqtt.mqtt-cloud.username = mqtt-edge
-    bridge.mqtt.mqtt-cloud.password = mqtt-edge
-    bridge.mqtt.mqtt-cloud.keepalive = 60s
-    bridge.mqtt.mqtt-cloud.reconnect_interval = 20s
-    bridge.mqtt.mqtt-cloud.clean_start = true
+    # bridge.mqtt.mqttcloud.address = mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
+    bridge.mqtt.mqttcloud.proto_ver = mqttv5
+    bridge.mqtt.mqttcloud.ssl = on
+    bridge.mqtt.mqttcloud.verify = true
+    bridge.mqtt.mqttcloud.server_name_indication = disable
+    bridge.mqtt.mqttcloud.keyfile = etc/pki/mqtt-cloud.client.tls.key
+    bridge.mqtt.mqttcloud.certfile = etc/pki/mqtt-cloud.client.tls..crt
+    bridge.mqtt.mqttcloud.cacertfile = etc/pki/mqtt-cloud.ca.crt
+    bridge.mqtt.mqttcloud.username = mqtt-edge
+    bridge.mqtt.mqttcloud.password = mqtt-edge
+    bridge.mqtt.mqttcloud.keepalive = 60s
+    bridge.mqtt.mqttcloud.reconnect_interval = 20s
+    bridge.mqtt.mqttcloud.clean_start = true
 
-    bridge.mqtt.mqtt-cloud.clientid = ${POD_NAMESPACE}-${NODE_NAME}-${NODE_IP}
-    bridge.mqtt.mqtt-cloud.bridge_mode = true
+    # bridge.mqtt.mqttcloud.clientid = ${POD_NAMESPACE}-${NODE_NAME}-${NODE_IP}
+    bridge.mqtt.mqttcloud.bridge_mode = true
     # publish(push) message to mqtt-cloud
-    bridge.mqtt.mqtt-cloud.forwards = device001/#,device002/#
-    bridge.mqtt.mqtt-cloud.batch_size = 64
-    bridge.mqtt.mqtt-cloud.max_inflight_batches = 64
-    bridge.mqtt.mqtt-cloud.retry_interval = 10s
+    bridge.mqtt.mqttcloud.forwards = device001/#,device002/#
+    bridge.mqtt.mqttcloud.batch_size = 64
+    bridge.mqtt.mqttcloud.max_inflight_batches = 64
+    bridge.mqtt.mqttcloud.retry_interval = 10s
     # subscribe(pull) message from mqtt-cloud
-    bridge.mqtt.mqtt-cloud.subscription.1.topic = command/device001
-    bridge.mqtt.mqtt-cloud.subscription.1.qos = 1
-    bridge.mqtt.mqtt-cloud.subscription.2.topic = command/device002
-    bridge.mqtt.mqtt-cloud.subscription.2.qos = 1
+    bridge.mqtt.mqttcloud.subscription.1.topic = command/device001
+    bridge.mqtt.mqttcloud.subscription.1.qos = 1
+    bridge.mqtt.mqttcloud.subscription.2.topic = command/device002
+    bridge.mqtt.mqttcloud.subscription.2.qos = 1
 
     # cache
-    bridge.mqtt.mqtt-cloud.queue.replayq_dir = data/bridge/
-    bridge.mqtt.mqtt-cloud.queue.replayq_seg_bytes = 128MB
-    bridge.mqtt.mqtt-cloud.queue.max_total_size = 2048MB
+    bridge.mqtt.mqttcloud.queue.replayq_dir = data/bridge/
+    bridge.mqtt.mqttcloud.queue.replayq_seg_bytes = 128MB
+    bridge.mqtt.mqttcloud.queue.max_total_size = 2048MB
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_web_hook/etc/emqx_web_hook.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-web-hook
@@ -449,7 +449,7 @@ data:
   webhook.conf: |
 
     # send notify to some http server
-    web.hook.url = https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local
+    # web.hook.url = https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local
     web.hook.ssl.verify = false
     web.hook.ssl.server_name_indication = disable
     # web.hook.ssl.keyfile =
@@ -551,7 +551,7 @@ data:
   # grafana: https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_prometheus/grafana_template/
   prometheus.conf: |
 
-    prometheus.push.gateway.server = https://prom-push-gateway.${POD_NAMESPACE}.svc.cluster.local:9091
+    # prometheus.push.gateway.server = https://prom-push-gateway.${POD_NAMESPACE}.svc.cluster.local:9091
     prometheus.interval = 15000
 
 

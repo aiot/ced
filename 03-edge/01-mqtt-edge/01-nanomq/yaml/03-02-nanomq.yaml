@@ -82,10 +82,10 @@ spec:
               mountPath: /etc/nanomq/pki/
               readOnly: true
 
-          # envFrom:
-          #   - configMapRef:
-          #       name: nanomq-env
-          #       optional: true
+          envFrom:
+            - configMapRef:
+                name: nanomq-env
+                optional: true
           env:
             - name: NODE_NAME
               valueFrom:
