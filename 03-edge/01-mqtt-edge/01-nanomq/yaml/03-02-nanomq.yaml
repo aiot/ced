@@ -50,6 +50,15 @@ spec:
         - name: config
           configMap:
             name: nanomq
+            items:
+              - key: broker.conf
+                path: broker.conf.tpl
+              - key: auth.conf
+                path: auth.conf.tpl
+              - key: bridge.conf
+                path: bridge.conf.tpl
+              - key: webhook.conf
+                path: webhook.conf.tpl
             defaultMode: 0644
             optional: true
 
@@ -111,6 +120,26 @@ spec:
           tty: false
           terminationMessagePolicy: FallbackToLogsOnError
           terminationMessagePath: /dev/termination-log
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - |-
+                    configFilePath='/etc/nanomq/config'
+                    for configFile in $(ls ${configFilePath})
+                    do
+                        configFileName=$(echo -e ${configFile} | awk -F '.' '{print $1}')
+                        cp -rfv ${configFilePath}/${configFileName}.conf.tpl ${configFilePath}/${configFileName}.conf
+                    done
+
+                    echo -e '' >> ${configFilePath}/bridge.conf
+                    echo -e "${NANOMQ_BRIDGE__MQTT__ADDRESS}" >> ${configFilePath}/bridge.conf
+                    echo -e "${NANOMQ_BRIDGE__MQTT__CLIENTID}" >> ${configFilePath}/bridge.conf
+
+                    echo -e '' >> ${configFilePath}/webhook.conf
+                    echo -e "${NANOMQ_WEBHOOK__URL}" >> ${configFilePath}/webhook.conf
           # https://nanomq.io/docs/zh/latest/toolkit.html#broker
           command:
             - /usr/local/bin/nanomq

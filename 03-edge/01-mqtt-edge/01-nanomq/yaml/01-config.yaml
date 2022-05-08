@@ -1,15 +1,21 @@
-# # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/README.md#nanomq-environment-variables
-# ---
-# kind: ConfigMap
-# apiVersion: v1
-# metadata:
-#   namespace: aiot-case
-#   name: nanomq-env
-# immutable: false
-# data:
-#   NANOMQ_CONF_PATH: /etc/nanomq/config/broker.conf
-#   NANOMQ_AUTH_CONF_PATH: /etc/nanomq/config/auth.conf
-#   NANOMQ_BRIDGE_CONF_PATH: /etc/nanomq/config/bridge.conf
+# https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/README.md#nanomq-environment-variables
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: aiot-case
+  name: nanomq-env
+immutable: false
+data:
+  NANOMQ_CONF_PATH: /etc/nanomq/config/broker.conf
+  NANOMQ_AUTH_CONF_PATH: /etc/nanomq/config/auth.conf
+  NANOMQ_BRIDGE_CONF_PATH: /etc/nanomq/config/bridge.conf
+  NANOMQ_WEBHOOK_CONF_PATH: /etc/nanomq/config/webhook.conf
+
+  NANOMQ_BRIDGE__MQTT__ADDRESS: mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
+  NANOMQ_BRIDGE__MQTT__CLIENTID: ${POD_NAMESPACE}-${NODE_NAME}-${NODE_IP}
+
+  NANOMQ_WEBHOOK__URL: https://nanomq-webhook-server.${POD_NAMESPACE}.svc.cluster.local
 
 # https://nanomq.io/docs/zh/latest/config-description.html
 ---
@@ -73,14 +79,14 @@ data:
   bridge.conf: |
     bridge.mqtt.parallel = 64
 
-    bridge.mqtt.address = mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
+    # bridge.mqtt.address = mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
     bridge.mqtt.proto_ver = 5
     bridge.mqtt.username = mqtt-edge
     bridge.mqtt.password = mqtt-edge
     bridge.mqtt.keepalive = 60
     bridge.mqtt.clean_start = true
 
-    bridge.mqtt.clientid = ${POD_NAMESPACE}-${NODE_NAME}-${NODE_IP}
+    # bridge.mqtt.clientid = ${POD_NAMESPACE}-${NODE_NAME}-${NODE_IP}
     bridge.mqtt.bridge_mode = true
     # publish(push) message to mqtt-cloud
     bridge.mqtt.forwards = device001/#,device002/#
@@ -94,7 +100,7 @@ data:
   webhook.conf: |
     web.hook.enable = false
 
-    web.hook.url = https://nanomq-webhook-server.${POD_NAMESPACE}.svc.cluster.local
+    # web.hook.url = https://nanomq-webhook-server.${POD_NAMESPACE}.svc.cluster.local
     web.hook.ssl.verify = false
     web.hook.ssl.server_name_indication = false
     # web.hook.ssl.keyfile=
