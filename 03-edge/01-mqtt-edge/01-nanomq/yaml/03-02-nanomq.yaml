@@ -152,7 +152,7 @@ spec:
                     if [[ ${EMQX_NODE__NAME} == "" ]]
                     then
                         eval echo -e "bridge.mqtt.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}" >> ${configFilePath}/bridge.conf
-                    elif
+                    else
                         eval echo -e "bridge.mqtt.clientid = ${NANOMQ_BRIDGE__MQTT__CLIENTID}" >> ${configFilePath}/bridge.conf
                     fi
 
