@@ -52,13 +52,13 @@ spec:
             name: nanomq
             items:
               - key: broker.conf
-                path: broker.conf.tpl
+                path: broker.conf
               - key: auth.conf
-                path: auth.conf.tpl
+                path: auth.conf
               - key: bridge.conf
-                path: bridge.conf.tpl
+                path: bridge.conf
               - key: webhook.conf
-                path: webhook.conf.tpl
+                path: webhook.conf
             defaultMode: 0644
             optional: true
 
@@ -75,7 +75,20 @@ spec:
 
           volumeMounts:
             - name: config
-              mountPath: /etc/nanomq/config/
+              subPath: broker.conf
+              mountPath: /etc/nanomq/config/broker.conf.tpl
+              readOnly: false
+            - name: config
+              subPath: auth.conf
+              mountPath: /etc/nanomq/config/auth.conf.tpl
+              readOnly: false
+            - name: config
+              subPath: bridge.conf
+              mountPath: /etc/nanomq/config/bridge.conf.tpl
+              readOnly: false
+            - name: config
+              subPath: webhook.conf
+              mountPath: /etc/nanomq/config/webhook.conf.tpl
               readOnly: false
 
             - name: cert
