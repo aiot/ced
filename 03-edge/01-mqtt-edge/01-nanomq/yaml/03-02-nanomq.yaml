@@ -133,40 +133,35 @@ spec:
           tty: false
           terminationMessagePolicy: FallbackToLogsOnError
           terminationMessagePath: /dev/termination-log
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/bash
-                  - -c
-                  - |-
-                    configFilePath='/etc/nanomq/config'
-                    for configFile in $(ls ${configFilePath})
-                    do
-                        configFileName=$(echo -e ${configFile} | awk -F '.' '{print $1}')
-                        cp -rfv ${configFilePath}/${configFileName}.conf.tpl ${configFilePath}/${configFileName}.conf
-                    done
-
-                    echo -e '' >> ${configFilePath}/bridge.conf
-                    eval echo -e "bridge.mqtt.address = ${NANOMQ_BRIDGE__MQTT__ADDRESS}" >> ${configFilePath}/bridge.conf
-                    if [[ ${EMQX_NODE__NAME} == "" ]]
-                    then
-                        eval echo -e "bridge.mqtt.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}" >> ${configFilePath}/bridge.conf
-                    else
-                        eval echo -e "bridge.mqtt.clientid = ${NANOMQ_BRIDGE__MQTT__CLIENTID}" >> ${configFilePath}/bridge.conf
-                    fi
-
-                    echo -e '' >> ${configFilePath}/webhook.conf
-                    eval echo -e "web.hook.url = ${NANOMQ_WEBHOOK__URL}" >> ${configFilePath}/webhook.conf
           # https://nanomq.io/docs/zh/latest/toolkit.html#broker
           command:
-            - /usr/local/bin/nanomq
-            - broker
-            - start
-            - --conf=/etc/nanomq/config/broker.conf
-            - --auth=/etc/nanomq/config/auth.conf
-            - --bridge=/etc/nanomq/config/bridge.conf
-            - --webhook=/etc/nanomq/config/webhook.conf
+            - /bin/bash
+            - -c
+            - |-
+              configFilePath='/etc/nanomq/config'
+              for configFile in $(ls ${configFilePath})
+              do
+                  configFileName=$(echo -e ${configFile} | awk -F '.' '{print $1}')
+                  cp -rfv ${configFilePath}/${configFileName}.conf.tpl ${configFilePath}/${configFileName}.conf
+              done
+
+              echo -e '' >> ${configFilePath}/bridge.conf
+              eval echo -e "bridge.mqtt.address = ${NANOMQ_BRIDGE__MQTT__ADDRESS}" >> ${configFilePath}/bridge.conf
+              if [[ ${EMQX_NODE__NAME} == "" ]]
+              then
+                  eval echo -e "bridge.mqtt.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}" >> ${configFilePath}/bridge.conf
+              else
+                  eval echo -e "bridge.mqtt.clientid = ${NANOMQ_BRIDGE__MQTT__CLIENTID}" >> ${configFilePath}/bridge.conf
+              fi
+
+              echo -e '' >> ${configFilePath}/webhook.conf
+              eval echo -e "web.hook.url = ${NANOMQ_WEBHOOK__URL}" >> ${configFilePath}/webhook.conf
+
+              /usr/local/bin/nanomq broker start \
+              --conf=/etc/nanomq/config/broker.conf \
+              --auth=/etc/nanomq/config/auth.conf \
+              --bridge=/etc/nanomq/config/bridge.conf \
+              --webhook=/etc/nanomq/config/webhook.conf
 
           ports:
             - name: tcp
