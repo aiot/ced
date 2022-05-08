@@ -373,7 +373,12 @@ spec:
             - |-
               if [[ ${EMQX_NODE__NAME} == "" ]]
               then
-                  export EMQX_NODE__NAME="${EMQX_CLUSTER__K8S__APP_NAME}@${POD_NAME}.${EMQX_CLUSTER__K8S__SERVICE_NAME}.${EMQX_CLUSTER__K8S__NAMESPACE}.${EMQX_CLUSTER__K8S__SUFFIX}"
+                  erlangNodeName="${EMQX_CLUSTER__K8S__APP_NAME}@${POD_NAME}.${EMQX_CLUSTER__K8S__SERVICE_NAME}.${EMQX_CLUSTER__K8S__NAMESPACE}.${EMQX_CLUSTER__K8S__SUFFIX}"
+
+                  export EMQX_NODE__NAME=${erlangNodeName}
+
+                  eval echo -e "export EMQX_NODE__NAME=${erlangNodeName}" >> /etc/profile.d/emqx.sh
+                  echo -e 'source /etc/profile.d/emqx.sh' >> /root/.bashrc
               fi
 
               /opt/emqx/bin/emqx foreground
