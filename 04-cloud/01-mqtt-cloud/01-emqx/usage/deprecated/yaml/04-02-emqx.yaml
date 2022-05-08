@@ -359,32 +359,24 @@ spec:
           tty: false
           terminationMessagePolicy: FallbackToLogsOnError
           terminationMessagePath: /dev/termination-log
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/bash
-                  - -c
-                  - |-
-                    if [[ ${EMQX_NODE__NAME} == "" ]]
-                    then
-                        if [[ -f /etc/environment ]]
-                        then
-                          touch /etc/environment
-                        fi
-
-                        eval echo -e EMQX_NODE__NAME="${EMQX_CLUSTER__K8S__APP_NAME}@${POD_NAME}.${EMQX_CLUSTER__K8S__SERVICE_NAME}.${EMQX_CLUSTER__K8S__NAMESPACE}.${EMQX_CLUSTER__K8S__SUFFIX}" >> /etc/environment
-                    fi
-            # preStop:
-            #   exec:
-            #     command:
-            #       - /bin/bash
-            #       - -c
-            #       - |-
-            #         /opt/emqx/bin/emqx-ctl cluster leave
+          # lifecycle:
+          #   preStop:
+          #     exec:
+          #       command:
+          #         - /bin/bash
+          #         - -c
+          #         - |-
+          #           /opt/emqx/bin/emqx-ctl cluster leave
           command:
-            - /opt/emqx/bin/emqx
-            - foreground
+            - /bin/bash
+            - -c
+            - |-
+              if [[ ${EMQX_NODE__NAME} == "" ]]
+              then
+                  export EMQX_NODE__NAME="${EMQX_CLUSTER__K8S__APP_NAME}@${POD_NAME}.${EMQX_CLUSTER__K8S__SERVICE_NAME}.${EMQX_CLUSTER__K8S__NAMESPACE}.${EMQX_CLUSTER__K8S__SUFFIX}"
+              fi
+
+              /opt/emqx/bin/emqx foreground
 
           ports:
             - name: tcp-internal
