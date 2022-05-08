@@ -359,28 +359,32 @@ spec:
           tty: false
           terminationMessagePolicy: FallbackToLogsOnError
           terminationMessagePath: /dev/termination-log
-          # lifecycle:
-          #   preStop:
-          #     exec:
-          #       command:
-          #         - /bin/bash
-          #         - -c
-          #         - |-
-          #           /opt/emqx/bin/emqx-ctl cluster leave
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - |-
+                    if [[ ${EMQX_NODE__NAME} == "" ]]
+                    then
+                        if [[ -f /etc/environment ]]
+                        then
+                          touch /etc/environment
+                        fi
+
+                        eval echo -e EMQX_NODE__NAME="${EMQX_CLUSTER__K8S__APP_NAME}@${POD_NAME}.${EMQX_CLUSTER__K8S__SERVICE_NAME}.${EMQX_CLUSTER__K8S__NAMESPACE}.${EMQX_CLUSTER__K8S__SUFFIX}" >> /etc/environment
+                    fi
+            # preStop:
+            #   exec:
+            #     command:
+            #       - /bin/bash
+            #       - -c
+            #       - |-
+            #         /opt/emqx/bin/emqx-ctl cluster leave
           command:
-            - /bin/bash
-            - -c
-            - |-
-              export EMQX_NODE__NAME="${EMQX_CLUSTER__K8S__APP_NAME}@${POD_NAME}.emqx-headless.${POD_NAMESPACE}.svc.cluster.local"
-
-              export EMQX_BRIDGE__MQTT__MQTTCLOUD__ADDRESS="mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883"
-              export EMQX_BRIDGE__MQTT__MQTTCLOUD__CLIENTID="${POD_NAMESPACE}-${NODE_NAME}-${NODE_IP}"
-
-              export EMQX_WEB__HOOK__URL="https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local"
-
-              export EMQX_PROMETHEUS__PUSH__GATEWAY__SERVER="https://prom-push-gateway.${POD_NAMESPACE}.svc.cluster.local:9091"
-
-              /opt/emqx/bin/emqx foreground
+            - /opt/emqx/bin/emqx
+            - foreground
 
           ports:
             - name: tcp-internal

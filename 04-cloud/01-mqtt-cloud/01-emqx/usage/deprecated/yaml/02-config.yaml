@@ -21,7 +21,7 @@ data:
   EMQX_CLUSTER__K8S__SUFFIX: svc.cluster.local
 
   # # erlang unique identifier
-  # EMQX_NODE__NAME: emqx@${POD_NAME}.${SERVICE_NAME}.${POD_NAMESPACE}.svc.cluster.local
+  # EMQX_NODE__NAME: ${EMQX_CLUSTER__K8S__APP_NAME}@${POD_NAME}.${EMQX_CLUSTER__K8S__SERVICE_NAME}.${EMQX_CLUSTER__K8S__NAMESPACE}.${EMQX_CLUSTER__K8S__SUFFIX}
   EMQX_NODE__COOKIE: *app-namespace
 
 # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html
@@ -425,7 +425,7 @@ data:
     bridge.mqtt.mqttcloud.reconnect_interval = 20s
     bridge.mqtt.mqttcloud.clean_start = true
 
-    # bridge.mqtt.mqttcloud.clientid = ${POD_NAMESPACE}-${NODE_NAME}-${NODE_IP}
+    # bridge.mqtt.mqttcloud.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
     bridge.mqtt.mqttcloud.bridge_mode = true
     # publish(push) message to mqtt-cloud
     bridge.mqtt.mqttcloud.forwards = device001/#,device002/#
