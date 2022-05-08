@@ -148,11 +148,11 @@ spec:
                     done
 
                     echo -e '' >> ${configFilePath}/bridge.conf
-                    echo -e $(echo -e "${NANOMQ_BRIDGE__MQTT__ADDRESS}") >> ${configFilePath}/bridge.conf
-                    echo -e $(echo -e "${NANOMQ_BRIDGE__MQTT__CLIENTID}") >> ${configFilePath}/bridge.conf
+                    eval echo -e "bridge.mqtt.address = ${NANOMQ_BRIDGE__MQTT__ADDRESS}" >> ${configFilePath}/bridge.conf
+                    eval echo -e "bridge.mqtt.clientid = ${NANOMQ_BRIDGE__MQTT__CLIENTID}" >> ${configFilePath}/bridge.conf
 
                     echo -e '' >> ${configFilePath}/webhook.conf
-                    echo -e $(echo -e "${NANOMQ_WEBHOOK__URL}") >> ${configFilePath}/webhook.conf
+                    eval echo -e "web.hook.url = ${NANOMQ_WEBHOOK__URL}" >> ${configFilePath}/webhook.conf
           # https://nanomq.io/docs/zh/latest/toolkit.html#broker
           command:
             - /usr/local/bin/nanomq
