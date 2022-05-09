@@ -35,12 +35,12 @@ spec:
       targetPort: 8084
     # - name: api
     #   protocol: TCP
-    #   port: 8080
-    #   targetPort: 8080
+    #   port: 8081
+    #   targetPort: 8081
     - name: api-https
       protocol: TCP
-      port: 8081
-      targetPort: 8081
+      port: 8082
+      targetPort: 8082
   type: ClusterIP
   clusterIP: None
   sessionAffinity: None
@@ -92,12 +92,12 @@ spec:
   ports:
     # - name: api
     #   protocol: TCP
-    #   port: 8080
-    #   targetPort: 8080
+    #   port: 8081
+    #   targetPort: 8081
     - name: api-https
       protocol: TCP
-      port: 8081
-      targetPort: 8081
+      port: 8082
+      targetPort: 8082
     - name: dashboard
       protocol: TCP
       port: 18083
@@ -451,10 +451,10 @@ spec:
               containerPort: &port-websocket-tls 8084
             - name: api
               protocol: TCP
-              containerPort: &port-api 8080
+              containerPort: &port-api 8081
             - name: api-https
               protocol: TCP
-              containerPort: &port-api-https 8081
+              containerPort: &port-api-https 8082
             - name: dashboard
               protocol: TCP
               containerPort: &port-dashboard 18083
