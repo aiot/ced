@@ -470,7 +470,6 @@ spec:
           startupProbe:
             httpGet:
               scheme: HTTP
-              host: 127.0.0.1
               port: *port-api
               path: /status
             initialDelaySeconds: 0
@@ -481,7 +480,6 @@ spec:
           readinessProbe:
             httpGet:
               scheme: HTTP
-              host: 127.0.0.1
               port: *port-api
               path: /status
             initialDelaySeconds: 0
@@ -492,7 +490,6 @@ spec:
           livenessProbe:
             httpGet:
               scheme: HTTP
-              host: 127.0.0.1
               port: *port-api
               path: /status
             initialDelaySeconds: 0
