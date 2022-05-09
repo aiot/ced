@@ -128,7 +128,7 @@ metadata:
   # annotations:
   #   kubereloader.kubestation.aiot.hk/auto: "true"
 spec:
-  serviceName: emqx
+  serviceName: emqx-ekka
 
   replicas: 3
   selector:
