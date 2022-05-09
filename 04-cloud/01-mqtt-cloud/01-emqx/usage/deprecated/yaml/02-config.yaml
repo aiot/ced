@@ -24,7 +24,8 @@ data:
   # EMQX_NODE__NAME: ${EMQX_CLUSTER__K8S__APP_NAME}@${POD_NAME}.${EMQX_CLUSTER__K8S__SERVICE_NAME}.${EMQX_CLUSTER__K8S__NAMESPACE}.${EMQX_CLUSTER__K8S__SUFFIX}
   EMQX_NODE__COOKIE: *app-namespace
 
-  # EMQX_WEB__HOOK__URL: https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local
+  # note: this is a fake value, please replace it with the actual value
+  EMQX_WEB__HOOK__URL: https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local
 
 # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html
 ---
@@ -608,7 +609,7 @@ data:
     % message persistence
     % https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
     % webhook
-    { emqx_web_hook, false }.
+    { emqx_web_hook, true }.
     % rule engine based sql
     % https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
     % https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html

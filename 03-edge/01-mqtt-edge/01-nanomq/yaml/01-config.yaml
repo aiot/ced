@@ -15,7 +15,8 @@ data:
   NANOMQ_BRIDGE__MQTT__ADDRESS: mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
   # NANOMQ_BRIDGE__MQTT__CLIENTID: ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
 
-  # NANOMQ_WEBHOOK__URL: https://nanomq-webhook-server.${POD_NAMESPACE}.svc.cluster.local
+  # note: this is a fake value, please replace it with the actual value
+  NANOMQ_WEBHOOK__URL: https://nanomq-webhook-server.${POD_NAMESPACE}.svc.cluster.local
 
 # https://nanomq.io/docs/zh/latest/config-description.html
 ---
