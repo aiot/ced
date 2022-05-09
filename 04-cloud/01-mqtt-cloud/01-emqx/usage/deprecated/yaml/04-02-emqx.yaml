@@ -56,7 +56,7 @@ kind: Service
 apiVersion: v1
 metadata:
   namespace: &app-namespace aiot-case
-  name: &app-name emqx-headless
+  name: &app-name emqx-ekka
   labels: &app-label
     app.kubernetes.io/name: emqx
     app.kubernetes.io/component: server
@@ -67,30 +67,10 @@ spec:
     <<: *app-label
   publishNotReadyAddresses: true
   ports:
-    # - name: tcp
-    #   protocol: TCP
-    #   port: 1883
-    #   targetPort: 1883
-    - name: tcp-tls
-      protocol: TCP
-      port: 8883
-      targetPort: 8883
-    # - name: websocket
-    #   protocol: TCP
-    #   port: 8083
-    #   targetPort: 8083
-    - name: websocket-tls
-      protocol: TCP
-      port: 8084
-      targetPort: 8084
     - name: ekka
       protocol: TCP
       port: 4370
       targetPort: 4370
-    - name: ekka-rpc
-      protocol: TCP
-      port: 5370
-      targetPort: 5370
   type: ClusterIP
   clusterIP: None
   sessionAffinity: None
@@ -105,7 +85,7 @@ metadata:
   # annotations:
   #   kubereloader.kubestation.aiot.hk/auto: "true"
 spec:
-  serviceName: emqx-headless
+  serviceName: emqx
 
   replicas: 3
   selector:

@@ -37,14 +37,14 @@ spec:
     - "*.emqx.aiot-case"
     - "*.emqx.aiot-case.svc"
     - "*.emqx.aiot-case.svc.cluster.local"
-    - emqx-headless
-    - emqx-headless.aiot-case
-    - emqx-headless.aiot-case.svc
-    - emqx-headless.aiot-case.svc.cluster.local
-    - "*.emqx-headless"
-    - "*.emqx-headless.aiot-case"
-    - "*.emqx-headless.aiot-case.svc"
-    - "*.emqx-headless.aiot-case.svc.cluster.local"
+    - emqx-ekka
+    - emqx-ekka.aiot-case
+    - emqx-ekka.aiot-case.svc
+    - emqx-ekka.aiot-case.svc.cluster.local
+    - "*.emqx-ekka"
+    - "*.emqx-ekka.aiot-case"
+    - "*.emqx-ekka.aiot-case.svc"
+    - "*.emqx-ekka.aiot-case.svc.cluster.local"
   ipAddresses:
     - 127.0.0.1
   privateKey:
