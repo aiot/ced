@@ -98,10 +98,10 @@ spec:
       protocol: TCP
       port: 8081
       targetPort: 8081
-    # - name: dashboard
-    #   protocol: TCP
-    #   port: 18083
-    #   targetPort: 18083
+    - name: dashboard
+      protocol: TCP
+      port: 18083
+      targetPort: 18083
     - name: dashboard-https
       protocol: TCP
       port: 18084

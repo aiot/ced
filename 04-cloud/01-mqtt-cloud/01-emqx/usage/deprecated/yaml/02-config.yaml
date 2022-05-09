@@ -499,7 +499,7 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
   api.conf: |
 
-    management.listener.http = 127.0.0.1:8080
+    management.listener.http = 8080
     management.listener.http.inet6 = false
     management.listener.http.ipv6_v6only = false
     management.listener.http.acceptors = 8
@@ -507,7 +507,7 @@ data:
     management.listener.http.backlog = 1024
     management.listener.http.send_timeout = 15s
     management.listener.http.send_timeout_close = on
-    management.listener.https = 0.0.0.0:8081
+    management.listener.https = 8081
     management.listener.https.inet6 = false
     management.listener.https.ipv6_v6only = false
     management.listener.https.keyfile = etc/pki/tls.key
@@ -531,18 +531,19 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
   dashboard.conf: |
 
-    dashboard.listener.http = 127.0.0.1:18083
+    dashboard.listener.http = 18083
     dashboard.listener.http.inet6 = false
     dashboard.listener.http.ipv6_v6only = false
     dashboard.listener.http.acceptors = 8
     dashboard.listener.http.max_clients = 128
-    dashboard.listener.https = 0.0.0.0:18084
+    dashboard.listener.https = 18084
     dashboard.listener.https.inet6 = false
     dashboard.listener.https.ipv6_v6only = false
     dashboard.listener.https.keyfile = etc/pki/tls.key
     dashboard.listener.https.certfile = etc/pki/tls.crt
     dashboard.listener.https.cacertfile = etc/pki/ca.crt
-    dashboard.listener.https.verify = verify_none
+    # # bug: can not set dashboard.listener.https.verify, neither verify_none nor verify_peer
+    # dashboard.listener.https.verify = verify_none
     dashboard.listener.https.fail_if_no_peer_cert = false
     dashboard.listener.https.tls_versions = tlsv1.3,tlsv1.2
     dashboard.listener.https.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-CHACHA20-POLY1305,ECDHE-RSA-CHACHA20-POLY1305,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256

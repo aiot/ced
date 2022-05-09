@@ -64,8 +64,8 @@ data:
     http_server.username = mqtt-edge
     http_server.password = mqtt-edge
     # http_server.auth_type = jwt
-    # http_server.jwt.private.keyfile = /etc/nanomq/pki/jwt/rsa-256.key
-    # http_server.jwt.public.keyfile = /etc/nanomq/pki/jwt/rsa-256.pub
+    # http_server.jwt.private.keyfile = /etc/nanomq/pki/jwt/rs256.key
+    # http_server.jwt.public.keyfile = /etc/nanomq/pki/jwt/rs256.pub
 
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_auth_username.conf
   auth.conf: |
