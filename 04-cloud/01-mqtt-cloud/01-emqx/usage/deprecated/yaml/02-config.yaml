@@ -179,8 +179,9 @@ data:
     listener.tcp.internal.nodelay = false
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#tcpexternal
     listener.tcp.external = 127.0.0.1:1883
-    listener.tcp.external.peer_cert_as_clientid = cn
-    listener.tcp.external.peer_cert_as_username = cn
+    # note: whether to use the CN field of certificate as username and clientid
+    # # listener.tcp.external.peer_cert_as_username = cn
+    # # listener.tcp.external.peer_cert_as_clientid = cn
     listener.tcp.external.acceptors = 8
     listener.tcp.external.zone = external
     listener.tcp.external.access.1 = allow all
@@ -192,7 +193,8 @@ data:
     listener.tcp.external.send_timeout_close = on
     listener.tcp.external.reuseaddr = true
     listener.tcp.external.nodelay = true
-    listener.tcp.external.proxy_protocol = on
+    # warning: must be off, otherwise mqtt-client will not be able to publish messages
+    listener.tcp.external.proxy_protocol = off
     listener.tcp.external.proxy_protocol_timeout = 5s
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#tlsexternal
     listener.ssl.external = 0.0.0.0:8883
@@ -202,11 +204,13 @@ data:
     listener.ssl.external.depth = 0
     listener.ssl.external.verify = verify_peer
     listener.ssl.external.fail_if_no_peer_cert = true
-    listener.ssl.external.peer_cert_as_clientid = cn
-    listener.ssl.external.peer_cert_as_username = cn
+    # note: whether to use the CN field of certificate as username and clientid
+    # # listener.ssl.external.peer_cert_as_username = cn
+    # # listener.ssl.external.peer_cert_as_clientid = cn
     listener.ssl.external.handshake_timeout = 15s
     listener.ssl.external.tls_versions = tlsv1.3,tlsv1.2
-    listener.ssl.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-CHACHA20-POLY1305,ECDHE-RSA-CHACHA20-POLY1305,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256
+    # warning: this value must not be changed, otherwise tls will not work
+    listener.ssl.external.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
     listener.ssl.external.honor_cipher_order = on
     listener.ssl.external.secure_renegotiate = on
     listener.ssl.external.reuse_sessions = on
@@ -221,13 +225,15 @@ data:
     listener.ssl.external.send_timeout_close = on
     listener.ssl.external.reuseaddr = true
     listener.ssl.external.nodelay = true
-    listener.ssl.external.proxy_protocol = on
+    # warning: must be off, otherwise mqtt-client will not be able to publish messages
+    listener.ssl.external.proxy_protocol = off
     listener.ssl.external.proxy_protocol_timeout = 5s
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#wsexternal
     listener.ws.external = 127.0.0.1:8083
     listener.ws.external.mqtt_path = /mqtt
-    listener.ws.external.peer_cert_as_username = cn
-    listener.ws.external.peer_cert_as_clientid = cn
+    # note: whether to use the CN field of certificate as username and clientid
+    # # listener.ws.external.peer_cert_as_username = cn
+    # # listener.ws.external.peer_cert_as_clientid = cn
     listener.ws.external.acceptors = 8
     listener.ws.external.zone = external
     listener.ws.external.access.1 = allow all
@@ -239,14 +245,15 @@ data:
     listener.ws.external.send_timeout = 15s
     listener.ws.external.send_timeout_close = on
     listener.ws.external.nodelay = true
-    listener.ws.external.supported_subprotocols = mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5
+    listener.ws.external.supported_subprotocols = mqtt-v5, mqtt-v3.1.1, mqtt-v3, mqtt
     listener.ws.external.fail_if_no_subprotocol = false
     listener.ws.external.mqtt_piggyback = multiple
     listener.ws.external.compress = true
     listener.ws.external.check_origin_enable = false
     listener.ws.external.allow_origin_absence = true
     listener.ws.external.check_origins = http://127.0.0.1:8083, http://localhost:8083
-    listener.ws.external.proxy_protocol = on
+    # warning: must be off, otherwise mqtt-client will not be able to publish messages
+    listener.ws.external.proxy_protocol = off
     listener.ws.external.proxy_protocol_timeout = 5s
     listener.ws.external.proxy_address_header = X-Forwarded-For
     listener.ws.external.proxy_port_header = X-Forwarded-Port
@@ -259,10 +266,12 @@ data:
     listener.wss.external.depth = 0
     listener.wss.external.verify = verify_peer
     listener.wss.external.fail_if_no_peer_cert = true
-    listener.wss.external.peer_cert_as_username = cn
-    listener.wss.external.peer_cert_as_clientid = cn
+    # note: whether to use the CN field of certificate as username and clientid
+    # # listener.wss.external.peer_cert_as_username = cn
+    # # listener.wss.external.peer_cert_as_clientid = cn
     listener.wss.external.tls_versions = tlsv1.3,tlsv1.2
-    listener.wss.external.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-CHACHA20-POLY1305,ECDHE-RSA-CHACHA20-POLY1305,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256
+    # warning: this value must not be changed, otherwise tls will not work
+    listener.wss.external.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
     listener.wss.external.honor_cipher_order = on
     listener.wss.external.secure_renegotiate = on
     listener.wss.external.reuse_sessions = on
@@ -277,14 +286,15 @@ data:
     listener.wss.external.send_timeout = 15s
     listener.wss.external.send_timeout_close = on
     listener.wss.external.nodelay = true
-    listener.wss.external.supported_subprotocols = mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5
+    listener.wss.external.supported_subprotocols = mqtt-v5, mqtt-v3.1.1, mqtt-v3, mqtt
     listener.wss.external.fail_if_no_subprotocol = false
     listener.wss.external.mqtt_piggyback = multiple
     listener.wss.external.compress = true
     listener.wss.external.check_origin_enable = false
     listener.wss.external.allow_origin_absence = true
     listener.wss.external.check_origins = https://127.0.0.1:8084, https://localhost:8084
-    listener.wss.external.proxy_protocol = on
+    # warning: must be off, otherwise mqtt-client will not be able to publish messages
+    listener.wss.external.proxy_protocol = off
     listener.wss.external.proxy_protocol_timeout = 5s
     listener.wss.external.proxy_address_header = X-Forwarded-For
     listener.wss.external.proxy_port_header = X-Forwarded-Port
@@ -517,7 +527,8 @@ data:
     management.listener.https.verify = verify_peer
     management.listener.https.fail_if_no_peer_cert = true
     management.listener.https.tls_versions = tlsv1.3,tlsv1.2
-    management.listener.https.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-CHACHA20-POLY1305,ECDHE-RSA-CHACHA20-POLY1305,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256
+    # warning: this value must not be changed, otherwise tls will not work
+    management.listener.https.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
     management.listener.https.acceptors = 8
     management.listener.https.max_clients = 1024
     management.listener.https.backlog = 1024
@@ -550,7 +561,8 @@ data:
     # dashboard.listener.https.verify = verify_none
     dashboard.listener.https.fail_if_no_peer_cert = false
     dashboard.listener.https.tls_versions = tlsv1.3,tlsv1.2
-    dashboard.listener.https.ciphers = ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-CHACHA20-POLY1305,ECDHE-RSA-CHACHA20-POLY1305,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256
+    # warning: this value must not be changed, otherwise tls will not work
+    dashboard.listener.https.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
     dashboard.listener.https.honor_cipher_order = on
     dashboard.listener.https.secure_renegotiate = on
     dashboard.listener.https.reuse_sessions = on
