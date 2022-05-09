@@ -72,7 +72,8 @@ data:
     # cluster.k8s.service_name = emqx-discovery
     # cluster.k8s.namespace = aiot-case
     # cluster.k8s.suffix = svc.cluster.local
-    cluster.proto_dist = inet_tls
+    # warning: ekka does not support inet_tls
+    cluster.proto_dist = inet_tcp
     cluster.autoheal = on
     cluster.autoclean = 300s
     # CONFIG_SECTION_END=cluster
@@ -89,6 +90,7 @@ data:
     node.max_ports = 1048576
     node.dist_buffer_size = 8MB
     node.global_gc_interval = 15m
+    # warning: must be on, otherwise emqx will be fatal
     node.heartbeat = on
     # node.cookie = mqtt-cloud
     node.data_dir = data
