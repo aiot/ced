@@ -49,15 +49,13 @@ kind: Service
 apiVersion: v1
 metadata:
   namespace: &app-namespace aiot-case
-  name: &app-name emqx-external
-  labels: &app-label
+  name: &app-name emqx-mqtt-external
+spec:
+  selector:
     app.kubernetes.io/name: emqx
     app.kubernetes.io/component: server
     app.kubernetes.io/part-of: *app-namespace
     app.kubernetes.io/managed-by: kube
-spec:
-  selector:
-    <<: *app-label
   publishNotReadyAddresses: false
   ports:
     # - name: tcp
@@ -76,6 +74,22 @@ spec:
       protocol: TCP
       port: 8084
       targetPort: 8084
+  type: NodePort
+  sessionAffinity: None
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name emqx-api-external
+spec:
+  selector:
+    app.kubernetes.io/name: emqx
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: *app-namespace
+    app.kubernetes.io/managed-by: kube
+  publishNotReadyAddresses: false
+  ports:
     # - name: api
     #   protocol: TCP
     #   port: 8080
@@ -93,21 +107,19 @@ spec:
       port: 18084
       targetPort: 18084
   type: NodePort
-  sessionAffinity: None
+  sessionAffinity: ClientIP
 ---
 kind: Service
 apiVersion: v1
 metadata:
   namespace: &app-namespace aiot-case
   name: &app-name emqx-discovery
-  labels: &app-label
+spec:
+  selector:
     app.kubernetes.io/name: emqx
     app.kubernetes.io/component: server
     app.kubernetes.io/part-of: *app-namespace
     app.kubernetes.io/managed-by: kube
-spec:
-  selector:
-    <<: *app-label
   publishNotReadyAddresses: true
   ports:
     - name: ekka
