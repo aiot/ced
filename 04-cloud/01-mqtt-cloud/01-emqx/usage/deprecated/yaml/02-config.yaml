@@ -89,7 +89,7 @@ data:
     node.max_ports = 1048576
     node.dist_buffer_size = 8MB
     node.global_gc_interval = 15m
-    node.heartbeat = off
+    node.heartbeat = on
     # node.cookie = mqtt-cloud
     node.data_dir = data
     node.crash_dump = log/crash.dump
