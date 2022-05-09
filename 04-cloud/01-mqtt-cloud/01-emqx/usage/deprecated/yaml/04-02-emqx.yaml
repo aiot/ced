@@ -33,7 +33,11 @@ spec:
       protocol: TCP
       port: 8084
       targetPort: 8084
-    - name: api
+    # - name: api
+    #   protocol: TCP
+    #   port: 8080
+    #   targetPort: 8080
+    - name: api-https
       protocol: TCP
       port: 8081
       targetPort: 8081
@@ -86,10 +90,18 @@ spec:
     app.kubernetes.io/managed-by: kube
   publishNotReadyAddresses: false
   ports:
-    - name: api
+    # - name: api
+    #   protocol: TCP
+    #   port: 8080
+    #   targetPort: 8080
+    - name: api-https
       protocol: TCP
       port: 8081
       targetPort: 8081
+    # - name: dashboard
+    #   protocol: TCP
+    #   port: 18083
+    #   targetPort: 18083
     - name: dashboard-https
       protocol: TCP
       port: 18084
@@ -439,7 +451,13 @@ spec:
               containerPort: &port-websocket-tls 8084
             - name: api
               protocol: TCP
-              containerPort: &port-api 8081
+              containerPort: &port-api 8080
+            - name: api-https
+              protocol: TCP
+              containerPort: &port-api-https 8081
+            - name: dashboard
+              protocol: TCP
+              containerPort: &port-dashboard 18083
             - name: dashboard-https
               protocol: TCP
               containerPort: &port-dashboard-https 18084
@@ -451,7 +469,8 @@ spec:
               containerPort: &port-ekka-rpc 5370
           startupProbe:
             httpGet:
-              scheme: HTTPS
+              scheme: HTTP
+              host: 127.0.0.1
               port: *port-api
               path: /status
             initialDelaySeconds: 0
@@ -461,7 +480,8 @@ spec:
             failureThreshold: 24
           readinessProbe:
             httpGet:
-              scheme: HTTPS
+              scheme: HTTP
+              host: 127.0.0.1
               port: *port-api
               path: /status
             initialDelaySeconds: 0
@@ -471,7 +491,8 @@ spec:
             failureThreshold: 1
           livenessProbe:
             httpGet:
-              scheme: HTTPS
+              scheme: HTTP
+              host: 127.0.0.1
               port: *port-api
               path: /status
             initialDelaySeconds: 0
