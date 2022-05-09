@@ -37,6 +37,14 @@ spec:
     - "*.emqx.aiot-case"
     - "*.emqx.aiot-case.svc"
     - "*.emqx.aiot-case.svc.cluster.local"
+    - emqx-external
+    - emqx-external.aiot-case
+    - emqx-external.aiot-case.svc
+    - emqx-external.aiot-case.svc.cluster.local
+    - "*.emqx-external"
+    - "*.emqx-external.aiot-case"
+    - "*.emqx-external.aiot-case.svc"
+    - "*.emqx-external.aiot-case.svc.cluster.local"
     - emqx-ekka
     - emqx-ekka.aiot-case
     - emqx-ekka.aiot-case.svc

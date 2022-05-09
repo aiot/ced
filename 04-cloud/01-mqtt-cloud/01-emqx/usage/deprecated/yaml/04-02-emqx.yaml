@@ -41,6 +41,49 @@ spec:
       protocol: TCP
       port: 8081
       targetPort: 8081
+  type: ClusterIP
+  clusterIP: None
+  sessionAffinity: None
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name emqx-external
+  labels: &app-label
+    app.kubernetes.io/name: emqx
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: *app-namespace
+    app.kubernetes.io/managed-by: kube
+spec:
+  selector:
+    <<: *app-label
+  publishNotReadyAddresses: false
+  ports:
+    # - name: tcp
+    #   protocol: TCP
+    #   port: 1883
+    #   targetPort: 1883
+    - name: tcp-tls
+      protocol: TCP
+      port: 8883
+      targetPort: 8883
+    # - name: websocket
+    #   protocol: TCP
+    #   port: 8083
+    #   targetPort: 8083
+    - name: websocket-tls
+      protocol: TCP
+      port: 8084
+      targetPort: 8084
+    # - name: api
+    #   protocol: TCP
+    #   port: 8080
+    #   targetPort: 8080
+    - name: api-https
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
     # - name: dashboard
     #   protocol: TCP
     #   port: 18083
