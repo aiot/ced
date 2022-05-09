@@ -245,7 +245,6 @@ data:
     listener.ws.external.compress = true
     listener.ws.external.check_origin_enable = false
     listener.ws.external.allow_origin_absence = true
-    listener.ws.external.check_origins = http://127.0.0.1:18083, http://localhost:18083
     listener.ws.external.proxy_protocol = on
     listener.ws.external.proxy_protocol_timeout = 5s
     listener.ws.external.proxy_address_header = X-Forwarded-For
@@ -283,7 +282,6 @@ data:
     listener.wss.external.compress = true
     listener.wss.external.check_origin_enable = false
     listener.wss.external.allow_origin_absence = true
-    listener.wss.external.check_origins = https://127.0.0.1:8084, https://localhost:8084
     listener.wss.external.proxy_protocol = on
     listener.wss.external.proxy_protocol_timeout = 5s
     listener.wss.external.proxy_address_header = X-Forwarded-For
@@ -499,14 +497,14 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
   api.conf: |
 
-    management.listener.http = 127.0.0.1:8080
-    management.listener.http.inet6 = false
-    management.listener.http.ipv6_v6only = false
-    management.listener.http.acceptors = 8
-    management.listener.http.max_clients = 1024
-    management.listener.http.backlog = 1024
-    management.listener.http.send_timeout = 15s
-    management.listener.http.send_timeout_close = on
+    # management.listener.http = 0.0.0.0:8081
+    # management.listener.http.inet6 = false
+    # management.listener.http.ipv6_v6only = false
+    # management.listener.http.acceptors = 8
+    # management.listener.http.max_clients = 1024
+    # management.listener.http.backlog = 1024
+    # management.listener.http.send_timeout = 15s
+    # management.listener.http.send_timeout_close = on
     management.listener.https = 0.0.0.0:8081
     management.listener.https.inet6 = false
     management.listener.https.ipv6_v6only = false
@@ -531,11 +529,11 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
   dashboard.conf: |
 
-    dashboard.listener.http = 127.0.0.1:18083
-    dashboard.listener.http.inet6 = false
-    dashboard.listener.http.ipv6_v6only = false
-    dashboard.listener.http.acceptors = 8
-    dashboard.listener.http.max_clients = 128
+    # dashboard.listener.http = 0.0.0.0:18083
+    # dashboard.listener.http.inet6 = false
+    # dashboard.listener.http.ipv6_v6only = false
+    # dashboard.listener.http.acceptors = 8
+    # dashboard.listener.http.max_clients = 128
     dashboard.listener.https = 0.0.0.0:18084
     dashboard.listener.https.inet6 = false
     dashboard.listener.https.ipv6_v6only = false
