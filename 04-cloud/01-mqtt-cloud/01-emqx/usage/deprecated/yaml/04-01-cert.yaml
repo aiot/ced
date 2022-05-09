@@ -45,14 +45,14 @@ spec:
     - "*.emqx-external.aiot-case"
     - "*.emqx-external.aiot-case.svc"
     - "*.emqx-external.aiot-case.svc.cluster.local"
-    - emqx-ekka
-    - emqx-ekka.aiot-case
-    - emqx-ekka.aiot-case.svc
-    - emqx-ekka.aiot-case.svc.cluster.local
-    - "*.emqx-ekka"
-    - "*.emqx-ekka.aiot-case"
-    - "*.emqx-ekka.aiot-case.svc"
-    - "*.emqx-ekka.aiot-case.svc.cluster.local"
+    - emqx-discovery
+    - emqx-discovery.aiot-case
+    - emqx-discovery.aiot-case.svc
+    - emqx-discovery.aiot-case.svc.cluster.local
+    - "*.emqx-discovery"
+    - "*.emqx-discovery.aiot-case"
+    - "*.emqx-discovery.aiot-case.svc"
+    - "*.emqx-discovery.aiot-case.svc.cluster.local"
   ipAddresses:
     - 127.0.0.1
   privateKey:

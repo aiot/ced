@@ -16,7 +16,7 @@ data:
   EMQX_CLUSTER__K8S__APISERVER: https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
   EMQX_CLUSTER__K8S__APP_NAME: emqx
   EMQX_CLUSTER__K8S__ADDRESS_TYPE: hostname
-  EMQX_CLUSTER__K8S__SERVICE_NAME: emqx-ekka
+  EMQX_CLUSTER__K8S__SERVICE_NAME: emqx-discovery
   EMQX_CLUSTER__K8S__NAMESPACE: *app-namespace
   EMQX_CLUSTER__K8S__SUFFIX: svc.cluster.local
 
@@ -66,7 +66,7 @@ data:
     # cluster.k8s.apiserver = https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
     # cluster.k8s.app_name = emqx
     # cluster.k8s.address_type = hostname
-    # cluster.k8s.service_name = emqx-ekka
+    # cluster.k8s.service_name = emqx-discovery
     # cluster.k8s.namespace = aiot-case
     # cluster.k8s.suffix = svc.cluster.local
     cluster.proto_dist = inet_tls

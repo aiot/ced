@@ -99,7 +99,7 @@ kind: Service
 apiVersion: v1
 metadata:
   namespace: &app-namespace aiot-case
-  name: &app-name emqx-ekka
+  name: &app-name emqx-discovery
   labels: &app-label
     app.kubernetes.io/name: emqx
     app.kubernetes.io/component: server
@@ -119,6 +119,21 @@ spec:
   sessionAffinity: None
 
 # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/StatefulSet.yaml
+# ---
+# kind: PodDisruptionBudget
+# apiVersion: policy/v1beta1
+# metadata:
+#   namespace: &app-namespace aiot-case
+#   name: &app-name emqx
+# spec:
+#   selector:
+#     matchLabels:
+#       app.kubernetes.io/name: emqx
+#       app.kubernetes.io/component: server
+#       app.kubernetes.io/part-of: *app-namespace
+#       app.kubernetes.io/managed-by: kube
+#   # minAvailable: 25%
+#   maxUnavailable: 75%
 ---
 kind: StatefulSet
 apiVersion: apps/v1
@@ -128,7 +143,7 @@ metadata:
   # annotations:
   #   kubereloader.kubestation.aiot.hk/auto: "true"
 spec:
-  serviceName: emqx-ekka
+  serviceName: emqx-discovery
 
   replicas: 3
   selector:
