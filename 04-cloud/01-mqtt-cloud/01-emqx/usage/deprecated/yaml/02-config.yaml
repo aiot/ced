@@ -609,7 +609,7 @@ data:
     % message persistence
     % https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
     % webhook
-    { emqx_web_hook, true }.
+    { emqx_web_hook, false }.
     % rule engine based sql
     % https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
     % https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
