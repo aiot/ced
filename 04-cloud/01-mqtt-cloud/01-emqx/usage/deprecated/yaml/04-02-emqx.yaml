@@ -98,10 +98,10 @@ spec:
       protocol: TCP
       port: 8082
       targetPort: 8082
-    - name: dashboard
-      protocol: TCP
-      port: 18083
-      targetPort: 18083
+    # - name: dashboard
+    #   protocol: TCP
+    #   port: 18083
+    #   targetPort: 18083
     - name: dashboard-https
       protocol: TCP
       port: 18084
@@ -455,9 +455,9 @@ spec:
             - name: api-https
               protocol: TCP
               containerPort: &port-api-https 8082
-            - name: dashboard
-              protocol: TCP
-              containerPort: &port-dashboard 18083
+            # - name: dashboard
+            #   protocol: TCP
+            #   containerPort: &port-dashboard 18083
             - name: dashboard-https
               protocol: TCP
               containerPort: &port-dashboard-https 18084

@@ -90,7 +90,7 @@ data:
     node.max_ports = 1048576
     node.dist_buffer_size = 8MB
     node.global_gc_interval = 15m
-    # # warning: must be on or comment this, otherwise emqx will be fatal
+    # # warning: must be on or comment this to disable node.heartbeat, otherwise emqx will be fatal
     # node.heartbeat = on
     # node.cookie = mqtt-cloud
     node.data_dir = data
@@ -545,11 +545,12 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
   dashboard.conf: |
 
-    dashboard.listener.http = 18083
-    dashboard.listener.http.inet6 = false
-    dashboard.listener.http.ipv6_v6only = false
-    dashboard.listener.http.acceptors = 8
-    dashboard.listener.http.max_clients = 128
+    # # comment these to disable dashboard http listener
+    # dashboard.listener.http = 18083
+    # dashboard.listener.http.inet6 = false
+    # dashboard.listener.http.ipv6_v6only = false
+    # dashboard.listener.http.acceptors = 8
+    # dashboard.listener.http.max_clients = 128
 
     dashboard.listener.https = 18084
     dashboard.listener.https.inet6 = false
