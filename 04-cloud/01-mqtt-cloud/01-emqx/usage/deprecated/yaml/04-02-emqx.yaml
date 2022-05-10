@@ -468,30 +468,24 @@ spec:
               protocol: TCP
               containerPort: &port-ekka-rpc 5370
           startupProbe:
-            httpGet:
-              scheme: HTTP
-              port: *port-api
-              path: /status
+            tcpSocket:
+              port: *port-tcp-tls
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
             successThreshold: 1
             failureThreshold: 24
           readinessProbe:
-            httpGet:
-              scheme: HTTP
-              port: *port-api
-              path: /status
+            tcpSocket:
+              port: *port-tcp-tls
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 1
             successThreshold: 1
             failureThreshold: 1
           livenessProbe:
-            httpGet:
-              scheme: HTTP
-              port: *port-api
-              path: /status
+            tcpSocket:
+              port: *port-tcp-tls
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
