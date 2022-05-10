@@ -25,9 +25,9 @@ buildImage() {
 }
 
 
-# # build emqx-operator image
-# buildImage operator.dockerfile ${imageRepository}/emqx-operator:${emqxOperatorVersion}
-# docker rmi emqx/emqx-operator-controller:${emqxOperatorVersion}
+# build emqx-operator image
+buildImage operator.dockerfile ${imageRepository}/emqx-operator:${emqxOperatorVersion}
+docker rmi emqx/emqx-operator-controller:${emqxOperatorVersion}
 
 
 # build emqx image
