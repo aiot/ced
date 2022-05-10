@@ -179,7 +179,7 @@ data:
     listener.tcp.internal.nodelay = false
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#tcpexternal
     listener.tcp.external = 127.0.0.1:1883
-    # note: whether to use the CN field of certificate as username and clientid
+    # note: whether to use the CN field of certificate as username and clientid, comment these to disable it
     # # listener.tcp.external.peer_cert_as_username = cn
     # # listener.tcp.external.peer_cert_as_clientid = cn
     listener.tcp.external.acceptors = 8
@@ -204,7 +204,7 @@ data:
     listener.ssl.external.depth = 0
     listener.ssl.external.verify = verify_peer
     listener.ssl.external.fail_if_no_peer_cert = true
-    # note: whether to use the CN field of certificate as username and clientid
+    # note: whether to use the CN field of certificate as username and clientid, comment these to disable it
     # # listener.ssl.external.peer_cert_as_username = cn
     # # listener.ssl.external.peer_cert_as_clientid = cn
     listener.ssl.external.handshake_timeout = 15s
@@ -231,7 +231,7 @@ data:
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#wsexternal
     listener.ws.external = 127.0.0.1:8083
     listener.ws.external.mqtt_path = /mqtt
-    # note: whether to use the CN field of certificate as username and clientid
+    # note: whether to use the CN field of certificate as username and clientid, comment these to disable it
     # # listener.ws.external.peer_cert_as_username = cn
     # # listener.ws.external.peer_cert_as_clientid = cn
     listener.ws.external.acceptors = 8
@@ -266,7 +266,7 @@ data:
     listener.wss.external.depth = 0
     listener.wss.external.verify = verify_peer
     listener.wss.external.fail_if_no_peer_cert = true
-    # note: whether to use the CN field of certificate as username and clientid
+    # note: whether to use the CN field of certificate as username and clientid, comment these to disable it
     # # listener.wss.external.peer_cert_as_username = cn
     # # listener.wss.external.peer_cert_as_clientid = cn
     listener.wss.external.tls_versions = tlsv1.3,tlsv1.2
@@ -509,14 +509,15 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
   api.conf: |
 
-    management.listener.http = 8081
-    management.listener.http.inet6 = false
-    management.listener.http.ipv6_v6only = false
-    management.listener.http.acceptors = 8
-    management.listener.http.max_clients = 1024
-    management.listener.http.backlog = 1024
-    management.listener.http.send_timeout = 15s
-    management.listener.http.send_timeout_close = on
+    # # comment these to disable api http listener
+    # management.listener.http = 8081
+    # management.listener.http.inet6 = false
+    # management.listener.http.ipv6_v6only = false
+    # management.listener.http.acceptors = 8
+    # management.listener.http.max_clients = 1024
+    # management.listener.http.backlog = 1024
+    # management.listener.http.send_timeout = 15s
+    # management.listener.http.send_timeout_close = on
 
     management.listener.https = 8082
     management.listener.https.inet6 = false

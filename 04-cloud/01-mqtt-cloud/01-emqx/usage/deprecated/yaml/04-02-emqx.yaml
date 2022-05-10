@@ -449,9 +449,9 @@ spec:
             - name: websocket-tls
               protocol: TCP
               containerPort: &port-websocket-tls 8084
-            - name: api
-              protocol: TCP
-              containerPort: &port-api 8081
+            # - name: api
+            #   protocol: TCP
+            #   containerPort: &port-api 8081
             - name: api-https
               protocol: TCP
               containerPort: &port-api-https 8082
