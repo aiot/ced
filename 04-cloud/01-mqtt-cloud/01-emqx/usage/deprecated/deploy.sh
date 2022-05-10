@@ -27,3 +27,27 @@ for yamlName in $(yq --output-format=json --indent=4 ${absolutePath}/kustomizati
 do
     kubectl apply -f ${absolutePath}/${yamlName}
 done
+
+
+# get cert
+certAll=(
+    'emqx-client-cert-mqttx'
+)
+for cert in ${certAll[*]}
+do
+    clientCertDir="${absolutePath}/client-cert"
+    if [[ ! -d ${clientCertDir} ]]
+    then
+        mkdir -p ${clientCertDir}/
+    fi
+
+    until kubectl get secret -n ${appNamespace} -o name ${cert} > /dev/null 2>&1
+    do
+        echo -e "waiting for secret/${cert} to be created ..."
+        sleep 1
+    done
+    certShortName=$(echo -e ${cert} | awk -F 'emqx-client-cert-' '{print $2}')
+    kubectl get secret -n ${appNamespace} -o json ${cert} | jq -r '.data."tls.key"' | base64 --decode --wrap=0 > ${clientCertDir}/${certShortName}.key
+    kubectl get secret -n ${appNamespace} -o json ${cert} | jq -r '.data."tls.crt"' | base64 --decode --wrap=0 > ${clientCertDir}/${certShortName}.crt
+    kubectl get secret -n ${appNamespace} -o json ${cert} | jq -r '.data."ca.crt"' | base64 --decode --wrap=0 > ${clientCertDir}/ca.crt
+done
