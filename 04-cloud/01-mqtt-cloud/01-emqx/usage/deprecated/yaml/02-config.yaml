@@ -41,7 +41,6 @@ data:
 
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#mqtt
     # CONFIG_SECTION_BGN=mqtt
-    flapping_detect_policy = 30, 1m, 5m
     mqtt.max_clientid_len = 65535
     mqtt.max_packet_size = 1MB
     mqtt.max_qos_allowed = 2
@@ -126,6 +125,9 @@ data:
     zone.internal.enable_acl = off
     zone.internal.acl_deny_action = ignore
     zone.internal.enable_flapping_detect = off
+    zone.internal.max_inflight = 128
+    zone.internal.max_awaiting_rel = 1024
+    zone.internal.max_mqueue_len = 10240
     zone.internal.strict_mode = false
     zone.internal.wildcard_subscription = true
     zone.internal.shared_subscription = true
@@ -136,6 +138,7 @@ data:
     zone.external.enable_acl = on
     zone.external.enable_ban = on
     zone.external.acl_deny_action = disconnect
+    zone.external.enable_flapping_detect = off
     zone.external.use_username_as_clientid = false
     zone.external.max_clientid_len = 65535
     zone.external.max_packet_size = 1MB
@@ -152,10 +155,11 @@ data:
     zone.external.shared_subscription = true
     zone.external.max_subscriptions = 0
     zone.external.retry_interval = 10s
-    zone.external.idle_timeout = 15s
+    zone.external.idle_timeout = 30s
     zone.external.session_expiry_interval = 60m
-    zone.external.server_keepalive = 200
+    zone.external.server_keepalive = 60
     zone.external.keepalive_backoff = 0.75
+    zone.external.ignore_loop_deliver = false
     zone.external.enable_stats = on
     zone.external.conn_congestion.alarm = on
     zone.external.conn_congestion.min_alarm_sustain_duration = 2m
@@ -237,7 +241,8 @@ data:
     listener.ws.external.acceptors = 8
     listener.ws.external.zone = external
     listener.ws.external.access.1 = allow all
-    listener.ws.external.idle_timeout = 60s
+    # # if enable this, mqtt-server will actively disconnect from client
+    # listener.ws.external.idle_timeout = 300s
     listener.ws.external.max_connections = 1048576
     listener.ws.external.max_conn_rate = 1024
     listener.ws.external.active_n = 1024
@@ -251,7 +256,7 @@ data:
     listener.ws.external.compress = true
     listener.ws.external.check_origin_enable = false
     listener.ws.external.allow_origin_absence = true
-    listener.ws.external.check_origins = http://127.0.0.1:8083, http://localhost:8083
+    listener.ws.external.check_origins = http://127.0.0.1:18083, http://localhost:18083
     # warning: must be off, otherwise mqtt-client will not be able to publish messages
     listener.ws.external.proxy_protocol = off
     listener.ws.external.proxy_protocol_timeout = 5s
@@ -278,7 +283,8 @@ data:
     listener.wss.external.acceptors = 16
     listener.wss.external.zone = external
     listener.wss.external.access.1 = allow all
-    listener.wss.external.idle_timeout = 60s
+    # # if enable this, mqtt-server will actively disconnect from client
+    # listener.wss.external.idle_timeout = 300s
     listener.wss.external.max_connections = 1048576
     listener.wss.external.max_conn_rate = 1024
     listener.wss.external.active_n = 1024
@@ -292,7 +298,7 @@ data:
     listener.wss.external.compress = true
     listener.wss.external.check_origin_enable = false
     listener.wss.external.allow_origin_absence = true
-    listener.wss.external.check_origins = https://127.0.0.1:8084, https://localhost:8084
+    listener.wss.external.check_origins = https://127.0.0.1:18084, https://localhost:18084
     # warning: must be off, otherwise mqtt-client will not be able to publish messages
     listener.wss.external.proxy_protocol = off
     listener.wss.external.proxy_protocol_timeout = 5s
@@ -309,10 +315,12 @@ data:
     enable_acl_cache = on
     acl_cache_ttl = 1m
     acl_cache_max_size = 32
+    flapping_detect_policy = 30, 1m, 5m
     # CONFIG_SECTION_END=authacl
 
     # CONFIG_SECTION_BGN=modules
     modules.loaded_file = data/loaded_modules
+    # todo: tuning this
     module.presence.qos = 1
     module.slow_subs.threshold = 300ms
     module.slow_subs.stats_type = whole
@@ -437,6 +445,9 @@ data:
     bridge.mqtt.mqttcloud.ssl = on
     bridge.mqtt.mqttcloud.verify = true
     bridge.mqtt.mqttcloud.server_name_indication = disable
+    bridge.mqtt.mqttcloud.tls_versions = tlsv1.3,tlsv1.2
+    # warning: recommend not to change this value, otherwise it may cause tls to not work
+    bridge.mqtt.mqttcloud.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
     bridge.mqtt.mqttcloud.keyfile = etc/pki/mqtt-cloud.client.tls.key
     bridge.mqtt.mqttcloud.certfile = etc/pki/mqtt-cloud.client.tls..crt
     bridge.mqtt.mqttcloud.cacertfile = etc/pki/mqtt-cloud.ca.crt
@@ -455,8 +466,10 @@ data:
     bridge.mqtt.mqttcloud.retry_interval = 10s
     # subscribe(pull) message from mqtt-cloud
     bridge.mqtt.mqttcloud.subscription.1.topic = command/device001
+    # todo: tuning this
     bridge.mqtt.mqttcloud.subscription.1.qos = 1
     bridge.mqtt.mqttcloud.subscription.2.topic = command/device002
+    # todo: tuning this
     bridge.mqtt.mqttcloud.subscription.2.qos = 1
 
     # cache
@@ -496,6 +509,7 @@ data:
 
     rule_engine.ignore_sys_message = on
 
+    # todo: tuning this
     rule_engine.events.client_connected = on, qos1
     rule_engine.events.client_disconnected = on, qos1
     rule_engine.events.session_subscribed = off
@@ -559,7 +573,7 @@ data:
     dashboard.listener.https.keyfile = etc/pki/tls.key
     dashboard.listener.https.certfile = etc/pki/tls.crt
     dashboard.listener.https.cacertfile = etc/pki/ca.crt
-    # # bug: can not set dashboard.listener.https.verify, neither verify_none nor verify_peer
+    # # bug: can not set dashboard.listener.https.verify, neither verify_none nor verify_peer, otherwise the dashboard plugin will be fatal
     # dashboard.listener.https.verify = verify_none
     dashboard.listener.https.fail_if_no_peer_cert = false
     dashboard.listener.https.tls_versions = tlsv1.3,tlsv1.2

@@ -443,12 +443,14 @@ spec:
             - name: tcp-tls
               protocol: TCP
               containerPort: &port-tcp-tls 8883
+              # hostPort: *port-tcp-tls
             - name: websocket
               protocol: TCP
               containerPort: &port-websocket 8083
             - name: websocket-tls
               protocol: TCP
               containerPort: &port-websocket-tls 8084
+              # hostPort: *port-websocket-tls
             # - name: api
             #   protocol: TCP
             #   containerPort: &port-api 8081
@@ -461,6 +463,7 @@ spec:
             - name: dashboard-https
               protocol: TCP
               containerPort: &port-dashboard-https 18084
+              # hostPort: *port-dashboard-https
             - name: ekka
               protocol: TCP
               containerPort: &port-ekka 4370
