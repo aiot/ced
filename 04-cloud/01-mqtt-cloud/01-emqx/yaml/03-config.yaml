@@ -19,6 +19,7 @@ metadata:
   name: emqx-operator
 immutable: false
 data:
+  # warning: this configuration does not work for emqx-operator
   config.yaml: |-
 
     kind: ControllerManagerConfig

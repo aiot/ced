@@ -104,9 +104,6 @@ spec:
         - name: config
           configMap:
             name: emqx-operator
-            items:
-              - key: config.yaml
-                path: config.yaml
             defaultMode: 0644
             optional: true
 
@@ -123,13 +120,13 @@ spec:
 
           volumeMounts:
             - name: config
-              subPath: config.yaml
-              mountPath: /usr/local/bin/config.yaml
-              # mountPath: /etc/emqx-operator/config/
+              mountPath: /etc/emqx-operator/config/
               readOnly: false
 
             - name: cert
-              mountPath: /etc/emqx-operator/pki/
+              # mountPath: /etc/emqx-operator/pki/
+              # warning: this value is hard-coded and can not be changed
+              mountPath: /tmp/k8s-webhook-server/serving-certs/
               readOnly: true
 
           envFrom:
@@ -172,9 +169,7 @@ spec:
           terminationMessagePath: /dev/termination-log
           command:
             - /usr/local/bin/emqx-operator
-            # - --config=/etc/emqx-operator/config/config.yaml
-            - --leader-elect=enable
-            - --leader-election-namespace=$(POD_NAMESPACE)
+            - --leader-elect=true
             - --health-probe-bind-address=0.0.0.0:8081
             - --metrics-bind-address=0.0.0.0:8080
             - --zap-encoder=console
@@ -196,8 +191,6 @@ spec:
               scheme: HTTP
               port: *port-health
               path: /readyz
-            tcpSocket:
-              port: *port-metric
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
