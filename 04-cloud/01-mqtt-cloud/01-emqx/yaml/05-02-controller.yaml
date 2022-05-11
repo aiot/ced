@@ -63,18 +63,13 @@ spec:
 
       terminationGracePeriodSeconds: 0
       nodeSelector:
-        node-role.kubernetes.io/cloud: ""
-        node-role.kubernetes.io/kubestore: ""
+        node-role.kubernetes.io/control: ""
       affinity:
         # nodeAffinity:
         #   requiredDuringSchedulingIgnoredDuringExecution:
         #     nodeSelectorTerms:
         #       - matchExpressions:
-        #           - key: node-role.kubernetes.io/cloud
-        #             values:
-        #               - ""
-        #             operator: In
-        #           - key: node-role.kubernetes.io/kubestore
+        #           - key: node-role.kubernetes.io/control
         #             values:
         #               - ""
         #             operator: In

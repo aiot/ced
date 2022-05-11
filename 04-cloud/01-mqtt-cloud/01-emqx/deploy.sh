@@ -10,12 +10,6 @@ else
 fi
 
 
-# label node
-{%- for item in groups['kubestore'] %}
-kubectl label node {{hostvars[item].kubeHostName}} node-role.kubernetes.io/kubestore='' --overwrite=true
-{%- endfor %}
-
-
 # apply crd
 kubectl apply -f ${absolutePath}/yaml/01-crd.yaml
 
