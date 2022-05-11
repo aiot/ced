@@ -2,7 +2,7 @@
 # https://docs.emqx.com/zh/enterprise/v4.4/getting-started/config.html
 # https://www.emqx.io/docs/zh/v4.4/tutorial/tune.html
 
-# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.env.yaml
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/configmap.env.yaml
 # https://www.emqx.io/docs/zh/v4.4/configuration/environment-variable.html
 ---
 kind: ConfigMap
@@ -12,6 +12,9 @@ metadata:
   name: emqx-env
 immutable: false
 data:
+  KUBERNETES_SERVICE_HOST: kube-apiserver.kube-system.svc.cluster.local
+  KUBERNETES_SERVICE_PORT: "{{kube.apiserver.port}}"
+
   EMQX_CLUSTER__DISCOVERY: k8s
   EMQX_CLUSTER__K8S__APISERVER: https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
   EMQX_CLUSTER__K8S__APP_NAME: emqx
@@ -36,7 +39,7 @@ metadata:
   name: emqx
 immutable: false
 data:
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/etc/emqx.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/etc/emqx.conf
   emqx.conf: |
 
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#mqtt
@@ -366,7 +369,7 @@ data:
     log.rotation = on
     # CONFIG_SECTION_END=logger
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/etc/ssl_dist.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/etc/ssl_dist.conf
   ssl-dist.conf: |
 
     [
@@ -395,7 +398,7 @@ data:
   # authentication: https://www.emqx.io/docs/zh/v4.4/advanced/auth.html
   # authorization: https://www.emqx.io/docs/zh/v4.4/advanced/acl.html
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_auth_mnesia/etc/emqx_auth_mnesia.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_auth_mnesia/etc/emqx_auth_mnesia.conf
   # https://www.emqx.io/docs/zh/v4.4/advanced/auth-mnesia.html
   auth-mnesia.conf: |
 
@@ -408,19 +411,19 @@ data:
     auth.user.3.username = mqttx
     auth.user.3.password = mqttx
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_auth_jwt/etc/emqx_auth_jwt.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_auth_jwt/etc/emqx_auth_jwt.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-auth-jwt
   # https://www.emqx.io/docs/zh/v4.4/advanced/auth-jwt.html
   auth-jwt.conf: |
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/etc/acl.conf
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.acl.yaml
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/etc/acl.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/configmap.acl.yaml
   # https://www.emqx.io/docs/zh/v4.4/advanced/acl-file.html
   acl.conf: |
 
 
   # retain message
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_retainer/etc/emqx_retainer.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_retainer/etc/emqx_retainer.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-retainer
   # https://www.emqx.io/docs/zh/v4.4/advanced/retained.html
   retainer.conf: |
@@ -431,7 +434,7 @@ data:
     retainer.expiry_interval = 16m
     retainer.stop_publish_clear_msg = false
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_bridge_mqtt/etc/emqx_bridge_mqtt.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_bridge_mqtt/etc/emqx_bridge_mqtt.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-bridge-mqtt
   # https://www.emqx.io/docs/zh/v4.4/advanced/bridge.html
   # https://www.emqx.io/docs/zh/v4.4/bridge/bridge.html
@@ -477,7 +480,7 @@ data:
     bridge.mqtt.mqttcloud.queue.replayq_seg_bytes = 128MB
     bridge.mqtt.mqttcloud.queue.max_total_size = 2048MB
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_web_hook/etc/emqx_web_hook.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_web_hook/etc/emqx_web_hook.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-web-hook
   # https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
   webhook.conf: |
@@ -503,7 +506,7 @@ data:
     # server receives the ACK message that sent by client
     # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
   rule-engine.conf: |
 
@@ -519,7 +522,7 @@ data:
     rule_engine.events.message_dropped = off
 
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_management/etc/emqx_management.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_management/etc/emqx_management.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
   api.conf: |
 
@@ -555,7 +558,7 @@ data:
     # management.default_application.secret = mqtt-cloud
     management.max_row_limit = 10240
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/lib-ce/emqx_dashboard/etc/emqx_dashboard.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/lib-ce/emqx_dashboard/etc/emqx_dashboard.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-dashboard
   # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
   dashboard.conf: |
@@ -590,12 +593,12 @@ data:
 
 
   # prometheus agent for pushing metrics to prometheus-push-gateway
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_prometheus/etc/emqx_prometheus.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_prometheus/etc/emqx_prometheus.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-prometheus
   # metric: https://www.emqx.io/docs/zh/v4.4/advanced/metrics-and-stats.html
   # topic metric: https://www.emqx.io/docs/zh/v4.4/advanced/topic-metrics.html
   # alert: https://www.emqx.io/docs/zh/v4.4/advanced/alarms.html
-  # grafana: https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/apps/emqx_prometheus/grafana_template/
+  # grafana: https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_prometheus/grafana_template/
   prometheus.conf: |
 
     # prometheus.push.gateway.server = https://prom-push-gateway.${POD_NAMESPACE}.svc.cluster.local:9091
@@ -603,8 +606,8 @@ data:
 
 
   # note: module configuration is located in emqx.conf
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/data/loaded_modules.tmpl
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.loadedModules.yaml
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/data/loaded_modules.tmpl
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/configmap.loadedModules.yaml
   # https://docs.emqx.com/zh/enterprise/v4.4/modules/modules.html
   loaded-modules: |
 
@@ -631,8 +634,8 @@ data:
     % https://docs.emqx.com/zh/enterprise/v4.4/modules/tracer.html
     { emqx_mod_trace, true }.
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/data/loaded_plugins.tmpl
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/configmap.loadedPlugins.yaml
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/data/loaded_plugins.tmpl
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/configmap.loadedPlugins.yaml
   # https://docs.emqx.com/zh/enterprise/v4.4/advanced/plugins.html
   loaded-plugins: |
 
@@ -643,8 +646,8 @@ data:
     { emqx_auth_mysql, false }.
     { emqx_auth_mongo, false }.
     { emqx_auth_redis, false }.
-    { emqx_auth_ldap, false }.
     { emqx_auth_http, false }.
+    { emqx_auth_ldap, false }.
 
     % retain message
     { emqx_retainer, true }.

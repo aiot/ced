@@ -1,5 +1,3 @@
-# https://github.com/emqx/emqx-operator/blob/1.1.6/deploy/manifests/emqx-operator-controller.yaml
-
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -11,6 +9,8 @@ data:
   KUBERNETES_SERVICE_HOST: kube-apiserver.kube-system.svc.cluster.local
   KUBERNETES_SERVICE_PORT: "{{kube.apiserver.port}}"
 
+# https://github.com/emqx/emqx-operator/blob/{{kubethings.aiot.cloud.emqx.operator.version}}/deploy/manifests/emqx-operator-controller.yaml
+# https://github.com/emqx/emqx-operator/blob/{{kubethings.aiot.cloud.emqx.operator.version}}/config/manager/controller_manager_config.yaml
 ---
 kind: ConfigMap
 apiVersion: v1

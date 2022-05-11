@@ -1,6 +1,6 @@
 # https://www.emqx.io/docs/zh/v4.4/tutorial/deploy.html
 
-# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/service.yaml
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/service.yaml
 ---
 kind: Service
 apiVersion: v1
@@ -130,7 +130,7 @@ spec:
   clusterIP: None
   sessionAffinity: None
 
-# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/StatefulSet.yaml
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/StatefulSet.yaml
 # ---
 # kind: PodDisruptionBudget
 # apiVersion: policy/v1beta1
@@ -277,7 +277,7 @@ spec:
             optional: true
 
       containers:
-        - image: {{kubethings.image.repository}}/emqx:{{kubethings.aiot.cloud.emqx.app.version}}
+        - image: {{kubethings.image.repository}}/emqx:{{kubethings.aiot.cloud.emqx.version}}
           imagePullPolicy: {{kubethings.image.pullPolicy}}
           name: *app-name
 

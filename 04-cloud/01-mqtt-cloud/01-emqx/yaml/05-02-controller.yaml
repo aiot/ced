@@ -1,4 +1,4 @@
-# https://github.com/emqx/emqx-operator/blob/1.1.6/deploy/manifests/emqx-operator-controller.yaml
+# https://github.com/emqx/emqx-operator/blob/{{kubethings.aiot.cloud.emqx.operator.version}}/deploy/manifests/emqx-operator-controller.yaml
 
 ---
 kind: Service
@@ -117,7 +117,7 @@ spec:
             optional: true
 
       containers:
-        - image: {{kubethings.image.repository}}/emqx-operator:1.1.6
+        - image: {{kubethings.image.repository}}/emqx-operator:{{kubethings.aiot.cloud.emqx.operator.version}}
           imagePullPolicy: {{kubethings.image.pullPolicy}}
           name: *app-name
 
@@ -125,6 +125,7 @@ spec:
             - name: config
               subPath: config.yaml
               mountPath: /usr/local/bin/config.yaml
+              # mountPath: /etc/emqx-operator/config/
               readOnly: false
 
             - name: cert
@@ -171,8 +172,9 @@ spec:
           terminationMessagePath: /dev/termination-log
           command:
             - /usr/local/bin/emqx-operator
+            # - --config=/etc/emqx-operator/config/config.yaml
             - --leader-elect=enable
-            # - --leader-election-namespace=$(POD_NAMESPACE)
+            - --leader-election-namespace=$(POD_NAMESPACE)
             - --health-probe-bind-address=0.0.0.0:8081
             - --metrics-bind-address=0.0.0.0:8080
             - --zap-encoder=console

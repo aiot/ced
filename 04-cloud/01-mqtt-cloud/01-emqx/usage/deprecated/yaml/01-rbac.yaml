@@ -1,4 +1,4 @@
-# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.app.version}}/deploy/charts/emqx/templates/rbac.yaml
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/rbac.yaml
 
 ---
 kind: ServiceAccount

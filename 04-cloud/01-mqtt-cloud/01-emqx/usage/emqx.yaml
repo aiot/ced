@@ -1,0 +1,260 @@
+# https://github.com/emqx/emqx-operator/blob/{{kubethings.aiot.cloud.emqx.operator.version}}/config/samples/emqx/v1beta2/emqx.yaml
+# https://github.com/emqx/emqx-operator/blob/{{kubethings.aiot.cloud.emqx.operator.version}}/docs/zh_CN/configuration/configuration.md
+
+---
+kind: EmqxBroker
+apiVersion: apps.emqx.io/v1beta2
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name emqx
+spec:
+  # image: {{kubethings.image.repository}}/emqx:{{kubethings.aiot.cloud.emqx.version}}
+  image: emqx/emqx:{{kubethings.aiot.cloud.emqx.version}}
+  imagePullPolicy: {{kubethings.image.pullPolicy}}
+  replicas: 3
+
+  storage:
+    storageClassName: {{kubestorage.remoteStorage.csi.ceph.rbd.storageClassName}}
+    resources:
+      requests:
+        storage: 221Mi
+      # limits:
+      #   storage: 221Mi
+    accessModes:
+      - ReadWriteOnce
+    volumeMode: Filesystem
+
+  labels: &app-label
+    app.kubernetes.io/name: emqx
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: *app-namespace
+    app.kubernetes.io/managed-by: kube
+
+  serviceAccountName: emqx
+
+  nodeSelector:
+    node-role.kubernetes.io/cloud: ""
+    node-role.kubernetes.io/aiot-case: ""
+  affinity:
+    # nodeAffinity:
+    #   preferredDuringSchedulingIgnoredDuringExecution:
+    #     - weight: 100
+    #       preference:
+    #         matchExpressions:
+    #           - key: node-role.kubernetes.io/aiot-case
+    #             values:
+    #               - ""
+    #             operator: In
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                <<: *app-label
+  tolerations:
+    - operator: Exists
+
+  extraVolumes:
+    - name: cert
+      secret:
+        secretName: emqx-cert
+        defaultMode: 0644
+        optional: true
+
+  extraVolumeMounts:
+    - name: cert
+      mountPath: /opt/emqx/etc/pki/
+      readOnly: true
+
+  # # warning: envFrom syntax is not supported
+  # envFrom:
+  #   - configMapRef:
+  #       name: emqx-env
+  #       optional: true
+  env:
+    - name: NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    - name: NODE_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.hostIP
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+
+    - name: EMQX_MANAGEMENT__APPLICATION__DEFAULT_SECRET
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    - name: EMQX_MANAGEMENT__DEFAULT_APPLICATION__ID
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    - name: EMQX_MANAGEMENT__DEFAULT_APPLICATION__SECRET
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    - name: EMQX_DASHBOARD__DEFAULT_USER__LOGIN
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    - name: EMQX_DASHBOARD__DEFAULT_USER__PASSWORD
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+
+  emqxTemplate:
+    # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/etc/emqx.conf
+    listener:
+      ports:
+        # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#tcpexternal
+        mqtt: 1883
+        # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#tlsexternal
+        mqtts: 8883
+        # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#wsexternal
+        ws: 8083
+        # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#wssexternal
+        wss: 8084
+        # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
+        api: 8081
+        # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-dashboard
+        dashboard: 18083
+      # # warning: this is a rather silly implementation
+      # certificate:
+      #   mqtts:
+      #     stringData:
+      #       tls.key:
+      #       tls.crt:
+      #       ca.crt:
+      type: ClusterIP
+
+    # # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/etc/acl.conf
+    # # https://www.emqx.io/docs/zh/v4.4/advanced/acl-file.html
+    # acl:
+    #   - permission: allow
+    #     username: dashboard
+    #     action: subscribe
+    #     topics:
+    #       filter:
+    #         - "$SYS/#"
+    #   - permission: allow
+    #     ipaddress: "127.0.0.1"
+    #     topics:
+    #       filter:
+    #         - "$SYS/#"
+    #         - "#"
+    #   - permission: deny
+    #     action: subscribe
+    #     topics:
+    #       filter:
+    #         - "$SYS/#"
+    #       equal:
+    #         - "#"
+    #   - permission: allow
+
+    # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/data/loaded_modules.tmpl
+    # https://docs.emqx.com/zh/enterprise/v4.4/modules/modules.html
+    modules:
+      # acl
+      - name: emqx_mod_acl_internal
+        enable: true
+      # online and offline notification
+      # https://docs.emqx.com/zh/enterprise/v4.4/modules/presence.html
+      - name: emqx_mod_presence
+        enable: true
+      # mqtt subscription
+      # https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
+      - name: emqx_mod_subscription
+        enable: true
+      # topic rewrite
+      # https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
+      - name: emqx_mod_rewrite
+        enable: true
+      # delayed publish
+      # https://www.emqx.io/docs/zh/v4.4/advanced/delay-publish.html
+      - name: emqx_mod_delayed
+        enable: false
+      # topic metric
+      - name: emqx_mod_topic_metrics
+        enable: true
+      # slow subscriptions statistics
+      # https://docs.emqx.com/zh/enterprise/v4.4/modules/slow_subscribers_statistics.html
+      - name: emqx_mod_slow_subs
+        enable: true
+      # trace
+      # https://docs.emqx.com/zh/enterprise/v4.4/modules/tracer.html
+      - name: emqx_mod_trace
+        enable: true
+    # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/data/loaded_plugins.tmpl
+    # https://docs.emqx.com/zh/enterprise/v4.4/advanced/plugins.html
+    plugins:
+      # authentication and authorization
+      - name: emqx_auth_mnesia
+        enable: true
+      - name: emqx_auth_jwt
+        enable: true
+      - name: emqx_auth_pgsql
+        enable: false
+      - name: emqx_auth_mysql
+        enable: false
+      - name: emqx_auth_mongo
+        enable: false
+      - name: emqx_auth_redis
+        enable: false
+      - name: emqx_auth_http
+        enable: false
+      - name: emqx_auth_ldap
+        enable: false
+
+      # retain message
+      - name: emqx_retainer
+        enable: true
+      # message bridge
+      - name: emqx_bridge_mqtt
+        enable: false
+      # # message persistence
+      # # https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
+      # - name:
+      #   enable: true
+      # webhook
+      - name: emqx_web_hook
+        enable: false
+      # rule engine based sql
+      # https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
+      # https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
+      # https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_pgsql.html
+      # https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_pgsql.html
+      - name: emqx_rule_engine
+        enable: true
+
+      # api
+      - name: emqx_management
+        enable: true
+      # dashboard
+      - name: emqx_dashboard
+        enable: true
+
+      # prometheus agent for pushing metrics to prometheus-push-gateway
+      - name: emqx_prometheus
+        enable: false
+      # https://www.emqx.io/docs/zh/v4.4/advanced/telemetry.html
+      - name: emqx_telemetry
+        enable: false
+
+      # performance debugging
+      # https://docs.emqx.com/zh/enterprise/v4.4/modules/recon.html
+      - name: emqx_recon
+        enable: false

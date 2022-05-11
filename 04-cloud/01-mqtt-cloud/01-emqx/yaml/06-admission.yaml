@@ -1,4 +1,5 @@
-# https://github.com/emqx/emqx-operator/blob/1.1.6/deploy/manifests/emqx-operator-controller.yaml
+# https://github.com/emqx/emqx-operator/blob/{{kubethings.aiot.cloud.emqx.operator.version}}/deploy/manifests/emqx-operator-controller.yaml
+# https://github.com/emqx/emqx-operator/blob/{{kubethings.aiot.cloud.emqx.operator.version}}/config/webhook/manifests.yaml
 
 ---
 kind: ValidatingWebhookConfiguration

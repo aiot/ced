@@ -1,3 +1,4 @@
+# https://github.com/emqx/emqx-operator/blob/{{kubethings.aiot.cloud.emqx.operator.version}}/config/prometheus/monitor.yaml
 ---
 kind: PodMonitor
 apiVersion: monitoring.coreos.com/v1

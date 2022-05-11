@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-emqxVersion='{{kubethings.aiot.cloud.emqx.app.version}}'
-emqxOperatorVersion='{{kubethings.aiot.cloud.emqx.version}}'
+emqxVersion='{{kubethings.aiot.cloud.emqx.version}}'
+emqxOperatorVersion='{{kubethings.aiot.cloud.emqx.operator.version}}'
 alpineVersion='{{kubefactory.infraImage.alpine.version}}'
 ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
 imageRepository='{{kubethings.image.repository}}'
