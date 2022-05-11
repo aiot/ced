@@ -3,7 +3,7 @@
 ```bash
 git clone --recurse --tags git@github.com:emqx/emqx.git
 cd emqx
-git checkout v{{kubethings.aiot.cloud.emqx.app}}
+git checkout v{{kubethings.aiot.cloud.emqx.version}}
 cd deploy/charts
 
 helm template emqx \
