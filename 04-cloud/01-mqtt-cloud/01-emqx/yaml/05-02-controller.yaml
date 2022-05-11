@@ -62,22 +62,22 @@ spec:
       serviceAccountName: emqx-operator
 
       terminationGracePeriodSeconds: 0
-      # nodeSelector:
-      #   node-role.kubernetes.io/cloud: ""
-      #   node-role.kubernetes.io/kubestore: ""
+      nodeSelector:
+        node-role.kubernetes.io/cloud: ""
+        node-role.kubernetes.io/kubestore: ""
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node-role.kubernetes.io/cloud
-                    values:
-                      - ""
-                    operator: In
-                  - key: node-role.kubernetes.io/kubestore
-                    values:
-                      - ""
-                    operator: In
+        # nodeAffinity:
+        #   requiredDuringSchedulingIgnoredDuringExecution:
+        #     nodeSelectorTerms:
+        #       - matchExpressions:
+        #           - key: node-role.kubernetes.io/cloud
+        #             values:
+        #               - ""
+        #             operator: In
+        #           - key: node-role.kubernetes.io/kubestore
+        #             values:
+        #               - ""
+        #             operator: In
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
