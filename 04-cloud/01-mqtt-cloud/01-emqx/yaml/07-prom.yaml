@@ -1,0 +1,24 @@
+---
+kind: PodMonitor
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  namespace: &app-namespace {{kubethings.namespace}}
+  name: &app-name emqx-operator
+spec:
+  jobLabel: app.kubernetes.io/name
+  namespaceSelector:
+    matchNames:
+      - *app-namespace
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app-name
+      app.kubernetes.io/component: controller
+      app.kubernetes.io/part-of: *app-namespace
+      app.kubernetes.io/managed-by: kube
+  podMetricsEndpoints:
+    - scheme: http
+      tlsConfig:
+        insecureSkipVerify: true
+      port: metric
+      # targetPort: 80
+      path: /metrics

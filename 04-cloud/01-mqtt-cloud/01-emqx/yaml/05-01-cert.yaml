@@ -1,0 +1,49 @@
+# https://github.com/emqx/emqx-operator/blob/1.1.6/deploy/manifests/emqx-operator-controller.yaml
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  namespace: &app-namespace {{kubethings.namespace}}
+  name: &app-name emqx-operator
+spec:
+  issuerRef:
+    kind: ClusterIssuer
+    group: cert-manager.io
+    name: emqx-operator
+  commonName: *app-name
+  subject:
+    countries:
+      - "UNC"
+    provinces:
+      - "UNC"
+    localities:
+      - "UNC"
+    organizations:
+      - *app-namespace
+    organizationalUnits:
+      - "KubeStation:aiot@aiot.hk"
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+  encodeUsagesInRequest: true
+  dnsNames:
+    - localhost
+    - emqx-operator
+    - emqx-operator.{{kubethings.namespace}}
+    - emqx-operator.{{kubethings.namespace}}.svc
+    - emqx-operator.{{kubethings.namespace}}.svc.cluster.local
+    - "*.emqx-operator"
+    - "*.emqx-operator.{{kubethings.namespace}}"
+    - "*.emqx-operator.{{kubethings.namespace}}.svc"
+    - "*.emqx-operator.{{kubethings.namespace}}.svc.cluster.local"
+  ipAddresses:
+    - 127.0.0.1
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    encoding: PKCS1
+    rotationPolicy: Always
+  duration: {{kube.cert.signingDuration}}
+  renewBefore: 360h    # 15d
+  secretName: emqx-operator-cert

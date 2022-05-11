@@ -1,0 +1,209 @@
+# https://github.com/emqx/emqx-operator/blob/1.1.6/deploy/manifests/emqx-operator-controller.yaml
+
+---
+kind: ValidatingWebhookConfiguration
+apiVersion: admissionregistration.k8s.io/v1
+metadata:
+  name: emqx-operator
+  annotations:
+    cert-manager.io/inject-ca-from: {{kubethings.namespace}}/emqx-operator
+webhooks:
+  - name: v1beta2.emqx.validating.admission.emqx.io
+    rules:
+      - resources:
+          - emqxbrokers
+        apiGroups:
+          - apps.emqx.io
+        apiVersions:
+          - v1beta2
+        operations:
+          - CREATE
+          - UPDATE
+    admissionReviewVersions:
+      - v1
+      - v1beta1
+    timeoutSeconds: 10
+    failurePolicy: Fail
+    sideEffects: None
+    clientConfig:
+      service:
+        namespace: {{kubethings.namespace}}
+        name: emqx-operator
+        port: 443
+        path: /validate-apps-emqx-io-v1beta2-emqxbroker
+
+  - name: v1beta1.emqx.validating.admission.emqx.io
+    rules:
+      - resources:
+          - emqxbrokers
+        apiGroups:
+          - apps.emqx.io
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+    admissionReviewVersions:
+      - v1
+      - v1beta1
+    timeoutSeconds: 10
+    failurePolicy: Fail
+    sideEffects: None
+    clientConfig:
+      service:
+        namespace: {{kubethings.namespace}}
+        name: emqx-operator
+        port: 443
+        path: /validate-apps-emqx-io-v1beta1-emqxbroker
+
+  - name: v1beta2.enterprise.emqx.validating.admission.emqx.io
+    rules:
+      - resources:
+          - emqxenterprises
+        apiGroups:
+          - apps.emqx.io
+        apiVersions:
+          - v1beta2
+        operations:
+          - CREATE
+          - UPDATE
+    admissionReviewVersions:
+      - v1
+      - v1beta1
+    timeoutSeconds: 10
+    failurePolicy: Fail
+    sideEffects: None
+    clientConfig:
+      service:
+        namespace: {{kubethings.namespace}}
+        name: emqx-operator
+        port: 443
+        path: /validate-apps-emqx-io-v1beta2-emqxenterprise
+
+  - name: v1beta1.enterprise.emqx.validating.admission.emqx.io
+    rules:
+      - resources:
+          - emqxenterprises
+        apiGroups:
+          - apps.emqx.io
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+    admissionReviewVersions:
+      - v1
+      - v1beta1
+    timeoutSeconds: 10
+    failurePolicy: Fail
+    sideEffects: None
+    clientConfig:
+      service:
+        namespace: {{kubethings.namespace}}
+        name: emqx-operator
+        port: 443
+        path: /validate-apps-emqx-io-v1beta1-emqxenterprise
+
+---
+kind: MutatingWebhookConfiguration
+apiVersion: admissionregistration.k8s.io/v1
+metadata:
+  name: emqx-operator
+  annotations:
+    cert-manager.io/inject-ca-from: {{kubethings.namespace}}/emqx-operator
+webhooks:
+  - name: v1beta2.emqx.mutating.admission.emqx.io
+    rules:
+      - resources:
+          - emqxbrokers
+        apiGroups:
+          - apps.emqx.io
+        apiVersions:
+          - v1beta2
+        operations:
+          - CREATE
+          - UPDATE
+    admissionReviewVersions:
+      - v1
+      - v1beta1
+    timeoutSeconds: 10
+    failurePolicy: Fail
+    sideEffects: None
+    clientConfig:
+      service:
+        namespace: {{kubethings.namespace}}
+        name: emqx-operator
+        port: 443
+        path: /mutate-apps-emqx-io-v1beta2-emqxbroker
+
+  - name: v1beta1.emqx.mutating.admission.emqx.io
+    rules:
+      - resources:
+          - emqxbrokers
+        apiGroups:
+          - apps.emqx.io
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+    admissionReviewVersions:
+      - v1
+      - v1beta1
+    timeoutSeconds: 10
+    failurePolicy: Fail
+    sideEffects: None
+    clientConfig:
+      service:
+        namespace: {{kubethings.namespace}}
+        name: emqx-operator
+        port: 443
+        path: /mutate-apps-emqx-io-v1beta1-emqxbroker
+
+  - name: v1beta2.enterprise.emqx.mutating.admission.emqx.io
+    rules:
+      - resources:
+          - emqxenterprises
+        apiGroups:
+          - apps.emqx.io
+        apiVersions:
+          - v1beta2
+        operations:
+          - CREATE
+          - UPDATE
+    admissionReviewVersions:
+      - v1
+      - v1beta1
+    timeoutSeconds: 10
+    failurePolicy: Fail
+    sideEffects: None
+    clientConfig:
+      service:
+        namespace: {{kubethings.namespace}}
+        name: emqx-operator
+        port: 443
+        path: /mutate-apps-emqx-io-v1beta2-emqxenterprise
+
+  - name: v1beta1.enterprise.emqx.mutating.admission.emqx.io
+    rules:
+      - resources:
+          - emqxenterprises
+        apiGroups:
+          - apps.emqx.io
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+    admissionReviewVersions:
+      - v1
+      - v1beta1
+    timeoutSeconds: 10
+    failurePolicy: Fail
+    sideEffects: None
+    clientConfig:
+      service:
+        namespace: {{kubethings.namespace}}
+        name: emqx-operator
+        port: 443
+        path: /mutate-apps-emqx-io-v1beta1-emqxenterprise

@@ -1,0 +1,223 @@
+# https://github.com/emqx/emqx-operator/blob/1.1.6/deploy/manifests/emqx-operator-controller.yaml
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: &app-namespace {{kubethings.namespace}}
+  name: &app-name emqx-operator
+  labels: &app-label
+    app.kubernetes.io/name: *app-name
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/part-of: *app-namespace
+    app.kubernetes.io/managed-by: kube
+spec:
+  selector:
+    <<: *app-label
+  publishNotReadyAddresses: false
+  ports:
+    - name: admission
+      protocol: TCP
+      port: 443
+      targetPort: 9443
+    - name: metric
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+  sessionAffinity: None
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: &app-namespace {{kubethings.namespace}}
+  name: &app-name emqx-operator
+  # annotations:
+  #   kubereloader.kubestation.aiot.hk/auto: "true"
+spec:
+  replicas: 3
+  selector:
+    matchLabels: &app-label
+      app.kubernetes.io/name: *app-name
+      app.kubernetes.io/component: controller
+      app.kubernetes.io/part-of: *app-namespace
+      app.kubernetes.io/managed-by: kube
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  revisionHistoryLimit: 5
+
+  template:
+    metadata:
+      labels:
+        <<: *app-label
+      annotations:
+        co.elastic.logs/enabled: "false"
+        co.elastic.logs/encoding: utf-8
+
+    spec:
+      serviceAccountName: emqx-operator
+
+      terminationGracePeriodSeconds: 0
+      # nodeSelector:
+      #   node-role.kubernetes.io/cloud: ""
+      #   node-role.kubernetes.io/kubestore: ""
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/cloud
+                    values:
+                      - ""
+                    operator: In
+                  - key: node-role.kubernetes.io/kubestore
+                    values:
+                      - ""
+                    operator: In
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    <<: *app-label
+      tolerations:
+        - operator: Exists
+
+      hostIPC: false
+      hostPID: false
+      hostNetwork: false
+
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+
+      restartPolicy: Always
+
+      volumes:
+        - name: config
+          configMap:
+            name: emqx-operator
+            items:
+              - key: config.yaml
+                path: config.yaml
+            defaultMode: 0644
+            optional: true
+
+        - name: cert
+          secret:
+            secretName: emqx-operator-cert
+            defaultMode: 0644
+            optional: true
+
+      containers:
+        - image: {{kubethings.image.repository}}/emqx-operator:1.1.6
+          imagePullPolicy: {{kubethings.image.pullPolicy}}
+          name: *app-name
+
+          volumeMounts:
+            - name: config
+              subPath: config.yaml
+              mountPath: /usr/local/bin/config.yaml
+              readOnly: false
+
+            - name: cert
+              mountPath: /etc/emqx-operator/pki/
+              readOnly: true
+
+          envFrom:
+            - configMapRef:
+                name: emqx-operator-env
+                optional: true
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+          securityContext:
+            runAsGroup: 0
+            runAsUser: 0
+            runAsNonRoot: false
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+
+          stdin: false
+          tty: false
+          terminationMessagePolicy: FallbackToLogsOnError
+          terminationMessagePath: /dev/termination-log
+          command:
+            - /usr/local/bin/emqx-operator
+            - --leader-elect=enable
+            # - --leader-election-namespace=$(POD_NAMESPACE)
+            - --health-probe-bind-address=0.0.0.0:8081
+            - --metrics-bind-address=0.0.0.0:8080
+            - --zap-encoder=console
+            - --zap-time-encoding=iso8601
+            - --zap-log-level=info
+
+          ports:
+            - name: admission
+              protocol: TCP
+              containerPort: &port-admission 9443
+            - name: health
+              protocol: TCP
+              containerPort: &port-health 8081
+            - name: metric
+              protocol: TCP
+              containerPort: &port-metric 8080
+          startupProbe:
+            httpGet:
+              scheme: HTTP
+              port: *port-health
+              path: /readyz
+            tcpSocket:
+              port: *port-metric
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 24
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              port: *port-health
+              path: /readyz
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 1
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              port: *port-health
+              path: /healthz
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 2

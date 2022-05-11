@@ -1,0 +1,24 @@
+# https://github.com/emqx/emqx-operator/blob/1.1.6/deploy/manifests/emqx-operator-controller.yaml
+
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  namespace: {{kubethings.namespace}}
+  name: emqx-operator
+# imagePullSecrets:
+#   - name: {{kubethings.image.pullSecret}}
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: "{{kubethings.namespace}}:emqx-operator"
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    namespace: {{kubethings.namespace}}
+    name: emqx-operator

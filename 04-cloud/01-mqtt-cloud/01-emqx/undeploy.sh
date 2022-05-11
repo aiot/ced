@@ -21,14 +21,6 @@ kubectl delete -f ${absolutePath}/yaml/01-crd.yaml --ignore-not-found=true
 # prune
 appNamespace='{{kubethings.namespace}}'
 
-configAll=(
-    ''
-)
-for config in ${configAll[*]}
-do
-    kubectl delete configmap -n ${appNamespace} ${config} --ignore-not-found=true
-done
-
 certAll=(
     'emqx-operator-ca'
     'emqx-operator-cert'

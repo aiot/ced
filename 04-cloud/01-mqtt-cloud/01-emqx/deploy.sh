@@ -20,7 +20,8 @@ kubectl label node {{hostvars[item].kubeHostName}} node-role.kubernetes.io/kubes
 kubectl apply -f ${absolutePath}/yaml/01-crd.yaml
 
 emqxOperatorCRDTypeAll=(
-    ''
+    'emqxbrokers.apps.emqx.io'
+    'emqxenterprises.apps.emqx.io'
 )
 
 for emqxOperatorCRDType in ${emqxOperatorCRDTypeAll[*]}
