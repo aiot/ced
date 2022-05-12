@@ -27,6 +27,8 @@ data:
   # EMQX_NODE__NAME: ${EMQX_CLUSTER__K8S__APP_NAME}@${POD_NAME}.${EMQX_CLUSTER__K8S__SERVICE_NAME}.${EMQX_CLUSTER__K8S__NAMESPACE}.${EMQX_CLUSTER__K8S__SUFFIX}
   EMQX_NODE__COOKIE: *app-namespace
 
+  EMQX_MANAGEMENT__LISTENER__HTTPS: "8082"
+
   # note: this is a fake value, please replace it with the actual value
   EMQX_WEB__HOOK__URL: https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local
 
@@ -422,6 +424,76 @@ data:
   acl.conf: |
 
 
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_management/etc/emqx_management.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
+  api.conf: |
+
+    # # comment these to disable api http listener
+    # management.listener.http = 8081
+    # management.listener.http.inet6 = false
+    # management.listener.http.ipv6_v6only = false
+    # management.listener.http.acceptors = 8
+    # management.listener.http.max_clients = 1024
+    # management.listener.http.backlog = 1024
+    # management.listener.http.send_timeout = 15s
+    # management.listener.http.send_timeout_close = on
+
+    management.listener.https = 8082
+    management.listener.https.inet6 = false
+    management.listener.https.ipv6_v6only = false
+    management.listener.https.keyfile = etc/pki/tls.key
+    management.listener.https.certfile = etc/pki/tls.crt
+    management.listener.https.cacertfile = etc/pki/ca.crt
+    management.listener.https.verify = verify_peer
+    management.listener.https.fail_if_no_peer_cert = true
+    management.listener.https.tls_versions = tlsv1.3,tlsv1.2
+    # warning: recommend not to change this value, otherwise it may cause tls to not work
+    management.listener.https.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
+    management.listener.https.acceptors = 8
+    management.listener.https.max_clients = 1024
+    management.listener.https.backlog = 1024
+    management.listener.https.send_timeout = 15s
+    management.listener.https.send_timeout_close = on
+
+    # management.application.default_secret = mqtt-cloud
+    # management.default_application.id = mqtt-cloud
+    # management.default_application.secret = mqtt-cloud
+    management.max_row_limit = 10240
+
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/lib-ce/emqx_dashboard/etc/emqx_dashboard.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-dashboard
+  # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
+  dashboard.conf: |
+
+    # # comment these to disable dashboard http listener
+    # dashboard.listener.http = 18083
+    # dashboard.listener.http.inet6 = false
+    # dashboard.listener.http.ipv6_v6only = false
+    # dashboard.listener.http.acceptors = 8
+    # dashboard.listener.http.max_clients = 128
+
+    dashboard.listener.https = 18084
+    dashboard.listener.https.inet6 = false
+    dashboard.listener.https.ipv6_v6only = false
+    dashboard.listener.https.keyfile = etc/pki/tls.key
+    dashboard.listener.https.certfile = etc/pki/tls.crt
+    dashboard.listener.https.cacertfile = etc/pki/ca.crt
+    # # bug: can not set dashboard.listener.https.verify, neither verify_none nor verify_peer, otherwise the dashboard plugin will be fatal
+    # dashboard.listener.https.verify = verify_none
+    dashboard.listener.https.fail_if_no_peer_cert = false
+    dashboard.listener.https.tls_versions = tlsv1.3,tlsv1.2
+    # warning: recommend not to change this value, otherwise it may cause tls to not work
+    dashboard.listener.https.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
+    dashboard.listener.https.honor_cipher_order = on
+    dashboard.listener.https.secure_renegotiate = on
+    dashboard.listener.https.reuse_sessions = on
+    dashboard.listener.https.acceptors = 8
+    dashboard.listener.https.max_clients = 128
+
+    # dashboard.default_user.login = mqtt-cloud
+    # dashboard.default_user.password = mqtt-cloud
+
+
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_bridge_mqtt/etc/emqx_bridge_mqtt.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-bridge-mqtt
   # https://www.emqx.io/docs/zh/v4.4/advanced/bridge.html
@@ -522,76 +594,6 @@ data:
     retainer.stop_publish_clear_msg = false
 
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_management/etc/emqx_management.conf
-  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-management
-  api.conf: |
-
-    # # comment these to disable api http listener
-    # management.listener.http = 8081
-    # management.listener.http.inet6 = false
-    # management.listener.http.ipv6_v6only = false
-    # management.listener.http.acceptors = 8
-    # management.listener.http.max_clients = 1024
-    # management.listener.http.backlog = 1024
-    # management.listener.http.send_timeout = 15s
-    # management.listener.http.send_timeout_close = on
-
-    management.listener.https = 8082
-    management.listener.https.inet6 = false
-    management.listener.https.ipv6_v6only = false
-    management.listener.https.keyfile = etc/pki/tls.key
-    management.listener.https.certfile = etc/pki/tls.crt
-    management.listener.https.cacertfile = etc/pki/ca.crt
-    management.listener.https.verify = verify_peer
-    management.listener.https.fail_if_no_peer_cert = true
-    management.listener.https.tls_versions = tlsv1.3,tlsv1.2
-    # warning: recommend not to change this value, otherwise it may cause tls to not work
-    management.listener.https.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
-    management.listener.https.acceptors = 8
-    management.listener.https.max_clients = 1024
-    management.listener.https.backlog = 1024
-    management.listener.https.send_timeout = 15s
-    management.listener.https.send_timeout_close = on
-
-    # management.application.default_secret = mqtt-cloud
-    # management.default_application.id = mqtt-cloud
-    # management.default_application.secret = mqtt-cloud
-    management.max_row_limit = 10240
-
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/lib-ce/emqx_dashboard/etc/emqx_dashboard.conf
-  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-dashboard
-  # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
-  dashboard.conf: |
-
-    # # comment these to disable dashboard http listener
-    # dashboard.listener.http = 18083
-    # dashboard.listener.http.inet6 = false
-    # dashboard.listener.http.ipv6_v6only = false
-    # dashboard.listener.http.acceptors = 8
-    # dashboard.listener.http.max_clients = 128
-
-    dashboard.listener.https = 18084
-    dashboard.listener.https.inet6 = false
-    dashboard.listener.https.ipv6_v6only = false
-    dashboard.listener.https.keyfile = etc/pki/tls.key
-    dashboard.listener.https.certfile = etc/pki/tls.crt
-    dashboard.listener.https.cacertfile = etc/pki/ca.crt
-    # # bug: can not set dashboard.listener.https.verify, neither verify_none nor verify_peer, otherwise the dashboard plugin will be fatal
-    # dashboard.listener.https.verify = verify_none
-    dashboard.listener.https.fail_if_no_peer_cert = false
-    dashboard.listener.https.tls_versions = tlsv1.3,tlsv1.2
-    # warning: recommend not to change this value, otherwise it may cause tls to not work
-    dashboard.listener.https.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
-    dashboard.listener.https.honor_cipher_order = on
-    dashboard.listener.https.secure_renegotiate = on
-    dashboard.listener.https.reuse_sessions = on
-    dashboard.listener.https.acceptors = 8
-    dashboard.listener.https.max_clients = 128
-
-    # dashboard.default_user.login = mqtt-cloud
-    # dashboard.default_user.password = mqtt-cloud
-
-
   # prometheus agent for pushing metrics to prometheus-push-gateway
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_prometheus/etc/emqx_prometheus.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-prometheus
@@ -649,6 +651,11 @@ data:
     { emqx_auth_http, false }.
     { emqx_auth_ldap, false }.
 
+    % api
+    { emqx_management, true }.
+    % dashboard
+    { emqx_dashboard, true }.
+
     % message bridge
     { emqx_bridge_mqtt, false }.
     % rule engine based sql
@@ -666,11 +673,6 @@ data:
 
     % mqtt-sn gateway
     { emqx_sn, false }.
-
-    % api
-    { emqx_management, true }.
-    % dashboard
-    { emqx_dashboard, true }.
 
     % prometheus agent for pushing metrics to prometheus-push-gateway
     { emqx_prometheus, false }.
