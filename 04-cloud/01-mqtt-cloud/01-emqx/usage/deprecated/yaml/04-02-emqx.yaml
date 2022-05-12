@@ -246,14 +246,14 @@ spec:
               - key: acl.conf
                 path: acl.conf
 
-              - key: retainer.conf
-                path: retainer.conf
               - key: bridge-mqtt.conf
                 path: bridge-mqtt.conf
-              - key: webhook.conf
-                path: webhook.conf
               - key: rule-engine.conf
                 path: rule-engine.conf
+              - key: webhook.conf
+                path: webhook.conf
+              - key: retainer.conf
+                path: retainer.conf
 
               - key: api.conf
                 path: api.conf
@@ -308,20 +308,20 @@ spec:
             #   readOnly: false
 
             - name: config
-              subPath: retainer.conf
-              mountPath: /opt/emqx/etc/plugins/emqx_retainer.conf
-              readOnly: false
-            - name: config
               subPath: bridge-mqtt.conf
               mountPath: /opt/emqx/etc/plugins/emqx_bridge_mqtt.conf
+              readOnly: false
+            - name: config
+              subPath: rule-engine.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_rule_engine.conf
               readOnly: false
             - name: config
               subPath: webhook.conf
               mountPath: /opt/emqx/etc/plugins/emqx_web_hook.conf
               readOnly: false
             - name: config
-              subPath: rule-engine.conf
-              mountPath: /opt/emqx/etc/plugins/emqx_rule_engine.conf
+              subPath: retainer.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_retainer.conf
               readOnly: false
 
             - name: config

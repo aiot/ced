@@ -422,18 +422,6 @@ data:
   acl.conf: |
 
 
-  # retain message
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_retainer/etc/emqx_retainer.conf
-  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-retainer
-  # https://www.emqx.io/docs/zh/v4.4/advanced/retained.html
-  retainer.conf: |
-
-    retainer.storage_type = disc_only
-    retainer.max_payload_size = 256KB
-    retainer.max_retained_messages = 0
-    retainer.expiry_interval = 16m
-    retainer.stop_publish_clear_msg = false
-
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_bridge_mqtt/etc/emqx_bridge_mqtt.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-bridge-mqtt
   # https://www.emqx.io/docs/zh/v4.4/advanced/bridge.html
@@ -480,6 +468,21 @@ data:
     bridge.mqtt.mqttcloud.queue.replayq_seg_bytes = 128MB
     bridge.mqtt.mqttcloud.queue.max_total_size = 2048MB
 
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
+  rule-engine.conf: |
+
+    rule_engine.ignore_sys_message = on
+
+    # todo: tuning this
+    rule_engine.events.client_connected = on, qos1
+    rule_engine.events.client_disconnected = on, qos1
+    rule_engine.events.session_subscribed = off
+    rule_engine.events.session_unsubscribed = off
+    rule_engine.events.message_delivered = off
+    rule_engine.events.message_acked = on, qos1
+    rule_engine.events.message_dropped = off
+
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_web_hook/etc/emqx_web_hook.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-web-hook
   # https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
@@ -506,20 +509,17 @@ data:
     # server receives the ACK message that sent by client
     # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
-  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
-  rule-engine.conf: |
+  # retain message
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_retainer/etc/emqx_retainer.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-retainer
+  # https://www.emqx.io/docs/zh/v4.4/advanced/retained.html
+  retainer.conf: |
 
-    rule_engine.ignore_sys_message = on
-
-    # todo: tuning this
-    rule_engine.events.client_connected = on, qos1
-    rule_engine.events.client_disconnected = on, qos1
-    rule_engine.events.session_subscribed = off
-    rule_engine.events.session_unsubscribed = off
-    rule_engine.events.message_delivered = off
-    rule_engine.events.message_acked = on, qos1
-    rule_engine.events.message_dropped = off
+    retainer.storage_type = disc_only
+    retainer.max_payload_size = 64KB
+    retainer.max_retained_messages = 0
+    retainer.expiry_interval = 16m
+    retainer.stop_publish_clear_msg = false
 
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_management/etc/emqx_management.conf
@@ -649,20 +649,23 @@ data:
     { emqx_auth_http, false }.
     { emqx_auth_ldap, false }.
 
-    % retain message
-    { emqx_retainer, true }.
     % message bridge
     { emqx_bridge_mqtt, false }.
-    % message persistence
-    % https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
-    % webhook
-    { emqx_web_hook, false }.
     % rule engine based sql
     % https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
     % https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
     % https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_pgsql.html
     % https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_pgsql.html
     { emqx_rule_engine, true }.
+    % webhook
+    { emqx_web_hook, false }.
+    % retain message
+    { emqx_retainer, false }.
+    % message persistence
+    % https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
+
+    % mqtt-sn gateway
+    { emqx_sn, false }.
 
     % api
     { emqx_management, true }.
