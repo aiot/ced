@@ -471,24 +471,34 @@ spec:
               protocol: TCP
               containerPort: &port-ekka-rpc 5370
           startupProbe:
-            tcpSocket:
-              port: *port-tcp-tls
+            # tcpSocket:
+            #   port: *port-tcp-tls
+            exec:
+              command: &health-check-command
+                - /bin/bash
+                - -c
+                - |-
+                  emqx-ctl status > /dev/null 2>&1
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
             successThreshold: 1
             failureThreshold: 24
           readinessProbe:
-            tcpSocket:
-              port: *port-tcp-tls
+            # tcpSocket:
+            #   port: *port-tcp-tls
+            exec:
+              command: *health-check-command
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 1
             successThreshold: 1
             failureThreshold: 1
           livenessProbe:
-            tcpSocket:
-              port: *port-tcp-tls
+            # tcpSocket:
+            #   port: *port-tcp-tls
+            exec:
+              command: *health-check-command
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
