@@ -416,7 +416,7 @@ spec:
           #         - /bin/bash
           #         - -c
           #         - |-
-          #           /opt/emqx/bin/emqx-ctl cluster leave
+          #           emqx-ctl cluster leave
           command:
             - /bin/bash
             - -c
@@ -474,11 +474,20 @@ spec:
             # tcpSocket:
             #   port: *port-tcp-tls
             exec:
-              command: &health-check-command
+              command:
                 - /bin/bash
                 - -c
                 - |-
-                  /opt/emqx/bin/emqx-ctl status > /dev/null 2>&1
+                  curl --insecure --key ${EMQX_HOME}/etc/pki/tls.key --cert ${EMQX_HOME}/etc/pki/tls.crt https://${POD_IP}:${EMQX_MANAGEMENT__LISTENER__HTTPS}/status
+                  # emqx-ctl status
+                  if [[ $? != 0 ]]
+                  then
+                      exit 1
+                  fi
+
+                  # https://www.emqx.io/docs/zh/v4.4/getting-started/log.html
+                  emqx-ctl log primary-level info > /dev/null 2>&1 || true
+                  emqx-ctl log handlers set-level ssl_handler info > /dev/null 2>&1 || true
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
@@ -488,7 +497,12 @@ spec:
             # tcpSocket:
             #   port: *port-tcp-tls
             exec:
-              command: *health-check-command
+              command: &health-check-command
+                - /bin/bash
+                - -c
+                - |-
+                  curl --insecure --key ${EMQX_HOME}/etc/pki/tls.key --cert ${EMQX_HOME}/etc/pki/tls.crt https://${POD_IP}:${EMQX_MANAGEMENT__LISTENER__HTTPS}/status
+                  # emqx-ctl status
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 1
