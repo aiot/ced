@@ -38,8 +38,9 @@ RUN \
 # build image
 FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:ALPINE_VERSION
 
-# ENV \
-#     CUTTLEFISH_ENV_OVERRIDE_PREFIX='EMQX_'
+ENV \
+    EMQX_HOME='/opt/emqx'
+    # CUTTLEFISH_ENV_OVERRIDE_PREFIX='EMQX_'
 
 WORKDIR /opt/emqx/
 
