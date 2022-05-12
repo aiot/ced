@@ -467,7 +467,7 @@ data:
     bridge.mqtt.mqttcloud.batch_size = 64
     bridge.mqtt.mqttcloud.max_inflight_batches = 64
     bridge.mqtt.mqttcloud.retry_interval = 10s
-    # subscribe(pull) message from mqtt-cloud
+    # subscribe message from mqtt-cloud (mqtt-cloud push msg to mqtt-edge)
     bridge.mqtt.mqttcloud.subscription.1.topic = command/device001
     # todo: tuning this
     bridge.mqtt.mqttcloud.subscription.1.qos = 1

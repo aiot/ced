@@ -4,13 +4,27 @@
 
 ## connect options
 
-- clean session
+- clean session: 清除会话
 
-- keepalive
+    - 1
 
-- will msg
+        开启 clean session, client 断连时, 清除会话
 
-- retain msg
+    - 0
+
+        关闭 clean session
+
+- keepalive: 保持连接
+
+    client 周期向 server 发送 pingreq, server 收到后返回 pingresp, 使 client 与 server 之间保持连接
+
+- will msg:
+
+    client 异常离线时(client 断连前未向 server 发送 disconnect message), server 向订阅者发送 will message
+
+- retain msg: 保留消息
+
+    client 向 server 发布 message 时, 可以设置 retained message 标志. retained message 会保留在 server, 供订阅者接收
 
 ## msg
 
@@ -47,5 +61,3 @@
 - 2
 
     保证 receiver 收到且只收到一次 msg
-
-# mqtt-sn
