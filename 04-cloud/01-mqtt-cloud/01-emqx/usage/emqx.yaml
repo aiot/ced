@@ -219,6 +219,9 @@ spec:
       - name: emqx_auth_ldap
         enable: false
 
+      # retain message
+      - name: emqx_retainer
+        enable: true
       # message bridge
       - name: emqx_bridge_mqtt
         enable: false
@@ -231,9 +234,6 @@ spec:
         enable: true
       # webhook
       - name: emqx_web_hook
-        enable: false
-      # retain message
-      - name: emqx_retainer
         enable: false
       # # message persistence
       # # https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html

@@ -24,7 +24,11 @@
 
 - retain msg: 保留消息
 
-    client 向 server 发布 message 时, 可以设置 retained message 标志. retained message 会保留在 server, 供订阅者接收
+    > https://www.emqx.io/docs/zh/v4.4/advanced/retained.html
+
+    client 向 server 发布 message 时, 可以设置 retained message 标志, 一个 topic 只能有一个保留消息.
+
+    保留消息会保留在 server, 订阅者与 server 建立连接时, 保留消息立刻 push 到订阅者
 
 ## msg
 
@@ -54,7 +58,7 @@
 
 - 1
 
-    sender 发送 msg 后, 等待 receiver 的 ack, 若没有收到 ack 则重发.
+    sender 发送 msg 后, 等待 receiver 的 ack 回复, 若没有收到 ack 则重发.
 
     可以保证 receiver 至少收到一次 msg, 但无法保证重复
 

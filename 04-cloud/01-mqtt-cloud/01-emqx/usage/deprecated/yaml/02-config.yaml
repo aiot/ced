@@ -494,6 +494,18 @@ data:
     # dashboard.default_user.password = mqtt-cloud
 
 
+  # retain message
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_retainer/etc/emqx_retainer.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-retainer
+  # https://www.emqx.io/docs/zh/v4.4/advanced/retained.html
+  retainer.conf: |
+
+    retainer.storage_type = disc_only
+    retainer.max_payload_size = 128KB
+    retainer.max_retained_messages = 0
+    retainer.expiry_interval = 16m
+    retainer.stop_publish_clear_msg = false
+
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_bridge_mqtt/etc/emqx_bridge_mqtt.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-bridge-mqtt
   # https://www.emqx.io/docs/zh/v4.4/advanced/bridge.html
@@ -581,18 +593,6 @@ data:
     # server receives the ACK message that sent by client
     # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
 
-  # retain message
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_retainer/etc/emqx_retainer.conf
-  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-retainer
-  # https://www.emqx.io/docs/zh/v4.4/advanced/retained.html
-  retainer.conf: |
-
-    retainer.storage_type = disc_only
-    retainer.max_payload_size = 64KB
-    retainer.max_retained_messages = 0
-    retainer.expiry_interval = 16m
-    retainer.stop_publish_clear_msg = false
-
 
   # prometheus agent for pushing metrics to prometheus-push-gateway
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_prometheus/etc/emqx_prometheus.conf
@@ -656,6 +656,8 @@ data:
     % dashboard
     { emqx_dashboard, true }.
 
+    % retain message
+    { emqx_retainer, true }.
     % message bridge
     { emqx_bridge_mqtt, false }.
     % rule engine based sql
@@ -666,8 +668,6 @@ data:
     { emqx_rule_engine, true }.
     % webhook
     { emqx_web_hook, false }.
-    % retain message
-    { emqx_retainer, false }.
     % message persistence
     % https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
 

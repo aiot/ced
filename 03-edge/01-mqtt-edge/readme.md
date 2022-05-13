@@ -14,8 +14,6 @@ mqtt-edge 是 edge-app 的数据源.
 
     - mqtt-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud) 时, 与其他 mqtt-server(如 mqtt-cloud) 断连, message 不丢失, 连接恢复后继续转发(桥接)
 
-- 支持获取 client(如 device) 收到 message 的 ACK 应答信息
-
 - 支持 http api
 
     - 支持通过 api 关闭非法连接
