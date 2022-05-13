@@ -144,7 +144,7 @@ data:
     zone.external.enable_acl = on
     zone.external.enable_ban = on
     zone.external.acl_deny_action = disconnect
-    zone.external.enable_flapping_detect = off
+    zone.external.enable_flapping_detect = on
     zone.external.use_username_as_clientid = false
     zone.external.max_clientid_len = 65535
     zone.external.max_packet_size = 1MB
@@ -321,6 +321,7 @@ data:
     enable_acl_cache = on
     acl_cache_ttl = 1m
     acl_cache_max_size = 32
+    # https://www.emqx.io/docs/zh/v4.4/advanced/blacklist.html
     flapping_detect_policy = 30, 1m, 5m
     # CONFIG_SECTION_END=authacl
 
