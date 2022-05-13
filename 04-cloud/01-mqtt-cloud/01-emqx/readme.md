@@ -49,13 +49,50 @@ https://github.com/emqx/emqx
 
     > https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
 
-    指定订阅者默认订阅的 topic
+    订阅者默认订阅的 topic
 
-- `webhook`
+- ~~`webhook`~~
 
-    > https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
+    > ~~https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html~~
 
-    将 client 上、下线事件等通知到某个 web 服务
+    ~~将 client 上、下线事件等通知到某个 web 服务.~~ 建议使用 `emqx_mod_presence` 模块实现, 而不是使用 webhook plugin
+
+- `规则引擎`
+
+    - ~~`消息桥接`~~
+
+        > ~~https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html~~
+
+        ~~使用规则引擎实现消息桥接.~~ 建议使用 `emqx_bridge_mqtt` 模块实现, 而不是使用规则引擎
+
+    - ~~`消息持久化`~~
+
+        ~~使用规则引擎实现 `消息持久化`.~~ 建议使用消息持久化模块实现, 而不是使用规则引擎
+
+        - 持久化到`时序数据库`
+
+            - `tdengine`
+
+                > https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
+
+        <strike>
+
+        - 持久化到`关系型数据库`
+
+            - `pgsql`
+
+                > https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_pgsql.html <br/>
+                https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_pgsql.html
+
+        </strike>
+
+- ~~`消息桥接`~~
+
+    参见 [mqtt-edge/readme.md](../../../03-edge/01-mqtt-edge/readme.md)
+
+- `消息持久化`
+
+    > https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
 
 ## client
 

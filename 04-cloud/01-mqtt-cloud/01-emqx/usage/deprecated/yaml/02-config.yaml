@@ -29,9 +29,6 @@ data:
 
   EMQX_MANAGEMENT__LISTENER__HTTPS: "8082"
 
-  # note: this is a fake value, please replace it with the actual value
-  EMQX_WEB__HOOK__URL: https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local
-
 # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html
 ---
 kind: ConfigMap
@@ -658,14 +655,10 @@ data:
 
     % retain message
     { emqx_retainer, true }.
-    % rule engine based sql
-    % https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
-    % https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
-    % https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_pgsql.html
-    % https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_pgsql.html
-    { emqx_rule_engine, true }.
     % webhook
     { emqx_web_hook, false }.
+    % rule engine based sql
+    { emqx_rule_engine, true }.
 
     % message bridge
     { emqx_bridge_mqtt, false }.
