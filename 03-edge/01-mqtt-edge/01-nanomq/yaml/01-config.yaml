@@ -9,14 +9,14 @@ immutable: false
 data:
   NANOMQ_CONF_PATH: /etc/nanomq/config/broker.conf
   NANOMQ_AUTH_CONF_PATH: /etc/nanomq/config/auth.conf
-  NANOMQ_BRIDGE_CONF_PATH: /etc/nanomq/config/bridge.conf
   NANOMQ_WEBHOOK_CONF_PATH: /etc/nanomq/config/webhook.conf
-
-  NANOMQ_BRIDGE__MQTT__ADDRESS: mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
-  # NANOMQ_BRIDGE__MQTT__CLIENTID: ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
+  NANOMQ_BRIDGE_CONF_PATH: /etc/nanomq/config/bridge.conf
 
   # note: this is a fake value, please replace it with the actual value
   NANOMQ_WEBHOOK__URL: https://nanomq-webhook-server.${POD_NAMESPACE}.svc.cluster.local
+
+  NANOMQ_BRIDGE__MQTT__ADDRESS: mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
+  # NANOMQ_BRIDGE__MQTT__CLIENTID: ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
 
 # https://nanomq.io/docs/zh/latest/config-description.html
 ---
@@ -75,28 +75,6 @@ data:
     auth.2.login = mqttx
     auth.2.password = mqttx
 
-  # warning: not support tls
-  # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_bridge.conf
-  bridge.conf: |
-    bridge.mqtt.parallel = 64
-
-    # bridge.mqtt.address = mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
-    bridge.mqtt.proto_ver = 5
-    bridge.mqtt.username = mqtt-edge
-    bridge.mqtt.password = mqtt-edge
-    bridge.mqtt.keepalive = 60
-    bridge.mqtt.clean_start = true
-
-    # bridge.mqtt.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
-    bridge.mqtt.bridge_mode = true
-    # publish(push) message to mqtt-cloud
-    bridge.mqtt.forwards = device001/#,device002/#
-    # subscribe message from mqtt-cloud (mqtt-cloud push msg to mqtt-edge)
-    bridge.mqtt.subscription.1.topic = command/device001
-    bridge.mqtt.subscription.1.qos=1
-    bridge.mqtt.subscription.2.topic = command/device002
-    bridge.mqtt.subscription.2.qos=1
-
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_web_hook.conf
   webhook.conf: |
     web.hook.enable = false
@@ -119,3 +97,25 @@ data:
     # web.hook.rule.client.disconnected.1 = {"action": "on_client_disconnected"}
     # server receives the ACK message that sent by client
     # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
+
+  # warning: not support tls
+  # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_bridge.conf
+  bridge.conf: |
+    bridge.mqtt.parallel = 64
+
+    # bridge.mqtt.address = mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
+    bridge.mqtt.proto_ver = 5
+    bridge.mqtt.username = mqtt-edge
+    bridge.mqtt.password = mqtt-edge
+    bridge.mqtt.keepalive = 60
+    bridge.mqtt.clean_start = true
+
+    # bridge.mqtt.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
+    bridge.mqtt.bridge_mode = true
+    # publish(push) message to mqtt-cloud
+    bridge.mqtt.forwards = device001/#,device002/#
+    # subscribe message from mqtt-cloud (mqtt-cloud push msg to mqtt-edge)
+    bridge.mqtt.subscription.1.topic = command/device001
+    bridge.mqtt.subscription.1.qos=1
+    bridge.mqtt.subscription.2.topic = command/device002
+    bridge.mqtt.subscription.2.qos=1

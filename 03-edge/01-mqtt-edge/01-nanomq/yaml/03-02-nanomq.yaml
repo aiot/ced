@@ -83,12 +83,12 @@ spec:
               mountPath: /etc/nanomq/config/auth.conf.tpl
               readOnly: false
             - name: config
-              subPath: bridge.conf
-              mountPath: /etc/nanomq/config/bridge.conf.tpl
-              readOnly: false
-            - name: config
               subPath: webhook.conf
               mountPath: /etc/nanomq/config/webhook.conf.tpl
+              readOnly: false
+            - name: config
+              subPath: bridge.conf
+              mountPath: /etc/nanomq/config/bridge.conf.tpl
               readOnly: false
 
             - name: cert
@@ -145,23 +145,23 @@ spec:
                   cp -rfv ${configFilePath}/${configFileName}.conf.tpl ${configFilePath}/${configFileName}.conf
               done
 
+              echo -e '' >> ${configFilePath}/webhook.conf
+              eval echo -e "web.hook.url = ${NANOMQ_WEBHOOK__URL}" >> ${configFilePath}/webhook.conf
+
               echo -e '' >> ${configFilePath}/bridge.conf
               eval echo -e "bridge.mqtt.address = ${NANOMQ_BRIDGE__MQTT__ADDRESS}" >> ${configFilePath}/bridge.conf
-              if [[ ${EMQX_NODE__NAME} == "" ]]
+              if [[ ${NANOMQ_BRIDGE__MQTT__CLIENTID} == "" ]]
               then
                   eval echo -e "bridge.mqtt.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}" >> ${configFilePath}/bridge.conf
               else
                   eval echo -e "bridge.mqtt.clientid = ${NANOMQ_BRIDGE__MQTT__CLIENTID}" >> ${configFilePath}/bridge.conf
               fi
 
-              echo -e '' >> ${configFilePath}/webhook.conf
-              eval echo -e "web.hook.url = ${NANOMQ_WEBHOOK__URL}" >> ${configFilePath}/webhook.conf
-
               /usr/local/bin/nanomq broker start \
               --conf=/etc/nanomq/config/broker.conf \
               --auth=/etc/nanomq/config/auth.conf \
-              --bridge=/etc/nanomq/config/bridge.conf \
-              --webhook=/etc/nanomq/config/webhook.conf
+              --webhook=/etc/nanomq/config/webhook.conf \
+              --bridge=/etc/nanomq/config/bridge.conf
 
           ports:
             - name: tcp
