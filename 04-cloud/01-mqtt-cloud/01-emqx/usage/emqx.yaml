@@ -219,12 +219,16 @@ spec:
       - name: emqx_auth_ldap
         enable: false
 
+      # api
+      - name: emqx_management
+        enable: true
+      # dashboard
+      - name: emqx_dashboard
+        enable: true
+
       # retain message
       - name: emqx_retainer
         enable: true
-      # message bridge
-      - name: emqx_bridge_mqtt
-        enable: false
       # rule engine based sql
       # https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
       # https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
@@ -235,17 +239,14 @@ spec:
       # webhook
       - name: emqx_web_hook
         enable: false
+
+      # message bridge
+      - name: emqx_bridge_mqtt
+        enable: false
       # # message persistence
       # # https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
       # - name:
       #   enable: true
-
-      # api
-      - name: emqx_management
-        enable: true
-      # dashboard
-      - name: emqx_dashboard
-        enable: true
 
       # prometheus agent for pushing metrics to prometheus-push-gateway
       - name: emqx_prometheus

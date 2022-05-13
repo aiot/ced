@@ -28,7 +28,7 @@
 
     client 向 server 发布 message 时, 可以设置 retained message 标志, 一个 topic 只能有一个保留消息.
 
-    保留消息会保留在 server, 订阅者与 server 建立连接时, 保留消息立刻 push 到订阅者
+    保留消息会保留在 server, 订阅者与 server 建立连接时, 如果订阅者订阅的 topic 下有保留消息, 则保留消息会立刻 push 到订阅者
 
 ## msg
 

@@ -17,22 +17,6 @@ https://github.com/emqx/emqx
     emqx foreground
     ```
 
-### 功能
-
-- 代理订阅
-
-    > https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
-
-    指定订阅者默认订阅的 topic
-
-### http api
-
-> https://www.emqx.io/docs/zh/v4.4/advanced/http-api.html
-
-#### dashboard
-
-> https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
-
 ### cli: command-line-interface
 
 > https://www.emqx.io/docs/zh/v4.4/advanced/cli.html
@@ -51,9 +35,25 @@ https://github.com/emqx/emqx
         emqx-ctl cluster status
         ```
 
+### http api
+
+> https://www.emqx.io/docs/zh/v4.4/advanced/http-api.html
+
+#### dashboard
+
+> https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
+
+### 功能
+
+- `代理订阅`
+
+    > https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
+
+    指定订阅者默认订阅的 topic
+
 ## client
 
-### 共享订阅
+### `共享订阅`
 
 > https://www.emqx.io/docs/zh/v4.4/advanced/shared-subscriptions.html
 

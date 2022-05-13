@@ -246,19 +246,20 @@ spec:
               - key: acl.conf
                 path: acl.conf
 
+              - key: api.conf
+                path: api.conf
+              - key: dashboard.conf
+                path: dashboard.conf
+
               - key: retainer.conf
                 path: retainer.conf
-              - key: bridge-mqtt.conf
-                path: bridge-mqtt.conf
               - key: rule-engine.conf
                 path: rule-engine.conf
               - key: webhook.conf
                 path: webhook.conf
 
-              - key: api.conf
-                path: api.conf
-              - key: dashboard.conf
-                path: dashboard.conf
+              - key: bridge-mqtt.conf
+                path: bridge-mqtt.conf
 
               - key: prometheus.conf
                 path: prometheus.conf
@@ -308,12 +309,17 @@ spec:
             #   readOnly: false
 
             - name: config
-              subPath: retainer.conf
-              mountPath: /opt/emqx/etc/plugins/emqx_retainer.conf
+              subPath: api.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_management.conf
               readOnly: false
             - name: config
-              subPath: bridge-mqtt.conf
-              mountPath: /opt/emqx/etc/plugins/emqx_bridge_mqtt.conf
+              subPath: dashboard.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_dashboard.conf
+              readOnly: false
+
+            - name: config
+              subPath: retainer.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_retainer.conf
               readOnly: false
             - name: config
               subPath: rule-engine.conf
@@ -325,12 +331,8 @@ spec:
               readOnly: false
 
             - name: config
-              subPath: api.conf
-              mountPath: /opt/emqx/etc/plugins/emqx_management.conf
-              readOnly: false
-            - name: config
-              subPath: dashboard.conf
-              mountPath: /opt/emqx/etc/plugins/emqx_dashboard.conf
+              subPath: bridge-mqtt.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_bridge_mqtt.conf
               readOnly: false
 
             - name: config

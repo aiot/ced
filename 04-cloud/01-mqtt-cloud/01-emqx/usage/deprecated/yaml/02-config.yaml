@@ -506,6 +506,47 @@ data:
     retainer.expiry_interval = 16m
     retainer.stop_publish_clear_msg = false
 
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
+  rule-engine.conf: |
+
+    rule_engine.ignore_sys_message = on
+
+    rule_engine.events.client_connected = on, qos1
+    rule_engine.events.client_disconnected = on, qos1
+    rule_engine.events.session_subscribed = off
+    rule_engine.events.session_unsubscribed = off
+    rule_engine.events.message_delivered = off
+    rule_engine.events.message_acked = on, qos1
+    rule_engine.events.message_dropped = off
+
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_web_hook/etc/emqx_web_hook.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-web-hook
+  # https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
+  webhook.conf: |
+
+    # send notify to some http server
+    # web.hook.url = https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local
+    web.hook.ssl.verify = false
+    web.hook.ssl.server_name_indication = disable
+    # web.hook.ssl.keyfile =
+    # web.hook.ssl.certfile =
+    # web.hook.ssl.cacertfile =
+    web.hook.headers.content-type = application/json
+    web.hook.body.encoding_of_payload_field = plain
+    web.hook.enable_pipelining = true
+    web.hook.pool_size = 32
+
+    # event
+    # web.hook.rule.<hook-name>.<number> = <event>
+    # client online
+    # web.hook.rule.client.connected.1 = {"action": "on_client_connected"}
+    # client offline
+    # web.hook.rule.client.disconnected.1 = {"action": "on_client_disconnected"}
+    # server receives the ACK message that sent by client
+    # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
+
+
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_bridge_mqtt/etc/emqx_bridge_mqtt.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-bridge-mqtt
   # https://www.emqx.io/docs/zh/v4.4/advanced/bridge.html
@@ -549,46 +590,6 @@ data:
     bridge.mqtt.mqttcloud.queue.replayq_dir = data/bridge/
     bridge.mqtt.mqttcloud.queue.replayq_seg_bytes = 128MB
     bridge.mqtt.mqttcloud.queue.max_total_size = 2048MB
-
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
-  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
-  rule-engine.conf: |
-
-    rule_engine.ignore_sys_message = on
-
-    rule_engine.events.client_connected = on, qos1
-    rule_engine.events.client_disconnected = on, qos1
-    rule_engine.events.session_subscribed = off
-    rule_engine.events.session_unsubscribed = off
-    rule_engine.events.message_delivered = off
-    rule_engine.events.message_acked = on, qos1
-    rule_engine.events.message_dropped = off
-
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_web_hook/etc/emqx_web_hook.conf
-  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-web-hook
-  # https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
-  webhook.conf: |
-
-    # send notify to some http server
-    # web.hook.url = https://emqx-webhook-server.${POD_NAMESPACE}.svc.cluster.local
-    web.hook.ssl.verify = false
-    web.hook.ssl.server_name_indication = disable
-    # web.hook.ssl.keyfile =
-    # web.hook.ssl.certfile =
-    # web.hook.ssl.cacertfile =
-    web.hook.headers.content-type = application/json
-    web.hook.body.encoding_of_payload_field = plain
-    web.hook.enable_pipelining = true
-    web.hook.pool_size = 32
-
-    # event
-    # web.hook.rule.<hook-name>.<number> = <event>
-    # client online
-    # web.hook.rule.client.connected.1 = {"action": "on_client_connected"}
-    # client offline
-    # web.hook.rule.client.disconnected.1 = {"action": "on_client_disconnected"}
-    # server receives the ACK message that sent by client
-    # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
 
 
   # prometheus agent for pushing metrics to prometheus-push-gateway
@@ -655,8 +656,6 @@ data:
 
     % retain message
     { emqx_retainer, true }.
-    % message bridge
-    { emqx_bridge_mqtt, false }.
     % rule engine based sql
     % https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
     % https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
@@ -665,6 +664,9 @@ data:
     { emqx_rule_engine, true }.
     % webhook
     { emqx_web_hook, false }.
+
+    % message bridge
+    { emqx_bridge_mqtt, false }.
     % message persistence
     % https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
 
