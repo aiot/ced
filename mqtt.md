@@ -44,9 +44,9 @@
 
         通配多个层级, 如 things/x, things/x/y, ···
 
-- 系统消息
+- metric topic: `$SYS/#`
 
-    `$SYS/#`
+    > https://www.emqx.io/docs/zh/v4.4/advanced/system-topic.html
 
 ### QoS: Quality of Service (服务质量)
 
