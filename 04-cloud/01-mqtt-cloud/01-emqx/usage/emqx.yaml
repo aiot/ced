@@ -175,13 +175,13 @@ spec:
       # https://docs.emqx.com/zh/enterprise/v4.4/modules/presence.html
       - name: emqx_mod_presence
         enable: true
-      # mqtt subscription
-      # https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
-      - name: emqx_mod_subscription
-        enable: true
       # topic rewrite
       # https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
       - name: emqx_mod_rewrite
+        enable: true
+      # mqtt subscription
+      # https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
+      - name: emqx_mod_subscription
         enable: true
       # delayed publish
       # https://www.emqx.io/docs/zh/v4.4/advanced/delay-publish.html

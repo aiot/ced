@@ -3,34 +3,27 @@
 > https://www.emqx.io/docs/zh/v4.4/, https://docs.emqx.com/zh/enterprise/v4.4/ <br/>
 https://github.com/emqx/emqx
 
-## broker
+## architecture
 
-> https://www.emqx.io/docs/zh/v4.4/getting-started/start.html <br/>
-https://www.emqx.io/docs/zh/v4.4/getting-started/command-line.html
+> https://www.emqx.io/docs/zh/v4.4/design/design.html
+
+## server
+
+> https://www.emqx.io/docs/zh/v4.4/getting-started/command-line.html
 
 - start
 
     ```bash
-    emqx start
+    emqx foreground
     ```
 
-### cli: command-line-interface
+### 功能
 
-> https://www.emqx.io/docs/zh/v4.4/advanced/cli.html
+- 代理订阅
 
-- health check
+    > https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
 
-    - cluster
-
-        ```bash
-        emqx-ctl cluster status
-        ```
-
-    - instance
-
-        ```bash
-        emqx-ctl status
-        ```
+    指定订阅者默认订阅的 topic
 
 ### http api
 
@@ -40,11 +33,31 @@ https://www.emqx.io/docs/zh/v4.4/getting-started/command-line.html
 
 > https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
 
+### cli: command-line-interface
+
+> https://www.emqx.io/docs/zh/v4.4/advanced/cli.html
+
+- health check
+
+    - instance
+
+        ```bash
+        emqx-ctl status
+        ```
+
+    - cluster
+
+        ```bash
+        emqx-ctl cluster status
+        ```
+
 ## client
 
-## architecture
+### 共享订阅
 
-> https://www.emqx.io/docs/zh/v4.4/design/design.html
+> https://www.emqx.io/docs/zh/v4.4/advanced/shared-subscriptions.html
+
+多个订阅者订阅同一 topic 时, 可以使用共享订阅实现同一时间只有一个订阅者收到同一个 message
 
 # emqx operator
 

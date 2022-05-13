@@ -61,6 +61,7 @@ data:
 
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#broker
     # CONFIG_SECTION_BGN=broker
+    broker.shared_subscription_strategy = random
     broker.shared_dispatch_ack_enabled = true
     # CONFIG_SECTION_END=broker
 
@@ -325,7 +326,6 @@ data:
 
     # CONFIG_SECTION_BGN=modules
     modules.loaded_file = data/loaded_modules
-    # todo: tuning this
     module.presence.qos = 1
     module.slow_subs.threshold = 300ms
     module.slow_subs.stats_type = whole
@@ -541,10 +541,8 @@ data:
     bridge.mqtt.mqttcloud.retry_interval = 10s
     # subscribe message from mqtt-cloud (mqtt-cloud push msg to mqtt-edge)
     bridge.mqtt.mqttcloud.subscription.1.topic = command/device001
-    # todo: tuning this
     bridge.mqtt.mqttcloud.subscription.1.qos = 1
     bridge.mqtt.mqttcloud.subscription.2.topic = command/device002
-    # todo: tuning this
     bridge.mqtt.mqttcloud.subscription.2.qos = 1
 
     # cache
@@ -558,7 +556,6 @@ data:
 
     rule_engine.ignore_sys_message = on
 
-    # todo: tuning this
     rule_engine.events.client_connected = on, qos1
     rule_engine.events.client_disconnected = on, qos1
     rule_engine.events.session_subscribed = off
@@ -618,12 +615,12 @@ data:
     % online and offline notification
     % https://docs.emqx.com/zh/enterprise/v4.4/modules/presence.html
     { emqx_mod_presence, true }.
-    % mqtt subscription
-    % https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
-    { emqx_mod_subscription, true }.
     % topic rewrite
     % https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
     { emqx_mod_rewrite, true }.
+    % topic to which subscriber subscribes by default
+    % https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
+    { emqx_mod_subscription, true }.
     % delayed publish
     % https://www.emqx.io/docs/zh/v4.4/advanced/delay-publish.html
     { emqx_mod_delayed, false }.
