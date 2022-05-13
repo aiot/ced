@@ -577,9 +577,9 @@ data:
     bridge.mqtt.mqttcloud.bridge_mode = true
     # publish(push) message to mqtt-cloud
     bridge.mqtt.mqttcloud.forwards = device001/#,device002/#
-    bridge.mqtt.mqttcloud.batch_size = 64
-    bridge.mqtt.mqttcloud.max_inflight_batches = 64
-    bridge.mqtt.mqttcloud.retry_interval = 10s
+    bridge.mqtt.mqttcloud.batch_size = 32
+    bridge.mqtt.mqttcloud.max_inflight_batches = 32
+    bridge.mqtt.mqttcloud.retry_interval = 20s
     # subscribe message from mqtt-cloud (mqtt-cloud push msg to mqtt-edge)
     bridge.mqtt.mqttcloud.subscription.1.topic = command/device001
     bridge.mqtt.mqttcloud.subscription.1.qos = 1
@@ -588,7 +588,7 @@ data:
 
     # cache
     bridge.mqtt.mqttcloud.queue.replayq_dir = data/bridge/
-    bridge.mqtt.mqttcloud.queue.replayq_seg_bytes = 128MB
+    bridge.mqtt.mqttcloud.queue.replayq_seg_bytes = 64MB
     bridge.mqtt.mqttcloud.queue.max_total_size = 2048MB
 
 
