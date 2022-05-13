@@ -50,7 +50,8 @@
 
 ### QoS: Quality of Service (服务质量)
 
-> https://www.emqx.com/zh/blog/introduction-to-mqtt-qos
+> https://www.emqx.io/docs/zh/v4.4/advanced/retransmission.html <br/>
+https://www.emqx.com/zh/blog/introduction-to-mqtt-qos
 
 - 0
 
@@ -60,7 +61,7 @@
 
     sender 发送 msg 后, 等待 receiver 的 ack 回复, 若没有收到 ack 则重发.
 
-    可以保证 receiver 至少收到一次 msg, 但无法保证重复
+    可以保证 receiver 至少收到一次 msg, 但无法保证不重复(但会保证顺序)
 
 - 2
 

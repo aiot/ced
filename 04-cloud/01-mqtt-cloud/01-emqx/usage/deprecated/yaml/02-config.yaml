@@ -150,6 +150,7 @@ data:
     zone.external.max_packet_size = 1MB
     zone.external.max_qos_allowed = 2
     zone.external.upgrade_qos = off
+    # https://www.emqx.io/docs/zh/v4.4/advanced/inflight-window-and-message-queue.html
     zone.external.max_inflight = 128
     zone.external.max_awaiting_rel = 1024
     zone.external.max_mqueue_len = 10240
@@ -341,6 +342,7 @@ data:
     plugins.loaded_file = data/loaded_plugins
     # CONFIG_SECTION_END=plugins
 
+    # https://www.emqx.io/docs/zh/v4.4/advanced/alarms.html
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#monitor
     # CONFIG_SECTION_BGN=sys_mon
     os_mon.mem_check_interval = 60s
@@ -598,7 +600,6 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-prometheus
   # metric: https://www.emqx.io/docs/zh/v4.4/advanced/metrics-and-stats.html
   # topic metric: https://www.emqx.io/docs/zh/v4.4/advanced/topic-metrics.html
-  # alert: https://www.emqx.io/docs/zh/v4.4/advanced/alarms.html
   # grafana: https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_prometheus/grafana_template/
   prometheus.conf: |
 
