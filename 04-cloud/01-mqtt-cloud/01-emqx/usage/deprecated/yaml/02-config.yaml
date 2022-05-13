@@ -618,7 +618,7 @@ data:
     { emqx_mod_presence, true }.
     % topic rewrite
     % https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
-    { emqx_mod_rewrite, true }.
+    { emqx_mod_rewrite, false }.
     % topic to which subscriber subscribes by default
     % https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
     { emqx_mod_subscription, true }.

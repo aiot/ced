@@ -178,7 +178,7 @@ spec:
       # topic rewrite
       # https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
       - name: emqx_mod_rewrite
-        enable: true
+        enable: false
       # topic to which subscriber subscribes by default
       # https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
       - name: emqx_mod_subscription
