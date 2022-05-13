@@ -507,20 +507,6 @@ data:
     retainer.expiry_interval = 16m
     retainer.stop_publish_clear_msg = false
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
-  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
-  rule-engine.conf: |
-
-    rule_engine.ignore_sys_message = on
-
-    rule_engine.events.client_connected = on, qos1
-    rule_engine.events.client_disconnected = on, qos1
-    rule_engine.events.session_subscribed = off
-    rule_engine.events.session_unsubscribed = off
-    rule_engine.events.message_delivered = off
-    rule_engine.events.message_acked = on, qos1
-    rule_engine.events.message_dropped = off
-
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_web_hook/etc/emqx_web_hook.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-web-hook
   # https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
@@ -546,6 +532,20 @@ data:
     # web.hook.rule.client.disconnected.1 = {"action": "on_client_disconnected"}
     # server receives the ACK message that sent by client
     # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
+
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_rule_engine/etc/emqx_rule_engine.conf
+  # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件emqx-rule-engine
+  rule-engine.conf: |
+
+    rule_engine.ignore_sys_message = on
+
+    rule_engine.events.client_connected = on, qos1
+    rule_engine.events.client_disconnected = on, qos1
+    rule_engine.events.session_subscribed = off
+    rule_engine.events.session_unsubscribed = off
+    rule_engine.events.message_delivered = off
+    rule_engine.events.message_acked = on, qos1
+    rule_engine.events.message_dropped = off
 
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_bridge_mqtt/etc/emqx_bridge_mqtt.conf

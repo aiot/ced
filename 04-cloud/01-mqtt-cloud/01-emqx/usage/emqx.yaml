@@ -229,6 +229,9 @@ spec:
       # retain message
       - name: emqx_retainer
         enable: true
+      # webhook
+      - name: emqx_web_hook
+        enable: false
       # rule engine based sql
       # https://www.emqx.io/docs/zh/v4.4/rule/bridge_mqtt.html
       # https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_tdengine.html
@@ -236,9 +239,6 @@ spec:
       # https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_pgsql.html
       - name: emqx_rule_engine
         enable: true
-      # webhook
-      - name: emqx_web_hook
-        enable: false
 
       # message bridge
       - name: emqx_bridge_mqtt

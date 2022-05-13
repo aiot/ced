@@ -51,6 +51,12 @@ https://github.com/emqx/emqx
 
     指定订阅者默认订阅的 topic
 
+- `webhook`
+
+    > https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
+
+    将 client 上、下线事件等通知到某个 web 服务
+
 ## client
 
 ### `共享订阅`
