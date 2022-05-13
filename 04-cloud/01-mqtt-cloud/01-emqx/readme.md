@@ -81,8 +81,7 @@ https://github.com/emqx/emqx
 
             - `pgsql`
 
-                > https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_pgsql.html <br/>
-                https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_pgsql.html
+                > https://docs.emqx.com/zh/enterprise/v4.4/rule/backend_pgsql.html
 
         </strike>
 
