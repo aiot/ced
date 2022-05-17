@@ -55,7 +55,11 @@ https://github.com/emqx/emqx
 
     > ~~https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html~~
 
-    ~~将 client 上、下线事件等通知到某个 web 服务.~~ 建议使用 `emqx_mod_presence` 模块实现, 而不是使用 webhook plugin
+    ~~将 client 上、下线等事件通知到某个 web 服务.~~
+
+    强烈建议不要使用 emqx webhook plugin, 使用 emqx webhook plugin 则 webhook server 必须按照 emqx webhook plugin 所定义的报文格式开发, 可见 emqx webhook plugin 是一个相当鸡肋的功能.
+
+    建议使用 `emqx api` ~~或 `emqx_mod_presence` 模块~~实现 client 上、下线通知等功能.
 
 - `规则引擎`
 
@@ -67,9 +71,9 @@ https://github.com/emqx/emqx
 
     - ~~`消息持久化`~~
 
-        ~~使用规则引擎实现 `消息持久化`.~~ 建议使用消息持久化模块实现, 而不是使用规则引擎
+        ~~使用规则引擎实现`消息持久化`到数据库.~~ 建议使用消息持久化模块实现, 而不是使用规则引擎
 
-        - 持久化到`时序数据库`
+        - `时序数据库`
 
             - `tdengine`
 
@@ -77,7 +81,7 @@ https://github.com/emqx/emqx
 
         <strike>
 
-        - 持久化到`关系型数据库`
+        - `关系型数据库`
 
             - `pgsql`
 
@@ -91,7 +95,8 @@ https://github.com/emqx/emqx
 
 - `消息持久化`
 
-    > https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
+    > https://www.emqx.io/docs/zh/v4.4/backend/backend.html <br/>
+    https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
 
 ## client
 

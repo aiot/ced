@@ -14,7 +14,19 @@ mqtt-cloud 是 cloud-app 的数据源.
 
 - 支持 message 持久化
 
-    支持 message 持久化到时序数据库(如 tdengine), 供 cloud-app 查询
+    支持 message 持久化到数据库, 供 cloud-app 查询
+
+    - 时序数据库
+
+        - tdengine
+
+    <strike>
+
+    - 关系型数据库
+
+        - pgsql
+
+    </strike>
 
 - 支持 http api
 
