@@ -29,6 +29,7 @@ immutable: false
 data:
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq.conf
   broker.conf: |
+
     daemon = false
     num_taskq_thread = 8
     max_taskq_thread = 16
@@ -69,6 +70,7 @@ data:
 
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_auth_username.conf
   auth.conf: |
+
     auth.1.login = device
     auth.1.password = device
 
@@ -77,6 +79,7 @@ data:
 
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_web_hook.conf
   webhook.conf: |
+
     web.hook.enable = false
 
     # web.hook.url = https://nanomq-webhook-server.${POD_NAMESPACE}.svc.cluster.local
@@ -101,6 +104,7 @@ data:
   # warning: not support tls
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_bridge.conf
   bridge.conf: |
+
     bridge.mqtt.parallel = 64
 
     # bridge.mqtt.address = mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883

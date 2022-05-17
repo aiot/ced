@@ -83,10 +83,14 @@ https://www.emqx.com/zh/blog/introduction-to-mqtt-qos
 
 - https://github.com/mqttjs/mqtt.js
 
+    > https://www.emqx.com/zh/blog/mqtt-js-tutorial
+
 ### golang
 
 > https://www.emqx.io/docs/zh/v4.4/development/go.html
 
 - https://github.com/eclipse/paho.mqtt.golang
 
-    warning: mqtt v5 is not supported and seems no longer maintenance
+    warning: this library does not support mqtt v5 and seems no longer maintenance
+
+    > https://www.emqx.com/zh/blog/how-to-use-mqtt-in-golang
