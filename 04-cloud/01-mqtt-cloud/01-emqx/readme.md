@@ -39,41 +39,47 @@ https://github.com/emqx/emqx
 
 > https://www.emqx.io/docs/zh/v4.4/advanced/http-api.html
 
-#### `client 上、下线(connected、disconnected)通知`
+app 调用 emqx api 可以实现以下能力:
 
-- 实现方式一
+- `client 上、下线(connected、disconnected)通知`
 
-    app 通过 emqx api 查询 client 上、下线(connected、disconnected)状态
+    - 实现方式一
 
-    - /api/v4/clients
+        app 通过 emqx api 查询 client 上、下线(connected、disconnected)状态
 
-        所有客户端
+        - /api/v4/clients
 
-    - /api/v4/clients/{clientid}
+            所有客户端
 
-        通过 client-id 指定客户端
+        - /api/v4/clients/{clientid}
 
-- ~~实现方式二~~
+            通过 client-id 指定客户端
 
-    ~~app 通过订阅 $SYS topic 获取 client 上、下线(connected、disconnected)状态.~~ 强烈建议不要使用这种方式, 局限性太大.
+    - ~~实现方式二~~
 
-    - ~~$SYS/brokers/${node}/clients/${clientid}/connected~~
+        ~~app 通过订阅 $SYS topic 获取 client 上、下线(connected、disconnected)状态.~~ 强烈建议不要使用这种方式, 局限性太大.
 
-    - ~~$SYS/brokers/${node}/clients/${clientid}/disconnected~~
+        - ~~$SYS/brokers/${node}/clients/${clientid}/connected~~
 
-#### ~~`消息桥接`~~
+        - ~~$SYS/brokers/${node}/clients/${clientid}/disconnected~~
 
-~~app 通过订阅 emqx-edge 的 topic, 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud).~~ 建议使用 `emqx_bridge_mqtt` 模块实现.
+- ~~`消息桥接`~~
 
-#### ~~`消息持久化`~~
+    ~~app 通过订阅 emqx-edge 的 topic, 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud).~~ 建议使用 `emqx_bridge_mqtt` 模块实现.
 
-~~cloud-app 通过 emqx api 查询并订阅 topic, 然后使用时序数据库的 api 将 message 写入数据库.~~ 建议使用 emqx 消息持久化模块实现.
+- ~~`消息持久化`~~
 
-> https://www.emqx.com/zh/blog/emqx-rule-engine-series-writing-messages-to-tdengine
+    ~~cloud-app 通过 emqx api 查询并订阅 topic, 然后使用时序数据库的 api 将 message 写入数据库.~~ 建议使用 emqx 消息持久化模块实现.
+
+    > https://www.emqx.com/zh/blog/emqx-rule-engine-series-writing-messages-to-tdengine
 
 #### dashboard
 
 > https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
+
+- 使用单个 dashboard 管理多 mqtt-server 实例
+
+    > https://hub.docker.com/r/emqx/edge-manager
 
 ### 功能
 
