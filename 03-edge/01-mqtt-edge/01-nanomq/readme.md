@@ -17,6 +17,8 @@ https://github.com/emqx/nanomq
 
 > https://nanomq.io/docs/zh/latest/http-api.html
 
+<strike>
+
 ## client
 
 > https://nanomq.io/docs/zh/latest/toolkit.html#client
@@ -41,3 +43,5 @@ https://github.com/emqx/nanomq
         --user= --password= \
         --topic=
     ```
+
+</strike>

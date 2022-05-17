@@ -16,7 +16,7 @@ https://github.com/emqx/emqx-edge-docs/blob/master/zh_CN/
 
     - `消息缓存`
 
-        emqx-edge 与 emqx 断连时, client(如 device) 发布的 message 不丢失, 连接恢复后继续转发(桥接)
+        emqx-edge 与 emqx 断连时, client(如 device) 发布的 message(称为`离线消息`) 不丢失, 连接恢复后继续转发(桥接)
 
         - 缓存到磁盘
 

@@ -66,3 +66,27 @@ https://www.emqx.com/zh/blog/introduction-to-mqtt-qos
 - 2
 
     保证 receiver 收到且只收到一次 msg
+
+## client library
+
+> https://www.emqx.io/docs/zh/v4.4/development/client.html
+
+### c
+
+> https://www.emqx.io/docs/zh/v4.4/development/c.html
+
+- https://github.com/eclipse/paho.mqtt.c
+
+### nodejs
+
+> https://www.emqx.io/docs/zh/v4.4/development/javascript.html
+
+- https://github.com/mqttjs/mqtt.js
+
+### golang
+
+> https://www.emqx.io/docs/zh/v4.4/development/go.html
+
+- https://github.com/eclipse/paho.mqtt.golang
+
+    warning: mqtt v5 is not supported and seems no longer maintenance
