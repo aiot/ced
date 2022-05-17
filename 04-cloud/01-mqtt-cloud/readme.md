@@ -33,3 +33,5 @@ mqtt-cloud 是 cloud-app 的数据源.
     - 支持通过 api 关闭非法连接
 
     - 支持 dashboard 管理多 mqtt-server 实例
+
+        https://hub.docker.com/r/emqx/edge-manager
