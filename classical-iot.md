@@ -102,3 +102,9 @@
     4. 应用程序
 
         提取、处理时序数据库中的 things 数据, 向用户提供交互式 UI
+
+## 示例
+
+1. things -> device -> mqtt -> tdengine -> grafana
+
+    > https://www.emqx.com/zh/blog/emqx-tdengine-grafana
