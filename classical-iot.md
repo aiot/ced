@@ -105,6 +105,7 @@
 
 ## 示例
 
-1. things -> device -> mqtt -> tdengine -> grafana
+1. things -> device -> edge(neuron -> emqx-edge -> kuiper) -> cloud(emqx -> tdengine -> grafana)
 
-    > https://www.emqx.com/zh/blog/emqx-tdengine-grafana
+    > https://www.emqx.com/zh/blog/emqx-tdengine-grafana <br/>
+    https://github.com/emqx/edge-stack/blob/master/developer-scripts/readme-cn.md

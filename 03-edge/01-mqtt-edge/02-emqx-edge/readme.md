@@ -1,7 +1,8 @@
 # emqx-edge
 
-> https://docs.emqx.io/en/edge/latest/ <br/>
-https://github.com/emqx/emqx-edge-docs/blob/master/zh_CN/
+> the document of emqx-edge seems no longer maintenance: <br/>
+~~https://docs.emqx.io/en/edge/latest/~~ <br/>
+~~https://github.com/emqx/emqx-edge-docs/blob/master/zh_CN/~~
 
 ## server
 
