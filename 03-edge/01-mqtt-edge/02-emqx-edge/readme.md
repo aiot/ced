@@ -1,8 +1,17 @@
 # emqx-edge
 
 > the document of emqx-edge seems no longer maintenance: <br/>
-~~https://docs.emqx.io/en/edge/latest/~~ <br/>
-~~https://github.com/emqx/emqx-edge-docs/blob/master/zh_CN/~~
+~~https://docs.emqx.io/en/edge/latest/, https://github.com/emqx/emqx-edge-docs/blob/master/zh_CN/~~
+
+note: emqx-edge 的本质就是 emqx, 只是在编译时比 emqx 少编译了一些模块.
+
+warning: emqx-edge 有以下非常不合理的地方
+
+- 编译了 auth-mysql、auth-http; dashboard; retainer、web-hook、rule-engine 等很多不适合 edge 的模块
+
+- 没有编译 prometheus 等非常重要的模块
+
+可见 `emqx-edge 虽然取名为 edge, 但并不适合 edge`. 因此建议不要使用官方 emqx-edge 镜像, 而是重新编译 emqx-edge 并生成镜像; 或者直接使用 emqx 镜像.
 
 ## server
 

@@ -1,0 +1,86 @@
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name emqx-edge
+spec:
+  issuerRef:
+    kind: Issuer
+    group: cert-manager.io
+    name: emqx-edge
+  commonName: *app-name
+  subject:
+    countries:
+      - "UNC"
+    provinces:
+      - "UNC"
+    localities:
+      - "UNC"
+    organizations:
+      - *app-namespace
+    organizationalUnits:
+      - "KubeStation:aiot@aiot.hk"
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+  encodeUsagesInRequest: true
+  dnsNames:
+    - localhost
+    - emqx-edge
+    - emqx-edge.aiot-case
+    - emqx-edge.aiot-case.svc
+    - emqx-edge.aiot-case.svc.cluster.local
+    - "*.emqx-edge"
+    - "*.emqx-edge.aiot-case"
+    - "*.emqx-edge.aiot-case.svc"
+    - "*.emqx-edge.aiot-case.svc.cluster.local"
+  ipAddresses:
+    - 127.0.0.1
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    encoding: PKCS1
+    rotationPolicy: Always
+  duration: {{kube.cert.signingDuration}}
+  renewBefore: 360h    # 15d
+  secretName: emqx-edge-cert
+
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name emqx-edge-client-mqttx
+spec:
+  issuerRef:
+    kind: Issuer
+    group: cert-manager.io
+    name: emqx-edge
+  commonName: *app-name
+  subject:
+    countries:
+      - "UNC"
+    provinces:
+      - "UNC"
+    localities:
+      - "UNC"
+    organizations:
+      - *app-namespace
+    organizationalUnits:
+      - "KubeStation:aiot@aiot.hk"
+  usages:
+    - digital signature
+    - key encipherment
+    - client auth
+  encodeUsagesInRequest: true
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    encoding: PKCS1
+    rotationPolicy: Always
+  duration: {{kube.cert.signingDuration}}
+  renewBefore: 360h    # 15d
+  secretName: emqx-edge-client-cert-mqttx

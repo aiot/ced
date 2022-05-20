@@ -56,7 +56,6 @@ spec:
   renewBefore: 360h    # 15d
   secretName: emqx-cert
 
-
 ---
 kind: Certificate
 apiVersion: cert-manager.io/v1
