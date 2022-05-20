@@ -6,48 +6,59 @@ FROM emqx/emqx:EMQX_VERSION AS getpkg
 
 USER 0
 
+ARG emqxHome='/opt/emqx'
+ENV \
+    EMQX_HOME="${emqxHome}"
+
 RUN \
     set -ex && \
     \
     emqxVersion='EMQX_VERSION' && \
+    \
+    cd ${emqxHome}/bin/ && \
     rm -rfv \
-        /opt/emqx/bin/emqx.cmd \
-        /opt/emqx/bin/emqx-${emqxVersion} \
-        /opt/emqx/bin/emqx_ctl.cmd \
-        /opt/emqx/bin/emqx_ctl-${emqxVersion} \
-        /opt/emqx/bin/nodetool-${emqxVersion} \
-        /opt/emqx/bin/cuttlefish-${emqxVersion} \
-        /opt/emqx/bin/install_upgrade.escript-${emqxVersion} && \
-    ln -sfv /opt/emqx/bin/emqx /opt/emqx/bin/emqx-${emqxVersion} && \
-    mv -fv /opt/emqx/bin/emqx_ctl /opt/emqx/bin/emqx-ctl && \
-    ln -sfv /opt/emqx/bin/emqx-ctl /opt/emqx/bin/emqx_ctl && \
-    ln -sfv /opt/emqx/bin/emqx-ctl /opt/emqx/bin/emqx_ctl-${emqxVersion} && \
-    ln -sfv /opt/emqx/bin/nodetool /opt/emqx/bin/nodetool-${emqxVersion} && \
-    mv -fv /opt/emqx/bin/node_dump /opt/emqx/bin/node-dump && \
-    ln -sfv /opt/emqx/bin/node-dump /opt/emqx/bin/node_dump && \
-    ln -sfv /opt/emqx/bin/cuttlefish /opt/emqx/bin/cuttlefish-${emqxVersion} && \
-    mv -fv /opt/emqx/bin/install_upgrade.escript /opt/emqx/bin/install-upgrade.escript && \
-    ln -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript && \
-    ln -sfv /opt/emqx/bin/install-upgrade.escript /opt/emqx/bin/install_upgrade.escript-${emqxVersion} && \
-    cp -rfv /opt/emqx/etc/emqx.conf /opt/emqx/etc/emqx.ref.conf && \
-    mkdir -p -v /opt/emqx/etc/emqx.conf.d/ && \
-    rm -rfv /opt/emqx/etc/certs && \
-    mkdir -p -v /opt/emqx/etc/pki/ /opt/emqx/etc/pki/jwt/ && \
-    ln -sfv /opt/emqx/etc/pki /opt/emqx/etc/certs && \
-    chown -R root:root /opt/emqx/
+        emqx.cmd \
+        emqx-${emqxVersion} \
+        emqx_ctl.cmd \
+        emqx_ctl-${emqxVersion} \
+        nodetool-${emqxVersion} \
+        cuttlefish-${emqxVersion} \
+        install_upgrade.escript-${emqxVersion} && \
+    ln -sfv emqx emqx-${emqxVersion} && \
+    mv -fv emqx_ctl emqx-ctl && \
+    ln -sfv emqx-ctl emqx_ctl && \
+    ln -sfv emqx-ctl emqx_ctl-${emqxVersion} && \
+    ln -sfv nodetool nodetool-${emqxVersion} && \
+    mv -fv node_dump node-dump && \
+    ln -sfv node-dump node_dump && \
+    ln -sfv cuttlefish cuttlefish-${emqxVersion} && \
+    mv -fv install_upgrade.escript install-upgrade.escript && \
+    ln -sfv install-upgrade.escript install_upgrade.escript && \
+    ln -sfv install-upgrade.escript install_upgrade.escript-${emqxVersion} && \
+    \
+    cd ${emqxHome}/etc/ && \
+    cp -rfv emqx.conf emqx.ref.conf && \
+    mkdir -p -v emqx.conf.d/ && \
+    rm -rfv certs && \
+    mkdir -p -v pki/ pki/jwt/ && \
+    ln -sfv pki certs && \
+    \
+    cd ${emqxHome}/ && \
+    chown -R root:root ${emqxHome}/
 
 
 # build image
 FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:ALPINE_VERSION
 
+ARG emqxHome='/opt/emqx'
 ENV \
     # CUTTLEFISH_ENV_OVERRIDE_PREFIX='EMQX_' \
-    EMQX_HOME='/opt/emqx'
+    EMQX_HOME="${emqxHome}"
 
-WORKDIR /opt/emqx/
+WORKDIR ${emqxHome}/
 
 COPY \
-    --from='getpkg' /opt/emqx/ /opt/emqx/
+    --from='getpkg' /opt/emqx/ ${emqxHome}/
 
 RUN \
     set -ex && \
@@ -56,7 +67,7 @@ RUN \
     apk add --allow-untrusted --upgrade --no-cache openssl ncurses-libs libstdc++ && \
     rm -rfv /var/cache/apk/* && \
     \
-    ln -sfv /opt/emqx/bin/* /usr/local/bin/
+    ln -sfv ${emqxHome}/bin/* /usr/local/bin/
 
-# ENTRYPOINT ["/bin/bash", "-c", "/opt/emqx/bin/emqx foreground"]
-CMD ["/bin/bash", "-c", "/opt/emqx/bin/emqx foreground"]
+# ENTRYPOINT ["/bin/bash", "-c", "${EMQX_HOME}/bin/emqx foreground"]
+CMD ["/bin/bash", "-c", "${EMQX_HOME}/bin/emqx foreground"]

@@ -67,5 +67,5 @@ RUN \
     \
     ln -sfv ${emqxHome}/bin/* /usr/local/bin/
 
-# ENTRYPOINT ["/bin/bash", "-c", "${emqxHome}/bin/emqx foreground"]
-CMD ["/bin/bash", "-c", "${emqxHome}/bin/emqx foreground"]
+# ENTRYPOINT ["/bin/bash", "-c", "${EMQX_HOME}/bin/emqx foreground"]
+CMD ["/bin/bash", "-c", "${EMQX_HOME}/bin/emqx foreground"]
