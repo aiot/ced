@@ -406,9 +406,8 @@ data:
 
     auth.mnesia.password_hash = sha256
 
-    auth.user.1.username = api
-    auth.user.1.password = api
-
+    auth.user.1.username = cloud-app
+    auth.user.1.password = cloud-app
     auth.user.2.username = edge-app
     auth.user.2.password = edge-app
     auth.user.3.username = mqtt-edge

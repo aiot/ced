@@ -23,6 +23,10 @@ appNamespace='aiot-case'
 certAll=(
     'emqx-ca'
     'emqx-cert'
+
+    'emqx-client-cert-cloud-app'
+    'emqx-client-cert-edge-app'
+    'emqx-client-cert-mqtt-edge'
     'emqx-client-cert-mqttx'
 )
 for cert in ${certAll[*]}
