@@ -1,0 +1,382 @@
+---
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name emqx-edge
+  # annotations:
+  #   kubereloader.kubestation.aiot.hk/auto: "true"
+spec:
+  selector:
+    matchLabels: &app-label
+      app.kubernetes.io/name: emqx-edge
+      app.kubernetes.io/component: server
+      app.kubernetes.io/part-of: *app-namespace
+      app.kubernetes.io/managed-by: kube
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 75%
+  revisionHistoryLimit: 5
+
+  template:
+    metadata:
+      labels:
+        <<: *app-label
+
+    spec:
+      serviceAccountName: default
+      automountServiceAccountToken: false
+
+      terminationGracePeriodSeconds: 0
+      nodeSelector:
+        node-role.kubernetes.io/edge: ""
+        node-role.kubernetes.io/aiot-case: ""
+      tolerations:
+        - operator: Exists
+
+      hostIPC: false
+      hostPID: false
+      hostNetwork: true
+
+      dnsPolicy: ClusterFirstWithHostNet
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+
+      restartPolicy: Always
+
+      volumes:
+        - name: config
+          configMap:
+            name: emqx-edge
+            items:
+              - key: emqx.conf
+                path: emqx.conf
+              - key: ssl-dist.conf
+                path: ssl-dist.conf
+
+              - key: auth-mnesia.conf
+                path: auth-mnesia.conf
+              - key: auth-jwt.conf
+                path: auth-jwt.conf
+              - key: acl.conf
+                path: acl.conf
+
+              - key: api.conf
+                path: api.conf
+              - key: dashboard.conf
+                path: dashboard.conf
+
+              - key: retainer.conf
+                path: retainer.conf
+              - key: webhook.conf
+                path: webhook.conf
+              - key: rule-engine.conf
+                path: rule-engine.conf
+
+              - key: bridge-mqtt.conf
+                path: bridge-mqtt.conf
+
+              - key: prometheus.conf
+                path: prometheus.conf
+
+              - key: loaded-modules
+                path: loaded-modules
+              - key: loaded-plugins
+                path: loaded-plugins
+            defaultMode: 0644
+            optional: true
+
+        - name: cert
+          secret:
+            secretName: emqx-edge-cert
+            items:
+              - key: tls.key
+                path: tls.key
+              - key: tls.crt
+                path: tls.crt
+              - key: ca.crt
+                path: ca.crt
+            defaultMode: 0644
+            optional: true
+        - name: cert-mqtt-cloud-client
+          secret:
+            secretName: emqx-client-mqtt-edge
+            tems:
+              - key: tls.key
+                path: tls.key
+              - key: tls.crt
+                path: tls.crt
+              - key: ca.crt
+                path: ca.crt
+            defaultMode: 0644
+            optional: true
+
+        - name: data
+          hostPath:
+            path: /data/mqtt-edge/emqx-edge/
+            type: DirectoryOrCreate
+
+      containers:
+        - image: {{kubethings.image.repository}}/emqx:{{kubethings.aiot.cloud.emqx.version}}
+          imagePullPolicy: {{kubethings.image.pullPolicy}}
+          name: *app-name
+
+          volumeMounts:
+            - name: config
+              subPath: emqx.conf
+              mountPath: /opt/emqx/etc/emqx.conf
+              readOnly: false
+            - name: config
+              subPath: ssl-dist.conf
+              mountPath: /opt/emqx/etc/ssl_dist.conf
+              readOnly: false
+            - name: cert
+              subPath: tls.key
+              mountPath: /opt/emqx/etc/pki/tls.key
+              readOnly: true
+            - name: cert
+              subPath: tls.crt
+              mountPath: /opt/emqx/etc/pki/tls.crt
+              readOnly: true
+            - name: cert
+              subPath: ca.crt
+              mountPath: /opt/emqx/etc/pki/ca.crt
+              readOnly: true
+            - name: cert-mqtt-cloud-client
+              subPath: tls.key
+              mountPath: /opt/emqx/etc/pki/mqtt-cloud.client.tls.key
+              readOnly: true
+            - name: cert-mqtt-cloud-client
+              subPath: tls.crt
+              mountPath: /opt/emqx/etc/pki/mqtt-cloud.client.tls..crt
+              readOnly: true
+            - name: cert-mqtt-cloud-client
+              subPath: ca.crt
+              mountPath: /opt/emqx/etc/pki/mqtt-cloud.ca.crt
+              readOnly: true
+
+            - name: config
+              subPath: auth-mnesia.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_auth_mnesia.conf
+              readOnly: false
+            # - name: config
+            #   subPath: auth-jwt.conf
+            #   mountPath: /opt/emqx/etc/plugins/emqx_auth_jwt.conf
+            #   readOnly: false
+            # - name: config
+            #   subPath: acl.conf
+            #   mountPath: /opt/emqx/etc/acl.conf
+            #   readOnly: false
+
+            - name: config
+              subPath: api.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_management.conf
+              readOnly: false
+            - name: config
+              subPath: dashboard.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_dashboard.conf
+              readOnly: false
+
+            - name: config
+              subPath: retainer.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_retainer.conf
+              readOnly: false
+            - name: config
+              subPath: webhook.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_web_hook.conf
+              readOnly: false
+            - name: config
+              subPath: rule-engine.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_rule_engine.conf
+              readOnly: false
+
+            - name: config
+              subPath: bridge-mqtt.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_bridge_mqtt.conf
+              readOnly: false
+
+            - name: config
+              subPath: prometheus.conf
+              mountPath: /opt/emqx/etc/plugins/emqx_prometheus.conf
+              readOnly: false
+
+            - name: data
+              mountPath: /opt/emqx/data
+              readOnly: false
+            - name: config
+              subPath: loaded-modules
+              mountPath: /opt/emqx/data/loaded_modules
+              readOnly: false
+            - name: config
+              subPath: loaded-plugins
+              mountPath: /opt/emqx/data/loaded_plugins
+              readOnly: false
+
+          envFrom:
+            - configMapRef:
+                name: emqx-edge-env
+                optional: true
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+            - name: EMQX_MANAGEMENT__APPLICATION__DEFAULT_SECRET
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: EMQX_MANAGEMENT__DEFAULT_APPLICATION__ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: EMQX_MANAGEMENT__DEFAULT_APPLICATION__SECRET
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: EMQX_DASHBOARD__DEFAULT_USER__LOGIN
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: EMQX_DASHBOARD__DEFAULT_USER__PASSWORD
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+
+          securityContext:
+            runAsGroup: 0
+            runAsUser: 0
+            runAsNonRoot: false
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+
+          stdin: false
+          tty: false
+          terminationMessagePolicy: FallbackToLogsOnError
+          terminationMessagePath: /dev/termination-log
+          command:
+            - /bin/bash
+            - -c
+            - |-
+              if [[ ${EMQX_NODE__NAME} == "" ]]
+              then
+                  erlangNodeName="emqx-edge@${NODE_IP}"
+
+                  export EMQX_NODE__NAME=${erlangNodeName}
+
+                  eval echo -e "export EMQX_NODE__NAME=${erlangNodeName}" >> /etc/profile.d/emqx.sh
+                  echo -e 'source /etc/profile.d/emqx.sh' >> /root/.bashrc
+              fi
+
+              if [[ ${EMQX_BRIDGE__MQTT__MQTTCLOUD__ADDRESS} == "" ]]
+              then
+                  bridgeMqttAddress="emqx.${POD_NAMESPACE}.svc.cluster.local:8883"
+                  export EMQX_BRIDGE__MQTT__MQTTCLOUD__ADDRESS=${bridgeMqttAddress}
+                  eval echo -e "export EMQX_BRIDGE__MQTT__MQTTCLOUD__ADDRESS=${bridgeMqttAddress}" >> /etc/profile.d/emqx.sh
+              fi
+              bridgeClientID="${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}"
+              export EMQX_BRIDGE__MQTT__MQTTCLOUD__CLIENTID=${bridgeClientID}
+              eval echo -e "export EMQX_BRIDGE__MQTT__MQTTCLOUD__CLIENTID=${bridgeClientID}" >> /etc/profile.d/emqx.sh
+
+              /opt/emqx/bin/emqx foreground
+
+          ports:
+            - name: tcp-internal
+              protocol: TCP
+              containerPort: &port-tcp-internal 11883
+            - name: tcp
+              protocol: TCP
+              containerPort: &port-tcp 1883
+            - name: tcp-tls
+              protocol: TCP
+              containerPort: &port-tcp-tls 8883
+            - name: websocket
+              protocol: TCP
+              containerPort: &port-websocket 8083
+            - name: websocket-tls
+              protocol: TCP
+              containerPort: &port-websocket-tls 8084
+            # - name: api
+            #   protocol: TCP
+            #   containerPort: &port-api 8081
+            - name: api-https
+              protocol: TCP
+              containerPort: &port-api-https 8082
+            # - name: dashboard
+            #   protocol: TCP
+            #   containerPort: &port-dashboard 18083
+            - name: dashboard-https
+              protocol: TCP
+              containerPort: &port-dashboard-https 18084
+            - name: ekka
+              protocol: TCP
+              containerPort: &port-ekka 4370
+            - name: ekka-rpc
+              protocol: TCP
+              containerPort: &port-ekka-rpc 5370
+          startupProbe:
+            # tcpSocket:
+            #   port: *port-tcp-tls
+            exec:
+              command:
+                - /bin/bash
+                - -c
+                - |-
+                  curl --insecure --key ${EMQX_HOME}/etc/pki/tls.key --cert ${EMQX_HOME}/etc/pki/tls.crt https://${POD_IP}:${EMQX_MANAGEMENT__LISTENER__HTTPS}/status
+                  # emqx-ctl status
+                  if [[ $? != 0 ]]
+                  then
+                      exit 1
+                  fi
+
+                  emqx-ctl log primary-level info > /dev/null 2>&1 || true
+                  emqx-ctl log handlers set-level ssl_handler info > /dev/null 2>&1 || true
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 24
+          readinessProbe:
+            # tcpSocket:
+            #   port: *port-tcp-tls
+            exec:
+              command: &health-check-command
+                - /bin/bash
+                - -c
+                - |-
+                  curl --insecure --key ${EMQX_HOME}/etc/pki/tls.key --cert ${EMQX_HOME}/etc/pki/tls.crt https://${POD_IP}:${EMQX_MANAGEMENT__LISTENER__HTTPS}/status
+                  # emqx-ctl status
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 1
+          livenessProbe:
+            # tcpSocket:
+            #   port: *port-tcp-tls
+            exec:
+              command: *health-check-command
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 2

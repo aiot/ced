@@ -556,7 +556,7 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/bridge/bridge-mqtt.html
   bridge-mqtt.conf: |
 
-    bridge.mqtt.mqttcloud.start_type = manual
+    bridge.mqtt.mqttcloud.start_type = auto
 
     # bridge.mqtt.mqttcloud.address = mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
     bridge.mqtt.mqttcloud.proto_ver = mqttv5

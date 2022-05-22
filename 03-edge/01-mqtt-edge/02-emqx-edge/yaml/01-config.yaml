@@ -1,0 +1,596 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: emqx-edge-env
+immutable: false
+data:
+  # EMQX_NODE__NAME: emqx-edge@${NODE_IP}
+  EMQX_NODE__COOKIE: *app-namespace
+
+  EMQX_MANAGEMENT__LISTENER__HTTPS: "8082"
+
+  # EMQX_BRIDGE__MQTT__MQTTCLOUD__ADDRESS: emqx.${POD_NAMESPACE}.svc.cluster.local:8883
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: aiot-case
+  name: emqx-edge
+immutable: false
+data:
+  emqx.conf: |
+
+    # CONFIG_SECTION_BGN=mqtt
+    mqtt.max_clientid_len = 16384
+    mqtt.max_packet_size = 512KB
+    mqtt.max_qos_allowed = 2
+    mqtt.max_topic_levels = 32
+    mqtt.max_topic_alias = 16384
+    mqtt.strict_mode = false
+    mqtt.retain_available = true
+    mqtt.response_information = server-received
+    mqtt.wildcard_subscription = true
+    mqtt.shared_subscription = true
+    mqtt.ignore_loop_deliver = false
+    # CONFIG_SECTION_END=mqtt
+
+    # CONFIG_SECTION_BGN=broker
+    broker.shared_subscription_strategy = random
+    broker.shared_dispatch_ack_enabled = true
+    # CONFIG_SECTION_END=broker
+
+    # CONFIG_SECTION_BGN=cluster
+    cluster.name = mqtt-edge
+    # cluster.discovery = static
+    # cluster.static.seeds = emqx-edge@${NODE_IP}
+    # warning: must be inet_tcp, because ekka does not support inet_tls
+    cluster.proto_dist = inet_tcp
+    cluster.autoheal = on
+    cluster.autoclean = 300s
+    # CONFIG_SECTION_END=cluster
+
+    # CONFIG_SECTION_BGN=node
+    # node.name = emqx-edge@${NODE_IP}
+    node.dist_listen_min = 6369
+    node.dist_listen_max = 6369
+    node.ssl_dist_optfile = etc/ssl_dist.conf
+    node.async_threads = 2
+    node.process_limit = 2097152
+    node.max_ets_tables = 2097152
+    node.max_ports = 1048576
+    node.dist_buffer_size = 2MB
+    node.global_gc_interval = 15m
+    # # warning: must be on or comment this to disable node.heartbeat, otherwise emqx will be fatal
+    # node.heartbeat = on
+    # node.cookie = mqtt-edge
+    node.data_dir = data
+    node.crash_dump = log/crash.dump
+    # CONFIG_SECTION_END=node
+
+    # CONFIG_SECTION_BGN=rpc
+    rpc.mode = async
+    rpc.async_batch_size = 256
+    rpc.port_discovery = stateless
+    rpc.driver = ssl
+    rpc.default_client_driver = ssl
+    rpc.keyfile = etc/pki/tls.key
+    rpc.certfile = etc/pki/tls.crt
+    rpc.cacertfile = etc/pki/ca.crt
+    rpc.connect_timeout = 10s
+    rpc.authentication_timeout = 5s
+    rpc.send_timeout = 5s
+    rpc.call_receive_timeout = 15s
+    rpc.socket_keepalive_idle = 300s
+    rpc.socket_keepalive_count = 5
+    rpc.socket_keepalive_interval = 60s
+    rpc.socket_sndbuf = 256KB
+    rpc.socket_recbuf = 256KB
+    rpc.socket_buffer = 256KB
+    # CONFIG_SECTION_END=rpc
+
+    # CONFIG_SECTION_BGN=zones
+    zone.internal.bypass_auth_plugins = true
+    zone.internal.allow_anonymous = true
+    zone.internal.enable_acl = off
+    zone.internal.acl_deny_action = ignore
+    zone.internal.enable_flapping_detect = off
+    zone.internal.max_inflight = 64
+    zone.internal.max_awaiting_rel = 512
+    zone.internal.max_mqueue_len = 5120
+    zone.internal.strict_mode = false
+    zone.internal.wildcard_subscription = true
+    zone.internal.shared_subscription = true
+    zone.internal.max_subscriptions = 0
+    zone.internal.ignore_loop_deliver = false
+    zone.internal.enable_stats = on
+    #
+    zone.external.enable_acl = on
+    zone.external.enable_ban = on
+    zone.external.acl_deny_action = disconnect
+    zone.external.enable_flapping_detect = on
+    zone.external.use_username_as_clientid = false
+    zone.external.max_clientid_len = 16384
+    zone.external.max_packet_size = 512KB
+    zone.external.max_qos_allowed = 2
+    zone.external.upgrade_qos = off
+    #
+    zone.external.max_inflight = 64
+    zone.external.max_awaiting_rel = 512
+    zone.external.max_mqueue_len = 5120
+    zone.external.max_topic_levels = 32
+    zone.external.max_topic_alias = 16384
+    zone.external.strict_mode = false
+    zone.external.retain_available = true
+    zone.external.wildcard_subscription = true
+    zone.external.shared_subscription = true
+    zone.external.max_subscriptions = 0
+    zone.external.retry_interval = 10s
+    zone.external.idle_timeout = 30s
+    zone.external.session_expiry_interval = 60m
+    zone.external.server_keepalive = 60
+    zone.external.keepalive_backoff = 0.75
+    zone.external.ignore_loop_deliver = false
+    zone.external.enable_stats = on
+    zone.external.conn_congestion.alarm = on
+    zone.external.conn_congestion.min_alarm_sustain_duration = 2m
+    # CONFIG_SECTION_END=zones
+
+    # CONFIG_SECTION_BGN=listeners
+    listener.tcp.internal = 127.0.0.1:11883
+    listener.tcp.internal.acceptors = 2
+    listener.tcp.internal.zone = internal
+    listener.tcp.internal.max_connections = 1048576
+    listener.tcp.internal.max_conn_rate = 512
+    listener.tcp.internal.active_n = 512
+    listener.tcp.internal.backlog = 512
+    listener.tcp.internal.send_timeout = 5s
+    listener.tcp.internal.send_timeout_close = on
+    listener.tcp.internal.recbuf = 64KB
+    listener.tcp.internal.sndbuf = 64KB
+    listener.tcp.internal.buffer = 16KB
+    listener.tcp.internal.reuseaddr = true
+    listener.tcp.internal.nodelay = false
+    #
+    listener.tcp.external = 127.0.0.1:1883
+    # note: whether to use the CN field of certificate as username and clientid, comment these to disable it
+    # # listener.tcp.external.peer_cert_as_username = cn
+    # # listener.tcp.external.peer_cert_as_clientid = cn
+    listener.tcp.external.acceptors = 2
+    listener.tcp.external.zone = external
+    listener.tcp.external.access.1 = allow all
+    listener.tcp.external.max_connections = 1048576
+    listener.tcp.external.max_conn_rate = 512
+    listener.tcp.external.active_n = 512
+    listener.tcp.external.backlog = 512
+    listener.tcp.external.send_timeout = 15s
+    listener.tcp.external.send_timeout_close = on
+    listener.tcp.external.reuseaddr = true
+    listener.tcp.external.nodelay = true
+    # warning: must be off, otherwise mqtt-client will not be able to publish messages
+    listener.tcp.external.proxy_protocol = off
+    listener.tcp.external.proxy_protocol_timeout = 5s
+    #
+    listener.ssl.external = 0.0.0.0:8883
+    listener.ssl.external.keyfile = etc/pki/tls.key
+    listener.ssl.external.certfile = etc/pki/tls.crt
+    listener.ssl.external.cacertfile = etc/pki/ca.crt
+    listener.ssl.external.depth = 0
+    listener.ssl.external.verify = verify_peer
+    listener.ssl.external.fail_if_no_peer_cert = true
+    # note: whether to use the CN field of certificate as username and clientid, comment these to disable it
+    # # listener.ssl.external.peer_cert_as_username = cn
+    # # listener.ssl.external.peer_cert_as_clientid = cn
+    listener.ssl.external.handshake_timeout = 15s
+    listener.ssl.external.tls_versions = tlsv1.3,tlsv1.2
+    # warning: recommend not to change this value, otherwise it may cause tls to not work
+    listener.ssl.external.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
+    listener.ssl.external.honor_cipher_order = on
+    listener.ssl.external.secure_renegotiate = on
+    listener.ssl.external.reuse_sessions = on
+    listener.ssl.external.acceptors = 4
+    listener.ssl.external.zone = external
+    listener.ssl.external.access.1 = allow all
+    listener.ssl.external.max_connections = 1048576
+    listener.ssl.external.max_conn_rate = 512
+    listener.ssl.external.active_n = 512
+    listener.ssl.external.backlog = 512
+    listener.ssl.external.send_timeout = 15s
+    listener.ssl.external.send_timeout_close = on
+    listener.ssl.external.reuseaddr = true
+    listener.ssl.external.nodelay = true
+    # warning: must be off, otherwise mqtt-client will not be able to publish messages
+    listener.ssl.external.proxy_protocol = off
+    listener.ssl.external.proxy_protocol_timeout = 5s
+    #
+    listener.ws.external = 127.0.0.1:8083
+    listener.ws.external.mqtt_path = /mqtt
+    # note: whether to use the CN field of certificate as username and clientid, comment these to disable it
+    # # listener.ws.external.peer_cert_as_username = cn
+    # # listener.ws.external.peer_cert_as_clientid = cn
+    listener.ws.external.acceptors = 2
+    listener.ws.external.zone = external
+    listener.ws.external.access.1 = allow all
+    # # if enable this, mqtt-server will actively disconnect from client
+    # listener.ws.external.idle_timeout = 300s
+    listener.ws.external.max_connections = 1048576
+    listener.ws.external.max_conn_rate = 512
+    listener.ws.external.active_n = 512
+    listener.ws.external.backlog = 512
+    listener.ws.external.send_timeout = 15s
+    listener.ws.external.send_timeout_close = on
+    listener.ws.external.nodelay = true
+    listener.ws.external.supported_subprotocols = mqtt-v5, mqtt-v3.1.1, mqtt-v3, mqtt
+    listener.ws.external.fail_if_no_subprotocol = false
+    listener.ws.external.mqtt_piggyback = multiple
+    listener.ws.external.compress = true
+    listener.ws.external.check_origin_enable = false
+    listener.ws.external.allow_origin_absence = true
+    listener.ws.external.check_origins = http://127.0.0.1:18083, http://localhost:18083
+    # warning: must be off, otherwise mqtt-client will not be able to publish messages
+    listener.ws.external.proxy_protocol = off
+    listener.ws.external.proxy_protocol_timeout = 5s
+    listener.ws.external.proxy_address_header = X-Forwarded-For
+    listener.ws.external.proxy_port_header = X-Forwarded-Port
+    #
+    listener.wss.external = 0.0.0.0:8084
+    listener.wss.external.mqtt_path = /mqtt
+    listener.wss.external.keyfile = etc/pki/tls.key
+    listener.wss.external.certfile = etc/pki/tls.crt
+    listener.wss.external.cacertfile = etc/pki/ca.crt
+    listener.wss.external.depth = 0
+    listener.wss.external.verify = verify_peer
+    listener.wss.external.fail_if_no_peer_cert = true
+    # note: whether to use the CN field of certificate as username and clientid, comment these to disable it
+    # # listener.wss.external.peer_cert_as_username = cn
+    # # listener.wss.external.peer_cert_as_clientid = cn
+    listener.wss.external.tls_versions = tlsv1.3,tlsv1.2
+    # warning: recommend not to change this value, otherwise it may cause tls to not work
+    listener.wss.external.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
+    listener.wss.external.honor_cipher_order = on
+    listener.wss.external.secure_renegotiate = on
+    listener.wss.external.reuse_sessions = on
+    listener.wss.external.acceptors = 4
+    listener.wss.external.zone = external
+    listener.wss.external.access.1 = allow all
+    # # if enable this, mqtt-server will actively disconnect from client
+    # listener.wss.external.idle_timeout = 300s
+    listener.wss.external.max_connections = 1048576
+    listener.wss.external.max_conn_rate = 512
+    listener.wss.external.active_n = 512
+    listener.wss.external.backlog = 512
+    listener.wss.external.send_timeout = 15s
+    listener.wss.external.send_timeout_close = on
+    listener.wss.external.nodelay = true
+    listener.wss.external.supported_subprotocols = mqtt-v5, mqtt-v3.1.1, mqtt-v3, mqtt
+    listener.wss.external.fail_if_no_subprotocol = false
+    listener.wss.external.mqtt_piggyback = multiple
+    listener.wss.external.compress = true
+    listener.wss.external.check_origin_enable = false
+    listener.wss.external.allow_origin_absence = true
+    listener.wss.external.check_origins = https://127.0.0.1:18084, https://localhost:18084
+    # warning: must be off, otherwise mqtt-client will not be able to publish messages
+    listener.wss.external.proxy_protocol = off
+    listener.wss.external.proxy_protocol_timeout = 5s
+    listener.wss.external.proxy_address_header = X-Forwarded-For
+    listener.wss.external.proxy_port_header = X-Forwarded-Port
+    # CONFIG_SECTION_END=listeners
+
+    # CONFIG_SECTION_BGN=authacl
+    acl_file = etc/acl.conf
+    allow_anonymous = false
+    acl_nomatch = deny
+    acl_deny_action = disconnect
+    enable_acl_cache = on
+    acl_cache_ttl = 1m
+    acl_cache_max_size = 32
+    flapping_detect_policy = 30, 1m, 5m
+    # CONFIG_SECTION_END=authacl
+
+    # CONFIG_SECTION_BGN=modules
+    modules.loaded_file = data/loaded_modules
+    module.presence.qos = 1
+    module.slow_subs.threshold = 300ms
+    module.slow_subs.stats_type = whole
+    module.slow_subs.expire_interval = 10m
+    module.slow_subs.top_k_num = 30
+    # CONFIG_SECTION_END=modules
+
+    # CONFIG_SECTION_BGN=plugins
+    plugins.etc_dir = etc/plugins/
+    plugins.expand_plugins_dir = etc/plugins/
+    plugins.loaded_file = data/loaded_plugins
+    # CONFIG_SECTION_END=plugins
+
+    # CONFIG_SECTION_BGN=sys_mon
+    os_mon.mem_check_interval = 60s
+    os_mon.sysmem_high_watermark = 85%
+    os_mon.procmem_high_watermark = 5%
+    os_mon.cpu_check_interval = 60s
+    os_mon.cpu_high_watermark = 85%
+    os_mon.cpu_low_watermark = 75%
+    sysmon.busy_port = true
+    sysmon.busy_dist_port = true
+    vm_mon.check_interval = 30s
+    vm_mon.process_high_watermark = 85%
+    vm_mon.process_low_watermark = 75%
+    alarm.actions = log,publish
+    alarm.validity_period = 24h
+    alarm.size_limit = 256
+    # CONFIG_SECTION_END=sys_mon
+
+    # CONFIG_SECTION_BGN=logger
+    log.to = console
+    log.formatter = text
+    log.single_line = true
+    log.chars_limit = -1
+    log.max_depth = unlimited
+    log.level = info
+    log.dir = log
+    log.rotation = on
+    # CONFIG_SECTION_END=logger
+
+  ssl-dist.conf: |
+
+    [
+      {
+        server,
+        [
+          { keyfile, "etc/pki/tls.key" },
+          { certfile, "etc/pki/tls.crt" },
+          { cacertfile, "etc/pki/ca.crt" },
+          { secure_renegotiate, true },
+          { depth, 0 }
+        ]
+      },
+      {
+        client,
+        [
+          { keyfile, "etc/pki/tls.key" },
+          { certfile, "etc/pki/tls.crt" },
+          { cacertfile, "etc/pki/ca.crt" },
+          { secure_renegotiate, true }
+        ]
+      }
+    ].
+
+
+  auth-mnesia.conf: |
+
+    auth.mnesia.password_hash = sha256
+
+    auth.user.1.username = device
+    auth.user.1.password = device
+    auth.user.2.username = edge-app
+    auth.user.2.password = edge-app
+    auth.user.3.username = mqttx
+    auth.user.3.password = mqttx
+
+  auth-jwt.conf: |
+
+  acl.conf: |
+
+
+  api.conf: |
+
+    # # comment these to disable api http listener
+    # management.listener.http = 8081
+    # management.listener.http.inet6 = false
+    # management.listener.http.ipv6_v6only = false
+    # management.listener.http.acceptors = 2
+    # management.listener.http.max_clients = 256
+    # management.listener.http.backlog = 256
+    # management.listener.http.send_timeout = 15s
+    # management.listener.http.send_timeout_close = on
+
+    management.listener.https = 8082
+    management.listener.https.inet6 = false
+    management.listener.https.ipv6_v6only = false
+    management.listener.https.keyfile = etc/pki/tls.key
+    management.listener.https.certfile = etc/pki/tls.crt
+    management.listener.https.cacertfile = etc/pki/ca.crt
+    management.listener.https.verify = verify_peer
+    management.listener.https.fail_if_no_peer_cert = true
+    management.listener.https.tls_versions = tlsv1.3,tlsv1.2
+    # warning: recommend not to change this value, otherwise it may cause tls to not work
+    management.listener.https.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
+    management.listener.https.acceptors = 2
+    management.listener.https.max_clients = 256
+    management.listener.https.backlog = 256
+    management.listener.https.send_timeout = 15s
+    management.listener.https.send_timeout_close = on
+
+    # management.application.default_secret = mqtt-edge
+    # management.default_application.id = mqtt-edge
+    # management.default_application.secret = mqtt-edge
+    management.max_row_limit = 2560
+
+  dashboard.conf: |
+
+    # # comment these to disable dashboard http listener
+    # dashboard.listener.http = 18083
+    # dashboard.listener.http.inet6 = false
+    # dashboard.listener.http.ipv6_v6only = false
+    # dashboard.listener.http.acceptors = 2
+    # dashboard.listener.http.max_clients = 32
+
+    dashboard.listener.https = 18084
+    dashboard.listener.https.inet6 = false
+    dashboard.listener.https.ipv6_v6only = false
+    dashboard.listener.https.keyfile = etc/pki/tls.key
+    dashboard.listener.https.certfile = etc/pki/tls.crt
+    dashboard.listener.https.cacertfile = etc/pki/ca.crt
+    # # bug: can not set dashboard.listener.https.verify, neither verify_none nor verify_peer, otherwise the dashboard plugin will be fatal
+    # dashboard.listener.https.verify = verify_none
+    dashboard.listener.https.fail_if_no_peer_cert = false
+    dashboard.listener.https.tls_versions = tlsv1.3,tlsv1.2
+    # warning: recommend not to change this value, otherwise it may cause tls to not work
+    dashboard.listener.https.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
+    dashboard.listener.https.honor_cipher_order = on
+    dashboard.listener.https.secure_renegotiate = on
+    dashboard.listener.https.reuse_sessions = on
+    dashboard.listener.https.acceptors = 2
+    dashboard.listener.https.max_clients = 32
+
+    # dashboard.default_user.login = mqtt-edge
+    # dashboard.default_user.password = mqtt-edge
+
+
+  # retain message
+  retainer.conf: |
+
+    retainer.storage_type = disc_only
+    retainer.max_payload_size = 32KB
+    retainer.max_retained_messages = 0
+    retainer.expiry_interval = 16m
+    retainer.stop_publish_clear_msg = false
+
+   webhook.conf: |
+
+    # send notify to some http server
+    # web.hook.url = https://emqx-edge-webhook-server.${POD_NAMESPACE}.svc.cluster.local
+    web.hook.ssl.verify = false
+    web.hook.ssl.server_name_indication = disable
+    # web.hook.ssl.keyfile =
+    # web.hook.ssl.certfile =
+    # web.hook.ssl.cacertfile =
+    web.hook.headers.content-type = application/json
+    web.hook.body.encoding_of_payload_field = plain
+    web.hook.enable_pipelining = true
+    web.hook.pool_size = 32
+
+    # event
+    # web.hook.rule.<hook-name>.<number> = <event>
+    # client online
+    # web.hook.rule.client.connected.1 = {"action": "on_client_connected"}
+    # client offline
+    # web.hook.rule.client.disconnected.1 = {"action": "on_client_disconnected"}
+    # server receives the ACK message that sent by client
+    # web.hook.rule.message.acked.1 = {"action": "on_message_acked"}
+
+  rule-engine.conf: |
+
+    rule_engine.ignore_sys_message = on
+
+    rule_engine.events.client_connected = on, qos1
+    rule_engine.events.client_disconnected = on, qos1
+    rule_engine.events.session_subscribed = off
+    rule_engine.events.session_unsubscribed = off
+    rule_engine.events.message_delivered = off
+    rule_engine.events.message_acked = on, qos1
+    rule_engine.events.message_dropped = off
+
+
+  bridge-mqtt.conf: |
+
+    bridge.mqtt.mqttcloud.start_type = auto
+
+    # bridge.mqtt.mqttcloud.address = mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
+    bridge.mqtt.mqttcloud.proto_ver = mqttv5
+    bridge.mqtt.mqttcloud.ssl = on
+    bridge.mqtt.mqttcloud.verify = true
+    bridge.mqtt.mqttcloud.server_name_indication = disable
+    bridge.mqtt.mqttcloud.tls_versions = tlsv1.3,tlsv1.2
+    # warning: recommend not to change this value, otherwise it may cause tls to not work
+    bridge.mqtt.mqttcloud.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
+    bridge.mqtt.mqttcloud.keyfile = etc/pki/mqtt-cloud.client.tls.key
+    bridge.mqtt.mqttcloud.certfile = etc/pki/mqtt-cloud.client.tls..crt
+    bridge.mqtt.mqttcloud.cacertfile = etc/pki/mqtt-cloud.ca.crt
+    bridge.mqtt.mqttcloud.username = mqtt-edge
+    bridge.mqtt.mqttcloud.password = mqtt-edge
+    bridge.mqtt.mqttcloud.keepalive = 60s
+    bridge.mqtt.mqttcloud.reconnect_interval = 20s
+    bridge.mqtt.mqttcloud.clean_start = true
+
+    # bridge.mqtt.mqttcloud.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
+    bridge.mqtt.mqttcloud.bridge_mode = true
+    # publish(push) message to mqtt-cloud
+    bridge.mqtt.mqttcloud.forwards = bridge-test/#
+    bridge.mqtt.mqttcloud.batch_size = 32
+    bridge.mqtt.mqttcloud.max_inflight_batches = 32
+    bridge.mqtt.mqttcloud.retry_interval = 20s
+    # subscribe message from mqtt-cloud (mqtt-cloud push msg to mqtt-edge)
+    bridge.mqtt.mqttcloud.subscription.1.topic = command/bridge-test
+    bridge.mqtt.mqttcloud.subscription.1.qos = 1
+
+    # cache
+    bridge.mqtt.mqttcloud.queue.replayq_dir = data/bridge/
+    bridge.mqtt.mqttcloud.queue.replayq_seg_bytes = 64MB
+    bridge.mqtt.mqttcloud.queue.max_total_size = 2048MB
+
+
+  # prometheus agent for pushing metrics to prometheus-push-gateway
+  prometheus.conf: |
+
+    # prometheus.push.gateway.server = https://prom-push-gateway.${POD_NAMESPACE}.svc.cluster.local:9091
+    prometheus.interval = 15000
+
+
+  # note: module configuration is located in emqx.conf
+  loaded-modules: |
+
+    % acl
+    { emqx_mod_acl_internal, true }.
+    % online and offline notification
+    % https://docs.emqx.com/zh/enterprise/v4.4/modules/presence.html
+    { emqx_mod_presence, true }.
+    % topic rewrite
+    % https://www.emqx.io/docs/zh/v4.4/advanced/topic-rewrite.html
+    { emqx_mod_rewrite, false }.
+    % topic to which subscriber subscribes by default
+    % https://www.emqx.io/docs/zh/v4.4/advanced/proxy-subscriptions.html
+    { emqx_mod_subscription, true }.
+    % delayed publish
+    % https://www.emqx.io/docs/zh/v4.4/advanced/delay-publish.html
+    { emqx_mod_delayed, false }.
+    % topic metric
+    { emqx_mod_topic_metrics, true }.
+    % slow subscriptions statistics
+    % https://docs.emqx.com/zh/enterprise/v4.4/modules/slow_subscribers_statistics.html
+    { emqx_mod_slow_subs, true }.
+    % trace
+    % https://docs.emqx.com/zh/enterprise/v4.4/modules/tracer.html
+    { emqx_mod_trace, true }.
+
+  loaded-plugins: |
+
+    % authentication and authorization
+    { emqx_auth_mnesia, true }.
+    { emqx_auth_jwt, false }.
+    { emqx_auth_pgsql, false }.
+    { emqx_auth_mysql, false }.
+    { emqx_auth_mongo, false }.
+    { emqx_auth_redis, false }.
+    { emqx_auth_http, false }.
+    { emqx_auth_ldap, false }.
+
+    % api
+    { emqx_management, true }.
+    % dashboard
+    { emqx_dashboard, false }.
+
+    % retain message
+    { emqx_retainer, true }.
+    % webhook
+    { emqx_web_hook, false }.
+    % rule engine based sql
+    { emqx_rule_engine, false }.
+
+    % message bridge
+    { emqx_bridge_mqtt, true }.
+    % message persistence
+    % https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
+
+    % mqtt-sn gateway
+    { emqx_sn, false }.
+
+    % prometheus agent for pushing metrics to prometheus-push-gateway
+    { emqx_prometheus, false }.
+    % https://www.emqx.io/docs/zh/v4.4/advanced/telemetry.html
+    { emqx_telemetry, false }.
+
+    % performance debugging
+    % https://docs.emqx.com/zh/enterprise/v4.4/modules/recon.html
+    { emqx_recon, false }.
