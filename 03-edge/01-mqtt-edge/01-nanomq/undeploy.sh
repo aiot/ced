@@ -23,6 +23,9 @@ appNamespace='aiot-case'
 certAll=(
     'nanomq-ca'
     'nanomq-cert'
+
+    'nanomq-client-cert-device'
+    'nanomq-client-cert-edge-app'
     'nanomq-client-cert-mqttx'
 )
 for cert in ${certAll[*]}

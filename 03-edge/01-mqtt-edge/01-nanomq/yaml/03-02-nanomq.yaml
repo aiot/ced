@@ -65,6 +65,25 @@ spec:
         - name: cert
           secret:
             secretName: nanomq-cert
+            items:
+              - key: tls.key
+                path: tls.key
+              - key: tls.crt
+                path: tls.crt
+              - key: ca.crt
+                path: ca.crt
+            defaultMode: 0644
+            optional: true
+        - name: cert-mqtt-cloud-client
+          secret:
+            secretName: emqx-client-mqtt-edge
+            tems:
+              - key: tls.key
+                path: tls.key
+              - key: tls.crt
+                path: tls.crt
+              - key: ca.crt
+                path: ca.crt
             defaultMode: 0644
             optional: true
 
@@ -92,7 +111,28 @@ spec:
               readOnly: false
 
             - name: cert
-              mountPath: /etc/nanomq/pki/
+              subPath: tls.key
+              mountPath: /etc/nanomq/pki/tls.key
+              readOnly: true
+            - name: cert
+              subPath: tls.crt
+              mountPath: /etc/nanomq/pki/tls.crt
+              readOnly: true
+            - name: cert
+              subPath: ca.crt
+              mountPath: /etc/nanomq/pki/ca.crt
+              readOnly: true
+            - name: cert-mqtt-cloud-client
+              subPath: tls.key
+              mountPath: /etc/nanomq/pki/mqtt-cloud.client.tls.key
+              readOnly: true
+            - name: cert-mqtt-cloud-client
+              subPath: tls.crt
+              mountPath: /etc/nanomq/pki/mqtt-cloud.client.tls..crt
+              readOnly: true
+            - name: cert-mqtt-cloud-client
+              subPath: ca.crt
+              mountPath: /etc/nanomq/pki/mqtt-cloud.ca.crt
               readOnly: true
 
           envFrom:

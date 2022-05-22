@@ -73,9 +73,10 @@ data:
 
     auth.1.login = device
     auth.1.password = device
-
-    auth.2.login = mqttx
-    auth.2.password = mqttx
+    auth.2.login = edge-app
+    auth.2.password = edge-app
+    auth.3.login = mqttx
+    auth.3.password = mqttx
 
   # https://github.com/emqx/nanomq/blob/{{kubethings.aiot.edge.nanomq.version}}/etc/nanomq_web_hook.conf
   webhook.conf: |
