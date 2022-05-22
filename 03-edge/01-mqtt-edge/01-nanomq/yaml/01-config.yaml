@@ -120,7 +120,7 @@ data:
     # publish(push) message to mqtt-cloud
     bridge.mqtt.forwards = device001/#,device002/#
     # subscribe message from mqtt-cloud (mqtt-cloud push msg to mqtt-edge)
-    bridge.mqtt.subscription.1.topic = command/device001
+    bridge.mqtt.subscription.1.topic = command/device001/#
     bridge.mqtt.subscription.1.qos=1
-    bridge.mqtt.subscription.2.topic = command/device002
+    bridge.mqtt.subscription.2.topic = command/device002/#
     bridge.mqtt.subscription.2.qos=1

@@ -76,7 +76,7 @@ spec:
             optional: true
         - name: cert-mqtt-cloud-client
           secret:
-            secretName: emqx-client-mqtt-edge
+            secretName: emqx-client-cert-mqtt-edge
             tems:
               - key: tls.key
                 path: tls.key
@@ -128,7 +128,7 @@ spec:
               readOnly: true
             - name: cert-mqtt-cloud-client
               subPath: tls.crt
-              mountPath: /etc/nanomq/pki/mqtt-cloud.client.tls..crt
+              mountPath: /etc/nanomq/pki/mqtt-cloud.client.tls.crt
               readOnly: true
             - name: cert-mqtt-cloud-client
               subPath: ca.crt

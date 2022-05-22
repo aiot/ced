@@ -447,7 +447,7 @@ data:
     retainer.expiry_interval = 16m
     retainer.stop_publish_clear_msg = false
 
-   webhook.conf: |
+  webhook.conf: |
 
     # send notify to some http server
     # web.hook.url = https://emqx-edge-webhook-server.${POD_NAMESPACE}.svc.cluster.local
@@ -496,7 +496,7 @@ data:
     # warning: recommend not to change this value, otherwise it may cause tls to not work
     bridge.mqtt.mqttcloud.ciphers = TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_CHACHA20_POLY1305_SHA256,TLS_AES_128_CCM_SHA256,TLS_AES_128_CCM_8_SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-ECDSA-AES256-SHA384,ECDHE-RSA-AES256-SHA384,ECDHE-ECDSA-DES-CBC3-SHA,ECDH-ECDSA-AES256-GCM-SHA384,ECDH-RSA-AES256-GCM-SHA384,ECDH-ECDSA-AES256-SHA384,ECDH-RSA-AES256-SHA384,DHE-DSS-AES256-GCM-SHA384,DHE-DSS-AES256-SHA256,AES256-GCM-SHA384,AES256-SHA256,ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES128-SHA256,ECDHE-RSA-AES128-SHA256,ECDH-ECDSA-AES128-GCM-SHA256,ECDH-RSA-AES128-GCM-SHA256,ECDH-ECDSA-AES128-SHA256,ECDH-RSA-AES128-SHA256,DHE-DSS-AES128-GCM-SHA256,DHE-DSS-AES128-SHA256,AES128-GCM-SHA256,AES128-SHA256,ECDHE-ECDSA-AES256-SHA,ECDHE-RSA-AES256-SHA,DHE-DSS-AES256-SHA,ECDH-ECDSA-AES256-SHA,ECDH-RSA-AES256-SHA,AES256-SHA,ECDHE-ECDSA-AES128-SHA,ECDHE-RSA-AES128-SHA,DHE-DSS-AES128-SHA,ECDH-ECDSA-AES128-SHA,ECDH-RSA-AES128-SHA,AES128-SHA
     bridge.mqtt.mqttcloud.keyfile = etc/pki/mqtt-cloud.client.tls.key
-    bridge.mqtt.mqttcloud.certfile = etc/pki/mqtt-cloud.client.tls..crt
+    bridge.mqtt.mqttcloud.certfile = etc/pki/mqtt-cloud.client.tls.crt
     bridge.mqtt.mqttcloud.cacertfile = etc/pki/mqtt-cloud.ca.crt
     bridge.mqtt.mqttcloud.username = mqtt-edge
     bridge.mqtt.mqttcloud.password = mqtt-edge
@@ -509,10 +509,10 @@ data:
     # publish(push) message to mqtt-cloud
     bridge.mqtt.mqttcloud.forwards = bridge-test/#
     bridge.mqtt.mqttcloud.batch_size = 32
-    bridge.mqtt.mqttcloud.max_inflight_batches = 32
+    bridge.mqtt.mqttcloud.max_inflight_size = 32
     bridge.mqtt.mqttcloud.retry_interval = 20s
     # subscribe message from mqtt-cloud (mqtt-cloud push msg to mqtt-edge)
-    bridge.mqtt.mqttcloud.subscription.1.topic = command/bridge-test
+    bridge.mqtt.mqttcloud.subscription.1.topic = command/bridge-test/#
     bridge.mqtt.mqttcloud.subscription.1.qos = 1
 
     # cache

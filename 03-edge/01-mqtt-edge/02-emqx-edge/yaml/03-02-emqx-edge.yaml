@@ -102,8 +102,8 @@ spec:
             optional: true
         - name: cert-mqtt-cloud-client
           secret:
-            secretName: emqx-client-mqtt-edge
-            tems:
+            secretName: emqx-client-cert-mqtt-edge
+            items:
               - key: tls.key
                 path: tls.key
               - key: tls.crt
@@ -150,7 +150,7 @@ spec:
               readOnly: true
             - name: cert-mqtt-cloud-client
               subPath: tls.crt
-              mountPath: /opt/emqx/etc/pki/mqtt-cloud.client.tls..crt
+              mountPath: /opt/emqx/etc/pki/mqtt-cloud.client.tls.crt
               readOnly: true
             - name: cert-mqtt-cloud-client
               subPath: ca.crt
@@ -341,7 +341,7 @@ spec:
                 - /bin/bash
                 - -c
                 - |-
-                  curl --insecure --key ${EMQX_HOME}/etc/pki/tls.key --cert ${EMQX_HOME}/etc/pki/tls.crt https://${POD_IP}:${EMQX_MANAGEMENT__LISTENER__HTTPS}/status
+                  curl --insecure --key ${EMQX_HOME}/etc/pki/tls.key --cert ${EMQX_HOME}/etc/pki/tls.crt https://${NODE_IP}:${EMQX_MANAGEMENT__LISTENER__HTTPS}/status
                   # emqx-ctl status
                   if [[ $? != 0 ]]
                   then
@@ -363,7 +363,7 @@ spec:
                 - /bin/bash
                 - -c
                 - |-
-                  curl --insecure --key ${EMQX_HOME}/etc/pki/tls.key --cert ${EMQX_HOME}/etc/pki/tls.crt https://${POD_IP}:${EMQX_MANAGEMENT__LISTENER__HTTPS}/status
+                  curl --insecure --key ${EMQX_HOME}/etc/pki/tls.key --cert ${EMQX_HOME}/etc/pki/tls.crt https://${NODE_IP}:${EMQX_MANAGEMENT__LISTENER__HTTPS}/status
                   # emqx-ctl status
             initialDelaySeconds: 0
             periodSeconds: 5
