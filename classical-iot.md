@@ -2,31 +2,39 @@
 
 1. things
 
-    - 温度、湿度
+    things 即万物, 是 device 的数据源. things 包括两种类型数据:
 
-        - 自动调节空调
+    1. 自然数据(环境数据)
 
-    - 光照
+        - 温度、湿度
 
-        - 改变玻璃颜色
+            - 自动调节空调
 
-        - 太阳能
+        - 光照
 
-    - 红外线
+            - 改变玻璃颜色
 
-        - 开关灯
+            - 太阳能
 
-    - 风力
+        - 红外线
 
-        - 通风系统
+            - 开关灯
 
-        - 发电
+        - 风力
 
-    - ···
+            - 通风系统
 
-2. device: 智能设备
+            - 发电
 
-    1. 采集 things 数据
+        - ···
+
+    2. 人为数据(人造物数据)
+
+2. device
+
+    device 即智能设备, 是 mqtt-edge 的数据源. device 负责以下能力:
+
+    1. 数据采集(data-acquisition): 采集 things 数据
 
         - `传感器`
 
@@ -34,7 +42,13 @@
 
         - ···
 
-    2. 以 mqtt 格式上报 things 数据至 edge
+    2. 数据上报(data-reporting): 以 mqtt 格式上报 things 数据至 edge
+
+        功能:
+
+        - device 离线, message 不丢失, 上线后 message 自动发布到 mqtt-edge
+
+        通信方式:
 
         - 无线
 
