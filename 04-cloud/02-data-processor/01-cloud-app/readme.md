@@ -14,7 +14,7 @@ cloud-app 是 cloud-ai 的数据源和 digital-twin 的后端. cloud-app 取代�
 
     1. 自动下发
 
-        将 cloud-ai 预测的 device 最佳参数下发到 device
+        将 cloud-ai 预测的 device 最佳参数下发到 device (先下发到 mqtt-cloud, mqtt-cloud 转发到 mqtt-edge, mqtt-edge 再转发到 device)
 
     2. 手动下发
 

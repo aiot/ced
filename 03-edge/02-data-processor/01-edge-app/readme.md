@@ -12,7 +12,7 @@ edge-app 是 edge-ai 的数据源. edge-app 取代经典 IoT 中的规则引擎,
 
     1. 自动下发
 
-        将 edge-ai 预测的 device 最佳参数下发到 device
+        将 edge-ai 预测的 device 最佳参数下发到 device (先下发到 mqtt-edge, mqtt-edge 再转发到 device)
 
     2. 手动下发
 

@@ -1,5 +1,12 @@
 # AIoT
 
+> https://github.com/emqx/edge-stack/blob/master/readme-cn.md <br/>
+https://www.emqx.com/zh/blog/emq-industrial-internet-cloud-edge-integrated-solution#解决方案2-云边协同工业互联网平台
+
+<div align="center">
+    <img src="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" />
+</div>
+
 1. things
 
     things 即万物, 是 device 的数据源. things 包括两种类型数据:
@@ -80,15 +87,15 @@
 
     1. 数据转换: 通常应用于工业互联网
 
-        若上报到 edge 的数据不是 device 上报, 而是 things(如工控机) 直接上报的, 则需要由运行于 edge 上的`数据格式转换软件`将 things 数据格式转换为 mqtt 数据格式, 然后发送到 mqtt-edge。
+        若上报到 edge 的数据不是 device 上报, 而是 things(如工控机) 直接上报的, 则需要由运行于 edge 上的`数据格式转换软件`将 things 数据格式转换为 mqtt 数据格式, 然后发送到 mqtt-edge.
 
-        同样, 对 things 下发指令, 也需要由运行于 edge 上的数据格式转换软件将 mqtt 数据格式转换为 things 数据格式。
+        同样, 对 things 下发指令, 也需要由运行于 edge 上的数据格式转换软件将 mqtt 数据格式转换为 things 数据格式.
 
     </strike>
 
     2. 消息队列: mqtt-edge
 
-        mqtt-edge 是 edge-app 的数据源.
+        mqtt-edge 是 edge-app 的数据源
 
     3. 数据处理
 
@@ -100,24 +107,23 @@
 
         2. edge-ai
 
-            edge-ai 是 "edge-app 自动指令" 的数据源.
+            edge-ai 是 "edge-app 自动指令" 的数据源
 
 4. cloud
 
-    > https://github.com/emqx/edge-stack/blob/master/readme-cn.md <br/>
-    https://www.emqx.com/zh/blog/emq-industrial-internet-cloud-edge-integrated-solution#解决方案2-云边协同工业互联网平台
-
-    <div align="center">
-        <img src="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" />
-    </div>
-
     1. 消息队列: mqtt-cloud
 
-    2. 数据处理(规则引擎、规则流水线)
+        mqtt-cloud 是 cloud-app 的数据源
 
-        - 基于 sql 实时处理(提取、转换、聚合、路由)来自 mqtt-cloud 的 things 数据
+    2. 数据处理
 
-        - 下发指令到 device (先下发到 mqtt-cloud, mqtt-cloud 转发到 mqtt-edge, mqtt-edge 再转发到 device)
+        1. cloud-app
+
+            cloud-app 是 cloud-ai 的数据源和 digital-twin 的后端
+
+        2. cloud-ai
+
+            cloud-ai 是 "cloud-app 自动指令" 的数据源
 
     3. 时序数据库
 
