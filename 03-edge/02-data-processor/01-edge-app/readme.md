@@ -2,11 +2,11 @@
 
 edge-app 是 edge-ai 的数据源. edge-app 取代经典 IoT 中的规则引擎, 负责以下能力:
 
-1. 处理取自 mqtt-edge 的 things 数据
+1. 处理来自 mqtt-edge 的 things 数据
 
     - 转发 edge-ai 需要的 things 数据至 edge-ai, 进行预测
 
-    - 压缩并转发 things 数据至 mqtt-cloud. cloud-app 将取自 mqtt-cloud 的 things 数据持久化到 time-series-database
+    - 压缩并转发 things 数据至 mqtt-cloud. cloud-app 将来自 mqtt-cloud 的 things 数据持久化到 time-series-database
 
 2. 指令下发
 

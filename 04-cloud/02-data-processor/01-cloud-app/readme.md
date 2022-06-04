@@ -2,7 +2,7 @@
 
 cloud-app 是 cloud-ai 的数据源和 digital-twin 的后端. cloud-app 取代经典 IoT 中的规则引擎, 负责以下能力:
 
-1. 处理取自 mqtt-cloud 的 things 数据
+1. 处理来自 mqtt-cloud 的 things 数据
 
     - 转发 cloud-ai 需要的 things 数据至 cloud-ai, 进行仿真模拟与预测
 
