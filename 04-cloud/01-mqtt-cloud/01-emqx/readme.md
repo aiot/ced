@@ -77,7 +77,7 @@ app 调用 emqx api 可以实现以下能力:
 
 > https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
 
-- 使用单个 dashboard 管理多 mqtt-server 实例
+- 使用单个 dashboard 管理多个 mqtt-server 实例
 
     > https://hub.docker.com/r/emqx/edge-manager
 

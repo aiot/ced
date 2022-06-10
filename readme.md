@@ -211,13 +211,35 @@
 
         1. cloud-app
 
-            cloud-app 是 cloud-ai 的数据源和 digital-twin 的后端
+            cloud-app 是 cloud-ai 的数据源和 digital-twin 的后端. cloud-app ~~取代经典 IoT 中的规则引擎,~~ 负责以下能力:
 
-        2. cloud-ai
+            1. 处理查询自 mqtt-cloud 的非敏感 things 数据
+
+                - 转发 cloud-ai 需要的 things 数据至 cloud-ai, 进行仿真模拟与预测
+
+                    - 将 cloud-ai 预测的 device 最佳参数写入 time-series-database
+
+                - 持久化非敏感 things 数据到 time-series-database
+
+            2. 指令下发
+
+                1. 自动下发
+
+                    将 cloud-ai 预测的 device 最佳参数下发到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
+
+                2. 手动下发
+
+                    下发 device 参数到 device
+
+            3. 模型下发
+
+                使用 cronjob 将 cloud-ai 训练的模型下发到 edge-ai
+
+        2. `cloud-ai`
 
             cloud-ai 是 "cloud-app 自动指令" 的数据源
 
-    3. 时序数据库
+    3. `时序数据库`
 
         将 device 经 edge 上报的 things 数据持久化到数据库
 
