@@ -102,15 +102,20 @@
 
         功能:
 
-        - 支持`证书认证`
+        - 必要: 支持`证书认证`
 
             - mqtt-edge 作为 server 时, 支持 client(如 device) 使用证书认证
 
             - mqtt-edge 作为 client 向其他 mqtt-server(如 mqtt-cloud) 转发(桥接) message 时, 支持使用证书向其他 mqtt-server 发起认证
 
-        - 支持`消息桥接`
+        - 可选: 支持`消息桥接`
 
             mqtt-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud)
+
+            > 消息桥接是非必要功能. <br/>
+            出于安全考虑, 某些 things 数据(如家庭摄像头)必须限制在 edge 侧处理, 因此不一定(实际上多数情况是一定不)所有 device 采集的 things 数据都需要转发(桥接)到 mqtt-cloud. <br/>
+            出于网络原因, 转发(桥接)大量 things 数据到 mqtt-cloud 是不具有现实可行性的. <br/>
+            确需转发到 mqtt-cloud 的少量原始 things 数据可以通过 edge-app 完成.
 
             - 支持`消息缓存`
 
@@ -126,7 +131,7 @@
 
                 </strike>
 
-        - 支持 http api
+        - 必要: 支持 http api
 
             - 支持通过 api 关闭非法连接
 
