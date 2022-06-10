@@ -1,20 +1,20 @@
-# AIoT
+# `AIoT`
 
-1. things
+1. `things`
 
     things 即万物, 是 device 的数据源. things 包括两种类型数据:
 
-    1. 自然数据(环境数据)
+    1. `自然数据`(环境数据)
 
         - 电
+
+        - 力
 
             - 风力
 
                 - 通风系统
 
                 - 发电
-
-        - 力
 
         - 热
 
@@ -38,17 +38,17 @@
 
         - ···
 
-    2. 人为数据(人造物数据)
+    2. `人造物数据`(人为数据)
 
-        - ~~工控机~~
+        - ~~`工控机`~~
 
         - ···
 
-2. device
+2. `device`
 
     device 即智能设备, 是 mqtt-edge 的数据源. device 负责以下能力:
 
-    1. 数据采集(data-acquisition): 采集 things 数据
+    1. `数据采集`(data-acquisition): 采集 things 数据
 
         - `传感器`
 
@@ -56,7 +56,7 @@
 
         - ···
 
-    2. 数据上报(data-reporting): 以 mqtt 格式上报 things 数据至 edge
+    2. `数据上报`(data-reporting): 以 mqtt 格式上报 things 数据至 edge
 
         功能:
 
@@ -78,7 +78,7 @@
 
             - LAN(网线)
 
-3. edge
+3. `edge`
 
     ~~edge 在经典 IoT 中称为边缘网关~~. edge 负责以下能力:
 
@@ -88,7 +88,7 @@
 
     <strike>
 
-    1. 数据转换: 通常应用于工业互联网
+    1. 数据转换: 通常应用于`工业互联网`
 
         若上报到 edge 的数据不是 device 上报, 而是 things(如工控机) 直接上报的, 则需要由运行于 edge 上的`数据格式转换软件`将 things 数据格式转换为 mqtt 数据格式, 然后发送到 mqtt-edge.
 
@@ -96,7 +96,7 @@
 
     </strike>
 
-    2. 消息队列: mqtt-edge
+    2. `mqtt-edge`: 消息队列
 
         mqtt-edge 是 edge-app 的数据源
 
@@ -108,12 +108,14 @@
 
             - mqtt-edge 作为 client 向其他 mqtt-server(如 mqtt-cloud) 转发(桥接) message 时, 支持使用证书向其他 mqtt-server 发起认证
 
+        <strike>
+
         - 可选: 支持`消息桥接`
 
             mqtt-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud)
 
             > 消息桥接是非必要功能. <br/>
-            出于安全考虑, 某些 things 数据(如家庭摄像头)必须限制在 edge 侧处理, 因此不一定(实际上多数情况是一定不)所有 device 采集的 things 数据都需要转发(桥接)到 mqtt-cloud. <br/>
+            出于安全考虑, 一些敏感 things 数据(如家庭摄像头)必须限制在 edge 侧处理, 因此不一定(实际上多数情况是一定不)所有 device 采集的 things 数据都需要转发(桥接)到 mqtt-cloud. <br/>
             出于网络原因, 转发(桥接)大量 things 数据到 mqtt-cloud 是不具有现实可行性的. <br/>
             确需转发到 mqtt-cloud 的少量原始 things 数据可以通过 edge-app 完成.
 
@@ -125,11 +127,9 @@
 
                     建议缓存到磁盘
 
-                <strike>
+                - ~~缓存到数据库(如 sqlite)~~
 
-                - 缓存到数据库(如 sqlite)
-
-                </strike>
+            </strike>
 
         - 必要: 支持 http api
 
@@ -137,27 +137,27 @@
 
     3. 数据处理
 
-        1. edge-app
+        1. `edge-app`
 
-            edge-app 是 edge-ai 的数据源. edge-app ~~取代经典 IoT 中的规则引擎(也称为规则流水线)(一种基于 sql 实时处理(提取、转换、聚合、路由)取自 mqtt-edge 的 things 数据的低代码工具),~~ 负责以下能力:
+            edge-app 是 edge-ai 的数据源. edge-app ~~取代`经典IoT`中的`规则引擎`(也称为`规则流水线`)(一种基于 sql 实时处理(提取、转换、聚合、路由)查询自 mqtt-edge 的 things 数据的`低代码`工具),~~ 负责以下能力:
 
-            1. 处理取自 mqtt-edge 的 things 数据
+            1. 处理查询自 mqtt-edge 的 things 数据
 
                 - 转发 edge-ai 需要的 things 数据至 edge-ai, 进行预测
 
-                - 压缩并转发 things 数据至 mqtt-cloud. cloud-app 将取自 mqtt-cloud 的 things 数据持久化到 time-series-database
+                - 压缩并转发非敏感 things 数据至 mqtt-cloud. cloud-app 将查询自 mqtt-cloud 的非敏感 things 数据持久化到 time-series-database
 
             2. 指令下发
 
                 1. 自动下发
 
-                    将 edge-ai 预测的 device 最佳参数下发到 device (先下发到 mqtt-edge, mqtt-edge 再转发到 device)
+                    将 edge-ai 预测的 device 最佳参数下发到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
 
                 2. 手动下发
 
                     转发 "digital-twin 手动指令" 到 device
 
-        2. edge-ai
+        2. `edge-ai`
 
             edge-ai 是 "edge-app 自动指令" 的数据源
 
