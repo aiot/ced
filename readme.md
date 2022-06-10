@@ -135,6 +135,8 @@
 
             - 支持通过 api 关闭非法连接
 
+            - 支持一个 dashboard 管理多个 mqtt-server 实例
+
     3. 数据处理
 
         1. `edge-app`
@@ -167,11 +169,43 @@
 
                 edge-app 将 device 最佳参数下发到 device.
 
-4. cloud
+4. `cloud`
 
-    1. 消息队列: mqtt-cloud
+    1. `mqtt-cloud`: 消息队列
 
         mqtt-cloud 是 cloud-app 的数据源
+
+        功能:
+
+        > https://docs.emqx.com/zh/enterprise/v4.4/introduction/checklist.html
+
+        - 支持证书认证
+
+            - mqtt-cloud 作为 server 时, 支持 client(如 edge-app、mqtt-edge) 使用证书认证
+
+            - mqtt-cloud 作为 client 向其他 mqtt-server 转发(桥接) message 时, 支持使用证书向其他 mqtt-server 发起认证
+
+        - 支持 message 持久化
+
+            支持 message 持久化到数据库, 供 cloud-app 查询
+
+            - 时序数据库
+
+                - tdengine
+
+            <strike>
+
+            - 关系型数据库
+
+                - pgsql
+
+            </strike>
+
+        - 支持 http api
+
+            - 支持通过 api 关闭非法连接
+
+            - 支持一个 dashboard 管理多个 mqtt-server 实例
 
     2. 数据处理
 
