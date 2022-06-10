@@ -1,37 +1,40 @@
 # AIoT
 
-> https://github.com/emqx/edge-stack/blob/master/readme-cn.md <br/>
-https://www.emqx.com/zh/blog/emq-industrial-internet-cloud-edge-integrated-solution#解决方案2-云边协同工业互联网平台
-
-<div align="center">
-    <img src="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" />
-</div>
-
 1. things
 
     things 即万物, 是 device 的数据源. things 包括两种类型数据:
 
     1. 自然数据(环境数据)
 
-        - 温度、湿度
+        - 电
 
-            - 自动调节空调
+            - 风力
 
-        - 光照
+                - 通风系统
 
-            - 改变玻璃颜色
+                - 发电
 
-            - 太阳能
+        - 力
 
-        - 红外线
+        - 热
 
-            - 开关灯
+            - 温度、湿度
 
-        - 风力
+                - 自动调节空调、加湿器
 
-            - 通风系统
+        - 光
 
-            - 发电
+            - 光照
+
+                - 改变玻璃颜色
+
+                - 太阳能
+
+            - 红外线
+
+                - 开关灯
+
+        - 声
 
         - ···
 
@@ -97,6 +100,36 @@ https://www.emqx.com/zh/blog/emq-industrial-internet-cloud-edge-integrated-solut
 
         mqtt-edge 是 edge-app 的数据源
 
+        功能:
+
+        - 支持`证书认证`
+
+            - mqtt-edge 作为 server 时, 支持 client(如 device) 使用证书认证
+
+            - mqtt-edge 作为 client 向其他 mqtt-server(如 mqtt-cloud) 转发(桥接) message 时, 支持使用证书向其他 mqtt-server 发起认证
+
+        - 支持`消息桥接`
+
+            mqtt-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud)
+
+            - 支持`消息缓存`
+
+                mqtt-edge 与 mqtt-cloud 断连时, client(如 device) 发布的 message(称为`离线消息`) 不丢失, 连接恢复后继续转发(桥接)
+
+                - 缓存到磁盘
+
+                    建议缓存到磁盘
+
+                <strike>
+
+                - 缓存到数据库(如 sqlite)
+
+                </strike>
+
+        - 支持 http api
+
+            - 支持通过 api 关闭非法连接
+
     3. 数据处理
 
         1. edge-app
@@ -134,6 +167,13 @@ https://www.emqx.com/zh/blog/emq-industrial-internet-cloud-edge-integrated-solut
         提取、处理时序数据库中的 things 数据, 向用户提供交互式 UI
 
 ## 示例
+
+> https://github.com/emqx/edge-stack/blob/master/readme-cn.md <br/>
+https://www.emqx.com/zh/blog/emq-industrial-internet-cloud-edge-integrated-solution#解决方案2-云边协同工业互联网平台
+
+<div align="center">
+    <img src="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" />
+</div>
 
 1. things -> device -> edge(neuron -> emqx-edge -> kuiper) -> cloud(emqx -> tdengine -> grafana)
 
