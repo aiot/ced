@@ -141,7 +141,7 @@
 
         1. `edge-app`
 
-            edge-app 是 edge-ai 的数据源. edge-app ~~取代经典 IoT 中的`规则引擎`(也称`规则流水线`)(一种基于 sql 实时处理(提取、转换、聚合、路由)查询自 mqtt-edge 的 things 数据的`低代码`工具),~~ 负责以下能力:
+            edge-app 是 mqtt-edge 的唯一操作入口, 是 edge-ai 的数据源. edge-app ~~取代经典 IoT 中的`规则引擎`(也称`规则流水线`)(一种基于 sql 实时处理(提取、转换、聚合、路由)查询自 mqtt-edge 的 things 数据的`低代码`工具),~~ 负责以下能力:
 
             1. 处理查询自 mqtt-edge 的 things 数据
 
@@ -157,7 +157,7 @@
 
                 2. 手动下发
 
-                    转发 "digital-twin 手动指令" 到 device
+                    转发 "digital-twin 手动指令" 到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
 
         2. `edge-ai`
 
@@ -165,9 +165,15 @@
 
             1. "edge-app 自动指令" 的数据源
 
-                edge-ai 根据 device 上报的 things 数据, 对 device 状态进行预测, 将预测的 device 最佳参数反馈到 edge-app.
+                edge-ai 根据 device 上报的 things 数据, 对 device 状态进行预测, 将预测的 device 最佳参数反馈到 edge-app. edge-app 将 device 最佳参数下发到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic).
 
-                edge-app 将 device 最佳参数下发到 device.
+                qa:
+
+                1. edge-ai 可以直接操作 mqtt-edge 对 device 下发指令吗?
+
+                    不可以.
+
+                    首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级.
 
 4. `cloud`
 
