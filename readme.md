@@ -238,7 +238,15 @@
 
                 2. 手动下发
 
-                    下发 device 参数到 device
+                    下发 device 参数到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
+
+                qa:
+
+                1. cloud-app 可以直接操作 mqtt-edge 对 device 下发指令吗?
+
+                    不可以.
+
+                    首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级; 再次, 由于网络原因, cloud-app 直接操作 mqtt-edge 不具备现实可行性.
 
             3. 模型下发
 
