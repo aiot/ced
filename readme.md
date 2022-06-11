@@ -238,7 +238,7 @@
 
             3. digital-twin 的后端
 
-                1. 提取、处理时序数据库中的 things(device 采集的 things 数据) 和 device(cloud-ai 预测的 device 最佳参数) 数据, 返回给  digital-twin
+                1. 提取、处理时序数据库中的 things(device 采集的 things 数据)、device(cloud-ai 预测的 device 最佳参数) 数据, 返回给  digital-twin
 
                 2. 指令下发
 
@@ -264,11 +264,9 @@
 
             1. "cloud-app 自动指令" 的数据源
 
-                cloud-ai 对 device 经 edge 上报的 things 数据进行仿真模拟和预测, 将预测的 device 最佳参数反馈到 cloud-app.
+                cloud-ai 对 device 经 edge 上报的 things 数据进行仿真模拟和预测, 将预测的 device 最佳参数反馈到 cloud-app. cloud-app 将 device 最佳参数下发到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic), 并写入时序数据库.
 
-                cloud-app 将 device 最佳参数下发到 device, 并写入时序数据库.
-
-            2. 模型训练
+            2. `模型训练`
 
                 edge-ai 不具备模型训练的硬件条件, 模型在 cloud-ai 训练后下发到 edge-ai.
 
@@ -337,7 +335,7 @@
 
                 1. `自动下发`
 
-                    考虑到 "edge-app 自动指令" 可能因为 edge-ai 模型更新不及时而导致准确性略差, cloud-app 可以根据 cloud-ai 的预测自动下发指令到 device (指令最终经 edge 下发到 device)
+                    考虑到 "edge-app 自动指令" 可能因为 edge-ai 模型更新不及时而导致准确性略差, cloud-app 可以根据 cloud-ai 的预测自动下发指令到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
 
                     > note: <br/>
                     > 1. 为什么有了 "edge-app 自动指令", 还需要 "cloud-app 自动指令" <br/>
