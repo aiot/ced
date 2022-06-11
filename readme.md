@@ -147,7 +147,7 @@
 
                 - 转发 edge-ai 需要的 things 数据至 edge-ai, 进行预测
 
-                - 压缩并转发非敏感 things 数据至 mqtt-cloud. cloud-app 将查询自 mqtt-cloud 的非敏感 things 数据持久化到 time-series-database
+                - 压缩并转发非敏感 things 数据至 mqtt-cloud. cloud-app 将查询自 mqtt-cloud 的非敏感 things 数据持久化到时序数据库
 
             2. 指令下发
 
@@ -217,9 +217,9 @@
 
                 - 转发 cloud-ai 需要的 things 数据至 cloud-ai, 进行仿真模拟与预测
 
-                    - 将 cloud-ai 预测的 device 最佳参数写入 time-series-database
+                    - 将 cloud-ai 预测的 device 最佳参数写入时序数据库
 
-                - 持久化非敏感 things 数据到 time-series-database
+                - 持久化非敏感 things 数据至时序数据库
 
             2. 指令下发
 
@@ -243,15 +243,15 @@
 
                 cloud-ai 对 device 经 edge 上报的 things 数据进行仿真模拟和预测, 将预测的 device 最佳参数反馈到 cloud-app.
 
-                cloud-app 将 device 最佳参数下发到 device, 并写入 time-series-database.
+                cloud-app 将 device 最佳参数下发到 device, 并写入时序数据库.
 
             2. 模型训练
 
                 edge-ai 不具备模型训练的硬件条件, 模型在 cloud-ai 训练后下发到 edge-ai.
 
-    3. `时序数据库`
+    3. `时序数据库`: time-series-database
 
-        将 device 经 edge 上报的 things 数据持久化到数据库
+        时序数据库是 digital-twin 的数据源
 
     4. 应用程序
 
