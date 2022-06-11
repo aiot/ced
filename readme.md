@@ -366,16 +366,18 @@
 
             2. 指令下发
 
-## 示例
-
-> https://github.com/emqx/edge-stack/blob/master/readme-cn.md <br/>
-https://www.emqx.com/zh/blog/emq-industrial-internet-cloud-edge-integrated-solution#解决方案2-云边协同工业互联网平台
+## emqx 案例
 
 <div align="center">
     <img src="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" />
 </div>
 
-1. things -> device -> edge(neuron -> emqx-edge -> kuiper) -> cloud(emqx -> tdengine -> grafana)
+- https://github.com/emqx/edge-stack/blob/master/readme-cn.md
 
-    > https://www.emqx.com/zh/blog/emqx-tdengine-grafana <br/>
-    https://github.com/emqx/edge-stack/blob/master/developer-scripts/readme-cn.md
+- https://www.emqx.com/zh/blog/emq-industrial-internet-cloud-edge-integrated-solution#解决方案2-云边协同工业互联网平台
+
+- things -> device -> edge(neuron -> emqx-edge -> kuiper) -> cloud(emqx -> tdengine -> grafana)
+
+    - https://www.emqx.com/zh/blog/emqx-tdengine-grafana
+
+    - https://github.com/emqx/edge-stack/blob/master/developer-scripts/readme-cn.md
