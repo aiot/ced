@@ -155,7 +155,7 @@
 
                     将 edge-ai 预测的 device 最佳参数下发到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
 
-                2. 手动下发
+                2. 转发 "digital-twin 手动指令"
 
                     转发 "digital-twin 手动指令" 到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
 
@@ -278,7 +278,7 @@
 
         时序数据库是 digital-twin 的数据源
 
-    4. `交互应用`: interact-app
+    4. `交互应用`(interact-app)
 
         提取、处理时序数据库中的 things 数据, 向用户提供交互式 UI
 
