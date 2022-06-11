@@ -80,7 +80,7 @@
 
 3. `edge`
 
-    ~~edge 在经典 IoT 中称为边缘网关~~. edge 负责以下能力:
+    ~~edge 在`经典IoT`中称为边缘网关~~. edge 负责以下能力:
 
     <!-- <div align="center">
         <img src="https://static.emqx.com/_nuxt/img/banner-en-bg.4968787.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/banner-en-bg.4968787.png" />
@@ -114,7 +114,7 @@
 
             mqtt-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud)
 
-            > 消息桥接是非必要功能. <br/>
+            > 消息桥接是非必要功能: <br/>
             出于安全考虑, 一些敏感 things 数据(如家庭摄像头)必须限制在 edge 侧处理, 因此不一定(实际上多数情况是一定不)所有 device 采集的 things 数据都需要转发(桥接)到 mqtt-cloud. <br/>
             出于网络原因, 转发(桥接)大量 things 数据到 mqtt-cloud 是不具有现实可行性的. <br/>
             确需转发到 mqtt-cloud 的少量原始 things 数据可以通过 edge-app 完成.
@@ -141,7 +141,7 @@
 
         1. `edge-app`
 
-            edge-app 是 edge-ai 的数据源. edge-app ~~取代`经典IoT`中的`规则引擎`(也称为`规则流水线`)(一种基于 sql 实时处理(提取、转换、聚合、路由)查询自 mqtt-edge 的 things 数据的`低代码`工具),~~ 负责以下能力:
+            edge-app 是 edge-ai 的数据源. edge-app ~~取代经典 IoT 中的`规则引擎`(也称`规则流水线`)(一种基于 sql 实时处理(提取、转换、聚合、路由)查询自 mqtt-edge 的 things 数据的`低代码`工具),~~ 负责以下能力:
 
             1. 处理查询自 mqtt-edge 的 things 数据
 
@@ -179,29 +179,32 @@
 
         > https://docs.emqx.com/zh/enterprise/v4.4/introduction/checklist.html
 
-        - 支持证书认证
+        - 必要: 支持证书认证
 
             - mqtt-cloud 作为 server 时, 支持 client(如 edge-app、mqtt-edge) 使用证书认证
 
             - mqtt-cloud 作为 client 向其他 mqtt-server 转发(桥接) message 时, 支持使用证书向其他 mqtt-server 发起认证
 
-        - 支持 message 持久化
+        <strike>
+
+        - 可选: 支持 message 持久化
 
             支持 message 持久化到数据库, 供 cloud-app 查询
+
+            > mqtt-cloud 持久化 message 到数据库是非必要功能: <br/>
+            强烈建议不要让 mqtt-cloud 与数据库交互, 与数据库交互的一切动作都应当由 cloud-app 完成, 保证对数据库而言只有一个操作入口.
 
             - 时序数据库
 
                 - tdengine
 
-            <strike>
+            - ~~关系型数据库~~
 
-            - 关系型数据库
+                - ~~pgsql~~
 
-                - pgsql
+        </strike>
 
-            </strike>
-
-        - 支持 http api
+        - 必要: 支持 http api
 
             - 支持通过 api 关闭非法连接
 
@@ -249,7 +252,7 @@
 
                 edge-ai 不具备模型训练的硬件条件, 模型在 cloud-ai 训练后下发到 edge-ai.
 
-    3. `时序数据库`: time-series-database
+    3. `时序数据库`(time-series-database)
 
         时序数据库是 digital-twin 的数据源
 
