@@ -266,6 +266,14 @@
 
                 edge-ai 不具备模型训练的硬件条件, 模型在 cloud-ai 训练后下发到 edge-ai.
 
+                qa:
+
+                1. cloud-ai 可以直接操作 mqtt-edge 对 device 下发指令吗?
+
+                    不可以.
+
+                    首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级.
+
     3. `时序数据库`(time-series-database)
 
         时序数据库是 digital-twin 的数据源
