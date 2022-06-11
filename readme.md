@@ -222,35 +222,41 @@
 
             cloud-app 是 mqtt-cloud 和时序数据库的唯一操作入口, 是 cloud-ai 的数据源和 digital-twin 的后端. cloud-app ~~取代经典 IoT 中的规则引擎,~~ 负责以下能力:
 
-            1. 处理查询自 mqtt-cloud 的非敏感 things 数据
+            1. 操作 mqtt-cloud 和时序数据库
+
+                 - 持久化查询自 mqtt-cloud 的非敏感 things 数据至时序数据库
+
+            2. 与 cloud-ai 交互
 
                 - 转发 cloud-ai 需要的 things 数据至 cloud-ai, 进行仿真模拟与预测
 
                     - 将 cloud-ai 预测的 device 最佳参数写入时序数据库
 
-                - 持久化非敏感 things 数据至时序数据库
+                - 模型下发
 
-            2. 指令下发
+                    使用 cronjob 将 cloud-ai 训练的模型下发到 edge-ai
 
-                1. 自动下发
+            3. digital-twin 的后端
 
-                    将 cloud-ai 预测的 device 最佳参数下发到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
+                1. 提取、处理时序数据库中的 things(device 采集的 things 数据) 和 device(cloud-ai 预测的 device 最佳参数) 数据, 返回给  digital-twin
 
-                2. 手动下发
+                2. 指令下发
 
-                    下发 device 参数到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
+                    1. 自动下发
 
-                qa:
+                        将 cloud-ai 预测的 device 最佳参数下发到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
 
-                1. cloud-app 可以直接操作 mqtt-edge 对 device 下发指令吗?
+                    2. 手动下发
 
-                    不可以.
+                        下发 device 参数到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
 
-                    首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级; 再次, 由于网络原因, cloud-app 直接操作 mqtt-edge 不具备现实可行性.
+                    qa:
 
-            3. 模型下发
+                    1. cloud-app 可以直接操作 mqtt-edge 对 device 下发指令吗?
 
-                使用 cronjob 将 cloud-ai 训练的模型下发到 edge-ai
+                        不可以.
+
+                        首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级; 再次, 由于网络原因, cloud-app 直接操作 mqtt-edge 不具备现实可行性.
 
         2. `cloud-ai`
 
@@ -279,8 +285,6 @@
         时序数据库是 digital-twin 的数据源
 
     4. `交互应用`(interact-app)
-
-        提取、处理时序数据库中的 things 数据, 向用户提供交互式 UI
 
         1. `digital-twin`: `数字孪生`
 
