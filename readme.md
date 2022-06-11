@@ -167,13 +167,13 @@
 
                 edge-ai 根据 device 上报的 things 数据, 对 device 状态进行预测, 将预测的 device 最佳参数反馈到 edge-app. edge-app 将 device 最佳参数下发到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic).
 
-                qa:
+            qa:
 
-                1. edge-ai 可以直接操作 mqtt-edge 对 device 下发指令吗?
+            1. edge-ai 可以直接操作 mqtt-edge 对 device 下发指令吗?
 
-                    不可以.
+                不可以.
 
-                    首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级.
+                首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级.
 
 4. `cloud`
 
@@ -266,13 +266,13 @@
 
                 edge-ai 不具备模型训练的硬件条件, 模型在 cloud-ai 训练后下发到 edge-ai.
 
-                qa:
+            qa:
 
-                1. cloud-ai 可以直接操作 mqtt-edge 对 device 下发指令吗?
+            1. cloud-ai 可以直接操作 mqtt-edge 对 device 下发指令吗?
 
-                    不可以.
+                不可以.
 
-                    首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级.
+                首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级.
 
     3. `时序数据库`(time-series-database)
 
