@@ -209,7 +209,7 @@
 
     2. 数据处理
 
-        1. cloud-app
+        1. `cloud-app`
 
             cloud-app 是 cloud-ai 的数据源和 digital-twin 的后端. cloud-app ~~取代经典 IoT 中的规则引擎,~~ 负责以下能力:
 
