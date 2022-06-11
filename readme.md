@@ -198,7 +198,7 @@
             支持 message 持久化到数据库, 供 cloud-app 查询
 
             > mqtt-cloud 持久化 message 到数据库是非必要功能: <br/>
-            强烈建议不要让 mqtt-cloud 与数据库交互, 与数据库交互的一切动作都应当由 cloud-app 完成, 保证对数据库而言只有一个操作入口.
+            强烈建议不要让 mqtt-cloud 与数据库交互, 与数据库交互的一切动作都应当由 cloud-app 完成, 确保对数据库而言只有一个操作入口.
 
             - 时序数据库
 
@@ -220,7 +220,7 @@
 
         1. `cloud-app`
 
-            cloud-app 是 cloud-ai 的数据源和 digital-twin 的后端. cloud-app ~~取代经典 IoT 中的规则引擎,~~ 负责以下能力:
+            cloud-app 是 mqtt-cloud 和时序数据库的唯一操作入口, 是 cloud-ai 的数据源和 digital-twin 的后端. cloud-app ~~取代经典 IoT 中的规则引擎,~~ 负责以下能力:
 
             1. 处理查询自 mqtt-cloud 的非敏感 things 数据
 
