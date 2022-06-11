@@ -261,7 +261,7 @@
 
             digital-twin 是 cloud-app 的前端. digital-twin 负责以下能力:
 
-            1. things、device 可视化
+            1. `things、device 可视化`
 
                 - 3D 可视化
 
@@ -289,7 +289,7 @@
 
                 - 统计图
 
-            2. 指令下发
+            2. `指令下发`
 
                 > `指令优先级`: <br/>
                 > 1. digital-twin 手动指令 <br/>
@@ -306,7 +306,7 @@
 
                 在 digital-twin 上可以选择是否开启 "cloud-app 自动指令", 默认开启.
 
-                1. 自动下发
+                1. `自动下发`
 
                     考虑到 "edge-app 自动指令" 可能因为 edge-ai 模型更新不及时而导致准确性略差, cloud-app 可以根据 cloud-ai 的预测自动下发指令到 device (指令最终经 edge 下发到 device)
 
@@ -315,7 +315,7 @@
                     >     cloud-ai 的预测比 edge-ai 更准确, "cloud-app 自动指令" 主要作为 "edge-app 自动指令" 的辅助工具, 在 cloud-edge 网络良好的情况下, 可以修正 "edge-app 自动指令". <br/>
                     >     但通常情况下, cloud-edge 之间的网络质量是不能保证, "cloud-app 自动指令" 不能保证实时性, 所以 "edge-app 自动指令" 起主要作用, "cloud-app 自动指令" 只是 "edge-app 自动指令" 的辅助.
 
-                2. 手动下发
+                2. `手动下发`
 
                     在 digital-twin 上可以调用 cloud-app 对 device 手动下发指令.
 
@@ -329,20 +329,15 @@
                     > 1. 建议不要在 digital-twin 上对 device 手动下发指令, 应优先考虑使用 ai 自动更改 device 参数. <br/>
                     >     若发现 device 状态有明显错误, 应考虑修正 ai 模型.
 
+        2. `mobile-app`
 
+            mobile-app 是 digital-twin 在移动端的简化版. mobile-app 负责以下能力:
 
+            1. things、device 可视化
 
+                考虑到移动端的硬件条件, mobile-app 将只提供基础可视化, 不提供 "3D 可视化" 能力
 
-
-
-
-
-
-
-
-
-
-
+            2. 指令下发
 
 ## 示例
 
