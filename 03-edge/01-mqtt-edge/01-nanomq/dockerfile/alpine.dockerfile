@@ -33,19 +33,19 @@ RUN \
 # build image
 FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:ALPINE_VERSION
 
-RUN \
-    set -ex && \
-    \
-    apk update --allow-untrusted --purge --no-cache && \
-    apk add --allow-untrusted --upgrade --no-cache mbedtls-dev sqlite && \
-    rm -rfv /var/cache/apk/*
-
 COPY \
     --from='builder' /usr/lib/libgcc_s.so.1 /usr/lib/
 COPY \
     --from='builder' /root/nanomq/build/nanolib/libnano_shared.so /usr/lib/
 COPY \
     --from='builder' /root/nanomq/build/nanomq/nanomq /usr/local/bin/
+
+RUN \
+    set -ex && \
+    \
+    apk update --allow-untrusted --purge --no-cache && \
+    apk add --allow-untrusted --upgrade --no-cache mbedtls-dev sqlite && \
+    rm -rfv /var/cache/apk/*
 
 # ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]
 CMD ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]

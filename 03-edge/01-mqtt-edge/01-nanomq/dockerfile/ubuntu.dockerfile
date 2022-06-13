@@ -33,6 +33,9 @@ RUN \
 # build image
 FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/ubuntu:UBUNTU_VERSION
 
+COPY \
+    --from='builder' /root/nanomq/build/nanomq/nanomq /usr/local/bin/
+
 RUN \
     set -ex && \
     \
@@ -40,9 +43,6 @@ RUN \
     apt install -y --no-install-recommends libatomic1 libmbedtls-dev sqlite && \
     apt autoremove -y && \
     rm -rfv /var/lib/apt/lists/*
-
-COPY \
-    --from='builder' /root/nanomq/build/nanomq/nanomq /usr/local/bin/
 
 # ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]
 CMD ["/bin/bash", "-c", "/usr/local/bin/nanomq broker --help"]

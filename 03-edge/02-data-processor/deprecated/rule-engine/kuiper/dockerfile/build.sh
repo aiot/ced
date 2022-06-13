@@ -28,11 +28,6 @@ buildImage alpine.dockerfile ${imageRepository}/kuiper:${kuiperVersion}
 # docker rmi lfedge/ekuiper:${kuiperVersion}-alpine
 
 
-# # build kuiper-ubuntu image
-# buildImage ubuntu.dockerfile ${imageRepository}/kuiper-ubuntu:${kuiperVersion}-${ubuntuVersion}
-# # docker rmi lfedge/ekuiper:${kuiperVersion}-slim
-
-
 #
 docker rmi {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:${alpineVersion} || true
 docker rmi {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/ubuntu:${ubuntuVersion} || true
