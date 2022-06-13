@@ -115,9 +115,10 @@
             mqtt-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud)
 
             > 消息桥接是非必要功能: <br/>
-            出于安全考虑, 一些敏感 things 数据(如家庭摄像头)必须限制在 edge 侧处理, 因此不一定(实际上多数情况是一定不)所有 device 采集的 things 数据都需要转发(桥接)到 mqtt-cloud. <br/>
-            出于网络原因, 转发(桥接)大量 things 数据到 mqtt-cloud 是不具有现实可行性的. <br/>
-            确需转发到 mqtt-cloud 的少量原始 things 数据可以通过 edge-app 完成.
+            > 1. 出于实时性考虑, 一些 things 数据必须在 edge 侧就近处理; <br/>
+            > 2. 出于安全考虑, 一些敏感 things 数据(如家庭摄像头)必须限制在 edge 侧处理, 因此不一定(实际上多数情况是一定不)所有 device 采集的 things 数据都需要转发(桥接)到 mqtt-cloud; <br/>
+            > 3. 出于网络原因, 转发(桥接)大量 things 数据到 mqtt-cloud 在速度和成本上都是不具有现实可行性的; <br/>
+            > 4. 应当确保 mqtt-edge 的唯一操作入口是 edge-app, 确需转发到 mqtt-cloud 的少量原始 things 数据可以通过 edge-app 完成.
 
             - 支持`消息缓存`
 
