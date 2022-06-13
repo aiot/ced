@@ -25,12 +25,12 @@ buildImage() {
 
 # build kuiper image
 buildImage alpine.dockerfile ${imageRepository}/kuiper:${kuiperVersion}
-docker rmi lfedge/ekuiper:${kuiperVersion}-alpine
+# docker rmi lfedge/ekuiper:${kuiperVersion}-alpine
 
 
-# build kuiper-ubuntu image
-buildImage ubuntu.dockerfile ${imageRepository}/kuiper-ubuntu:${kuiperVersion}-${ubuntuVersion}
-docker rmi lfedge/ekuiper:${kuiperVersion}-slim
+# # build kuiper-ubuntu image
+# buildImage ubuntu.dockerfile ${imageRepository}/kuiper-ubuntu:${kuiperVersion}-${ubuntuVersion}
+# # docker rmi lfedge/ekuiper:${kuiperVersion}-slim
 
 
 #
