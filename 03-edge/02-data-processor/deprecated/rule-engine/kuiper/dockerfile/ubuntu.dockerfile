@@ -28,7 +28,8 @@ RUN \
     git clone --recurse --tags https://github.com/lf-edge/ekuiper.git && \
     cd ekuiper && \
     git checkout ${kuiperVersion} && \
-        make build_with_edgex
+        make build_with_edgex && \
+        mv -fv _build/kuiper-${kuiperVersion}-linux-amd64 _build/kuiper
 
 
 # build image
@@ -42,7 +43,7 @@ ENV \
 WORKDIR ${kuiperHome}
 
 COPY \
-    --from='builder' /go/kuiper/_build/kuiper-* ${kuiperHome}/
+    --from='builder' /go/kuiper/_build/kuiper/ ${kuiperHome}/
 
 RUN \
     set -ex && \
