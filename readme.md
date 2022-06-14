@@ -138,9 +138,11 @@
 
             - 支持一个 dashboard 管理多个 mqtt-server 实例
 
-    3. 数据处理
+    3. 数据处理: 流处理(与流处理相对应的是批处理). 流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算.
 
         1. `edge-app`
+
+            > edge-app 是必需且不能少的. 由于云边网络不稳定, 在 edge 与 cloud 网络断开时, 必须存在 edge-app 对 device 采集的 things 数据进行实时处理.
 
             edge-app 是 mqtt-edge 的唯一操作入口, 是 edge-ai 的数据源. edge-app ~~取代经典 IoT 中的`规则引擎`(也称`规则流水线`)(一种基于 sql 实时处理(提取、转换、聚合、路由)查询自 mqtt-edge 的 things 数据的`低代码`工具),~~ 负责以下能力:
 
