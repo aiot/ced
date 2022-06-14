@@ -23,7 +23,7 @@ RUN \
     kuiperVersion='KUIPER_VERSION' && \
     cd $(go env GOPATH) && \
     git clone --recurse --tags https://github.com/lf-edge/ekuiper.git && \
-    cd ekuiper && \
+    mv -fv ekuiper kuiper && cd kuiper && \
     git checkout ${kuiperVersion} && \
         make build_with_edgex && \
         mv -fv _build/kuiper-${kuiperVersion}-linux-amd64 _build/kuiper
