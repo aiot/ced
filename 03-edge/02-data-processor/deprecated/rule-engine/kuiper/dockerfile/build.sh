@@ -25,7 +25,14 @@ buildImage() {
 
 # build kuiper image
 buildImage alpine.dockerfile ${imageRepository}/kuiper:${kuiperVersion}
+docker rmi golang:1.17-alpine
 # docker rmi lfedge/ekuiper:${kuiperVersion}-alpine
+
+
+# build kuiper-ubuntu image
+buildImage ubuntu.dockerfile ${imageRepository}/kuiper-ubuntu:${kuiperVersion}-${ubuntuVersion}
+docker rmi golang:1.17
+# docker rmi lfedge/ekuiper:${kuiperVersion}-slim
 
 
 #
