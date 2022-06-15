@@ -25,6 +25,9 @@ RUN \
     git clone --recurse --tags https://github.com/lf-edge/ekuiper.git && \
     mv -fv ekuiper kuiper && cd kuiper && \
     git checkout ${kuiperVersion} && \
+        # https://ekuiper.org/docs/zh/latest/features.html
+        # CGO_ENABLE="1" must be set, because kuiper depends on sqlite, for more details see https://ekuiper.org/docs/zh/latest/operation/compile/cross-compile.html
+        # https://github.com/lf-edge/ekuiper/blob/${kuiperVersion}/Makefile#L50
         make build_with_edgex && \
         mv -fv _build/kuiper-${kuiperVersion}-linux-amd64 _build/kuiper
 
