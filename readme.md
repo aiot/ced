@@ -136,9 +136,14 @@
 
             - 支持通过 api 关闭非法连接
 
-            - 支持一个 dashboard 管理多个 mqtt-server 实例
+            - 支持一个 dashboard(managed-by-cloud) 管理多个 mqtt-server 实例
 
-    3. 数据处理: 流处理(与流处理相对应的是批处理). 流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算.
+    3. 数据处理
+
+        > 流处理: <br/>
+        流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算.
+
+        > 批处理: 与流处理相对应的是批处理
 
         1. `edge-app`
 
@@ -217,7 +222,7 @@
 
             - 支持通过 api 关闭非法连接
 
-            - 支持一个 dashboard 管理多个 mqtt-server 实例
+            - 支持一个 dashboard(managed-by-cloud) 管理多个 mqtt-server 实例
 
     2. 数据处理
 

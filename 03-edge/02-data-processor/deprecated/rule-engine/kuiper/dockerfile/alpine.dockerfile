@@ -17,7 +17,7 @@ RUN \
     \
     apk update --allow-untrusted --purge --no-cache && \
     apk add --allow-untrusted --upgrade --no-cache \
-        git gcc make libc-dev binutils-gold pkgconfig zeromq-dev && \
+        git gcc make libc-dev binutils-gold pkgconfig sqlite zeromq-dev && \
     rm -rfv /var/cache/apk/* && \
     \
     kuiperVersion='KUIPER_VERSION' && \
@@ -47,7 +47,7 @@ RUN \
     \
     apk update --allow-untrusted --purge --no-cache && \
     apk add --allow-untrusted --upgrade --no-cache \
-        libzmq && \
+        sqlite libzmq && \
     rm -rfv /var/cache/apk/*
 
 # ENTRYPOINT ["/bin/bash", "-c", "${KUIPER_HOME}/bin/kuiperd --help"]

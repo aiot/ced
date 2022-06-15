@@ -19,7 +19,7 @@ RUN \
     apt update -y && \
     apt install -y --no-install-recommends \
         ca-certificates apt-transport-https apt-utils \
-        pkg-config libczmq-dev && \
+        pkg-config sqlite3 libczmq-dev && \
     apt autoremove -y && \
     rm -rfv /var/lib/apt/lists/* && \
     \
@@ -50,7 +50,7 @@ RUN \
     \
     apt update -y && \
     apt install -y --no-install-recommends \
-        pkg-config libczmq-dev && \
+        pkg-config sqlite3 libczmq-dev && \
     apt autoremove -y && \
     rm -rfv /var/lib/apt/lists/*
 
