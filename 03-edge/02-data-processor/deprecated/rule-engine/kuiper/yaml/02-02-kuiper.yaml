@@ -1,0 +1,232 @@
+# https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/deploy/chart/usr/local/kuiper/templates/sevice.yaml
+# https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/deploy/chart/usr/local/kuiper/templates/StatefulSet.yaml
+---
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name kuiper
+  # annotations:
+  #   kubereloader.kubestation.aiot.hk/auto: "true"
+spec:
+  selector:
+    matchLabels: &app-label
+      app.kubernetes.io/name: kuiper
+      app.kubernetes.io/component: server
+      app.kubernetes.io/part-of: *app-namespace
+      app.kubernetes.io/managed-by: kube
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 75%
+  revisionHistoryLimit: 5
+
+  template:
+    metadata:
+      labels:
+        <<: *app-label
+
+    spec:
+      serviceAccountName: default
+      automountServiceAccountToken: false
+
+      terminationGracePeriodSeconds: 0
+      nodeSelector:
+        node-role.kubernetes.io/edge: ""
+        node-role.kubernetes.io/aiot-case: ""
+      tolerations:
+        - operator: Exists
+
+      hostIPC: false
+      hostPID: false
+      hostNetwork: true
+
+      dnsPolicy: ClusterFirstWithHostNet
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+
+      restartPolicy: Always
+
+      volumes:
+        - name: config
+          configMap:
+            name: kuiper
+            items:
+              - key: mqtt_source.yaml
+                path: mqtt_source.yaml
+              - key: kuiper.yaml
+                path: kuiper.yaml
+              - key: client.yaml
+                path: client.yaml
+              - key: edgex.yaml
+                path: edgex.yaml
+              - key: random.yaml
+                path: random.yaml
+              - key: zmq.yaml
+                path: zmq.yaml
+            defaultMode: 0644
+            optional: true
+
+        - name: cert
+          secret:
+            secretName: kuiper-cert
+            items:
+              - key: tls.key
+                path: tls.key
+              - key: tls.crt
+                path: tls.crt
+              - key: ca.crt
+                path: ca.crt
+            defaultMode: 0644
+            optional: true
+        - name: cert-mqtt-edge-client
+          secret:
+            secretName: nanomq-client-cert-kuiper
+            tems:
+              - key: tls.key
+                path: tls.key
+              - key: tls.crt
+                path: tls.crt
+              - key: ca.crt
+                path: ca.crt
+            defaultMode: 0644
+            optional: true
+
+        - name: data
+          hostPath:
+            path: /data/aiot/edge/data-processor/rule-engine/kuiper/
+            type: DirectoryOrCreate
+
+      containers:
+        - image: {{kubethings.image.repository}}/kuiper:{{kubethings.aiot.edge.kuiper.version}}
+          imagePullPolicy: {{kubethings.image.pullPolicy}}
+          name: *app-name
+
+          volumeMounts:
+            - name: config
+              subPath: mqtt_source.yaml
+              mountPath: /usr/local/kuiper/etc/mqtt_source.yaml
+              readOnly: false
+            - name: config
+              subPath: kuiper.yaml
+              mountPath: /usr/local/kuiper/etc/kuiper.yaml
+              readOnly: false
+            - name: config
+              subPath: client.yaml
+              mountPath: /usr/local/kuiper/etc/client.yaml
+              readOnly: false
+            - name: config
+              subPath: edgex.yaml
+              mountPath: /usr/local/kuiper/etc/sources/edgex.yaml
+              readOnly: false
+            - name: config
+              subPath: random.yaml
+              mountPath: /usr/local/kuiper/etc/sources/random.yaml
+              readOnly: false
+            - name: config
+              subPath: zmq.yaml
+              mountPath: /usr/local/kuiper/etc/sources/zmq.yaml
+              readOnly: false
+
+            - name: cert
+              subPath: tls.key
+              mountPath:  /usr/local/kuiper/etc/pki/tls.key
+              readOnly: true
+            - name: cert
+              subPath: tls.crt
+              mountPath:  /usr/local/kuiper/etc/pki/tls.crt
+              readOnly: true
+            - name: cert
+              subPath: ca.crt
+              mountPath:  /usr/local/kuiper/etc/pki/ca.crt
+              readOnly: true
+            - name: cert-mqtt-edge-client
+              subPath: tls.key
+              mountPath:  /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.key
+              readOnly: true
+            - name: cert-mqtt-edge-client
+              subPath: tls.crt
+              mountPath:  /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.crt
+              readOnly: true
+            - name: cert-mqtt-edge-client
+              subPath: ca.crt
+              mountPath:  /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
+              readOnly: true
+
+            - name: data
+              mountPath: /usr/local/kuiper/data
+              readOnly: false
+
+          envFrom:
+            - configMapRef:
+                name: kuiper-env
+                optional: true
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+          securityContext:
+            runAsGroup: 0
+            runAsUser: 0
+            runAsNonRoot: false
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+
+          stdin: false
+          tty: false
+          terminationMessagePolicy: FallbackToLogsOnError
+          terminationMessagePath: /dev/termination-log
+          command:
+            - /usr/local/kuiper/bin/kuiperd
+
+          ports:
+            - name: server
+              protocol: TCP
+              containerPort: &port-server 20498
+            - name: api
+              protocol: TCP
+              containerPort: &port-api 9081
+          startupProbe:
+            httpGet:
+              port: *port-api
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 24
+          # readinessProbe:
+          #   httpGet:
+          #     port: *port-api
+          #   initialDelaySeconds: 0
+          #   periodSeconds: 5
+          #   timeoutSeconds: 1
+          #   successThreshold: 1
+          #   failureThreshold: 1
+          livenessProbe:
+            httpGet:
+              port: *port-api
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 2

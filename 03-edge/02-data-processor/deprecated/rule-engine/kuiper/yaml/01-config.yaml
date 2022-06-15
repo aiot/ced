@@ -1,0 +1,132 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: aiot-case
+  name: kuiper-env
+immutable: false
+data:
+
+# https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/deploy/chart/kuiper/templates/configmap.yaml
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: aiot-case
+  name: kuiper
+immutable: false
+data:
+  client.yaml: |
+
+    basic:
+      host: 127.0.0.1
+      port: 20498
+
+
+  kuiper.yaml: |
+
+    basic:
+      authentication: false
+      consoleLog: false
+      debug: false
+      fileLog: true
+      ignoreCase: true
+      ip: 0.0.0.0
+      maxAge: 72
+      pluginHosts: https://packages.emqx.net
+      port: 20498
+      prometheus: false
+      prometheusPort: 20499
+      restIp: 0.0.0.0
+      restPort: 9081
+      rotateTime: 24
+    portable:
+      pythonBin: python
+    rule:
+      checkpointInterval: 300000
+      qos: 0
+      sendError: true
+    sink:
+      cacheThreshold: 10
+      cacheTriggerCount: 15
+      disableCache: true
+    store:
+      redis:
+        host: localhost
+        password: kuiper
+        port: 6379
+        timeout: 1000
+      sqlite:
+        name: null
+      type: sqlite
+
+
+  mqtt_source.yaml: |
+
+    default:
+      qos: 1
+      server: tcp://127.0.0.1:1883
+    demo_conf:
+      qos: 0
+      server: tcp://10.211.55.6:1883
+
+
+  edgex.yaml: |
+
+    application_conf:
+      messageType: request
+      port: 5571
+      protocol: tcp
+      server: localhost
+      topic: application
+      type: zero
+    default:
+      messageType: event
+      port: 5563
+      protocol: redis
+      server: localhost
+      topic: events
+      type: redis
+    mqtt_conf:
+      optional:
+        ClientId: client1
+      port: 1883
+      protocol: tcp
+      server: 127.0.0.1
+      topic: events
+      type: mqtt
+    share_conf:
+      connectionSelector: edgex.redisMsgBus
+      port: 1883
+      protocol: tcp
+      server: 127.0.0.1
+      topic: events
+      type: mqtt
+    zmq_conf:
+      messageType: event
+      port: 5563
+      protocol: tcp
+      server: localhost
+      topic: events
+      type: zero
+
+
+  random.yaml: |
+
+      dedup:
+        deduplicate: 50
+        interval: 100
+      default:
+        deduplicate: 0
+        interval: 1000
+        pattern:
+          count: 50
+        seed: 1
+      ext:
+        interval: 100
+
+
+  zmq.yaml: |
+
+    default:
+      server: tcp://127.0.0.1:5563
