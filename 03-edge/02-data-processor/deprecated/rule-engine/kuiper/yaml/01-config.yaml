@@ -16,51 +16,69 @@ metadata:
   name: kuiper
 immutable: false
 data:
+  # https://ekuiper.org/docs/zh/latest/operation/config/configuration_file.html
+  kuiper.yaml: |
+
+    basic:
+      # native function(sql)
+      ignoreCase: false
+      # plugin function
+      pluginHosts: https://packages.emqx.net
+
+      # http api
+      restIp: 0.0.0.0
+      restPort: 9081
+      restTls:
+        keyfile: /usr/local/kuiper/etc/pki/tls.key
+        certfile: /usr/local/kuiper/etc/pki/tls.crt
+        cafile: /usr/local/kuiper/etc/pki/ca.crt
+      # https://ekuiper.org/docs/zh/latest/operation/config/authentication.html
+      authentication: false
+      # cli
+      ip: 0.0.0.0
+      port: 20498
+
+      # metric
+      prometheus: true
+      prometheusPort: 20499
+      # log
+      fileLog: false
+      rotateTime: 24
+      maxAge: 72
+      consoleLog: true
+      debug: false
+
+    # https://ekuiper.org/docs/zh/latest/extension/portable/overview.html
+    portable:
+      pythonBin: python
+
+    rule:
+      checkpointInterval: 300000
+      qos: 0
+      sendError: true
+
+    sink:
+      disableCache: true
+      cacheThreshold: 10
+      cacheTriggerCount: 15
+
+    store:
+      type: sqlite
+      sqlite:
+        name: sqliteKV.db
+      redis:
+        host: 127.0.0.1
+        port: 6379
+        password: kuiper
+        timeout: 2000
+
   client.yaml: |
 
     basic:
       host: 127.0.0.1
       port: 20498
 
-
-  kuiper.yaml: |
-
-    basic:
-      authentication: false
-      consoleLog: false
-      debug: false
-      fileLog: true
-      ignoreCase: true
-      ip: 0.0.0.0
-      maxAge: 72
-      pluginHosts: https://packages.emqx.net
-      port: 20498
-      prometheus: false
-      prometheusPort: 20499
-      restIp: 0.0.0.0
-      restPort: 9081
-      rotateTime: 24
-    portable:
-      pythonBin: python
-    rule:
-      checkpointInterval: 300000
-      qos: 0
-      sendError: true
-    sink:
-      cacheThreshold: 10
-      cacheTriggerCount: 15
-      disableCache: true
-    store:
-      redis:
-        host: localhost
-        password: kuiper
-        port: 6379
-        timeout: 1000
-      sqlite:
-        name: null
-      type: sqlite
-
-
+  # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/mqtt.html
   mqtt_source.yaml: |
 
     default:
@@ -70,7 +88,7 @@ data:
       qos: 0
       server: tcp://10.211.55.6:1883
 
-
+  # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
   edgex.yaml: |
 
     application_conf:
@@ -110,7 +128,7 @@ data:
       topic: events
       type: zero
 
-
+  # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
   random.yaml: |
 
       dedup:
@@ -125,7 +143,7 @@ data:
       ext:
         interval: 100
 
-
+  # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
   zmq.yaml: |
 
     default:

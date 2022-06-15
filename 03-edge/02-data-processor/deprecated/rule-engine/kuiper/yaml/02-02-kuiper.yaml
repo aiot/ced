@@ -131,27 +131,27 @@ spec:
 
             - name: cert
               subPath: tls.key
-              mountPath:  /usr/local/kuiper/etc/pki/tls.key
+              mountPath: /usr/local/kuiper/etc/pki/tls.key
               readOnly: true
             - name: cert
               subPath: tls.crt
-              mountPath:  /usr/local/kuiper/etc/pki/tls.crt
+              mountPath: /usr/local/kuiper/etc/pki/tls.crt
               readOnly: true
             - name: cert
               subPath: ca.crt
-              mountPath:  /usr/local/kuiper/etc/pki/ca.crt
+              mountPath: /usr/local/kuiper/etc/pki/ca.crt
               readOnly: true
             - name: cert-mqtt-edge-client
               subPath: tls.key
-              mountPath:  /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.key
+              mountPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.key
               readOnly: true
             - name: cert-mqtt-edge-client
               subPath: tls.crt
-              mountPath:  /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.crt
+              mountPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.crt
               readOnly: true
             - name: cert-mqtt-edge-client
               subPath: ca.crt
-              mountPath:  /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
+              mountPath: /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
               readOnly: true
 
             - name: data
@@ -200,15 +200,15 @@ spec:
             - /usr/local/kuiper/bin/kuiperd
 
           ports:
-            - name: server
+            - name: http-api
               protocol: TCP
-              containerPort: &port-server 20498
-            - name: api
+              containerPort: &port-http-api 9081
+            - name: cli-api
               protocol: TCP
-              containerPort: &port-api 9081
+              containerPort: &port-cli-api 20498
           startupProbe:
             httpGet:
-              port: *port-api
+              port: *port-http-api
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
@@ -216,7 +216,7 @@ spec:
             failureThreshold: 24
           # readinessProbe:
           #   httpGet:
-          #     port: *port-api
+          #     port: *port-http-api
           #   initialDelaySeconds: 0
           #   periodSeconds: 5
           #   timeoutSeconds: 1
@@ -224,7 +224,7 @@ spec:
           #   failureThreshold: 1
           livenessProbe:
             httpGet:
-              port: *port-api
+              port: *port-http-api
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
