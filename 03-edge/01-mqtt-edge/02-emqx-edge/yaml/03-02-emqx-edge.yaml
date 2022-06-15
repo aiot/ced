@@ -115,7 +115,7 @@ spec:
 
         - name: data
           hostPath:
-            path: /data/mqtt-edge/emqx-edge/
+            path: /data/aiot/edge/mqtt/emqx-edge/
             type: DirectoryOrCreate
 
       containers:
