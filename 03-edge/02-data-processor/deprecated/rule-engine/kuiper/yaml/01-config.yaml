@@ -20,9 +20,9 @@ data:
   kuiper.yaml: |
 
     basic:
-      # native function(sql)
+      # sql
       ignoreCase: false
-      # plugin function
+      # plugin function(named sinks in kuiper)
       pluginHosts: https://packages.emqx.net
 
       # http api
@@ -52,11 +52,12 @@ data:
     portable:
       pythonBin: python
 
+    # https://ekuiper.org/docs/zh/latest/rules/overview.html
     rule:
-      checkpointInterval: 300000
+      # https://ekuiper.org/docs/zh/latest/rules/state_and_fault_tolerance.html
       qos: 0
+      checkpointInterval: 300000
       sendError: true
-
     sink:
       disableCache: true
       cacheThreshold: 10
@@ -78,15 +79,13 @@ data:
       host: 127.0.0.1
       port: 20498
 
+
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/mqtt.html
   mqtt_source.yaml: |
 
     default:
       qos: 1
       server: tcp://127.0.0.1:1883
-    demo_conf:
-      qos: 0
-      server: tcp://10.211.55.6:1883
 
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
   edgex.yaml: |
