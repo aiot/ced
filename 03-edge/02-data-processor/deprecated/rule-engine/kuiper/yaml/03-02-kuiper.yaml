@@ -53,18 +53,20 @@ spec:
           configMap:
             name: kuiper
             items:
-              - key: mqtt.yaml
-                path: mqtt.yaml
               - key: kuiper.yaml
                 path: kuiper.yaml
               - key: client.yaml
                 path: client.yaml
+              - key: connection.yaml
+                path: connection.yaml
+              - key: mqtt.yaml
+                path: mqtt.yaml
+              - key: zeromq.yaml
+                path: zeromq.yaml
               - key: edgex.yaml
                 path: edgex.yaml
               - key: random.yaml
                 path: random.yaml
-              - key: zmq.yaml
-                path: zmq.yaml
             defaultMode: 0644
             optional: true
 
@@ -117,16 +119,25 @@ spec:
 
           volumeMounts:
             - name: config
-              subPath: mqtt.yaml
-              mountPath: /usr/local/kuiper/etc/mqtt_source.yaml
-              readOnly: false
-            - name: config
               subPath: kuiper.yaml
               mountPath: /usr/local/kuiper/etc/kuiper.yaml
               readOnly: false
             - name: config
               subPath: client.yaml
               mountPath: /usr/local/kuiper/etc/client.yaml
+              readOnly: false
+
+            - name: config
+              subPath: connection.yaml
+              mountPath: /usr/local/kuiper/etc/connections/connection.yaml
+              readOnly: false
+            - name: config
+              subPath: mqtt.yaml
+              mountPath: /usr/local/kuiper/etc/mqtt_source.yaml
+              readOnly: false
+            - name: config
+              subPath: zmq.yaml
+              mountPath: /usr/local/kuiper/etc/sources/zmq.yaml
               readOnly: false
             - name: config
               subPath: edgex.yaml
@@ -135,10 +146,6 @@ spec:
             - name: config
               subPath: random.yaml
               mountPath: /usr/local/kuiper/etc/sources/random.yaml
-              readOnly: false
-            - name: config
-              subPath: zmq.yaml
-              mountPath: /usr/local/kuiper/etc/sources/zmq.yaml
               readOnly: false
 
             - name: cert

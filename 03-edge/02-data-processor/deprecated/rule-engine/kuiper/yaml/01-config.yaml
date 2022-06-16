@@ -149,7 +149,7 @@ data:
       qos: 1
 
   # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
-  zmq.yaml: |
+  zeromq.yaml: |
 
     default:
       server: tcp://127.0.0.1:5563
@@ -158,44 +158,25 @@ data:
   edgex.yaml: |
 
     default:
-      # connectionSelector: edgex.mqtt
-      type: mqtt
-      protocol: tcp
-      server: 127.0.0.1
-      port: 1883
+      connectionSelector: edgex.mqtt
       topic: events
       messageType: event
     mqtt_conf:
-      # connectionSelector: edgex.mqtt
-      type: mqtt
-      protocol: tcp
-      server: 127.0.0.1
-      port: 1883
+      connectionSelector: edgex.mqtt
       topic: events
-      optional:
-        ClientId: kuiper
+      messageType: event
     zmq_conf:
-      # connectionSelector: edgex.zeromq
-      type: zero
-      protocol: tcp
-      server: 127.0.0.1
-      port: 5563
+      connectionSelector: edgex.zeromq
       topic: events
       messageType: event
     application_conf:
-      type: zero
-      protocol: tcp
-      server: 127.0.0.1
-      port: 5571
+      connectionSelector: edgex.zeromq
       topic: application
       messageType: request
     share_conf:
-      # connectionSelector: edgex.redis
-      type: mqtt
-      protocol: tcp
-      server: 127.0.0.1
-      port: 1883
+      connectionSelector: edgex.redis
       topic: events
+      messageType: event
 
   # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
   random.yaml: |
