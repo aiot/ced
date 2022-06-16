@@ -30,8 +30,8 @@ RUN \
         # https://github.com/lf-edge/ekuiper/blob/${kuiperVersion}/Makefile#L50
         make build_with_edgex && \
         mv -fv _build/kuiper-${kuiperVersion}-linux-amd64 _build/kuiper && \
-        # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/tdengine.html
-        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/tdengine@v{{kubethings.aiot.cloud.tdengine.version}}.so extensions/sinks/tdengine/tdengine.go && \
+        # # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/tdengine.html
+        # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/tdengine@v{{kubethings.aiot.cloud.tdengine.version}}.so extensions/sinks/tdengine/tdengine.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/file.html
         go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/file.so extensions/sinks/file/file.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/image.html
