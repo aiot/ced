@@ -20,10 +20,10 @@ data:
   kuiper.yaml: |
 
     basic:
+      # source and function(named sink in kuiper) plugin
+      pluginHosts: https://packages.emqx.net
       # sql
       ignoreCase: false
-      # plugin function(named sinks in kuiper)
-      pluginHosts: https://packages.emqx.net
 
       # http api
       restIp: 0.0.0.0
@@ -84,8 +84,22 @@ data:
   mqtt_source.yaml: |
 
     default:
-      qos: 1
       server: tcp://127.0.0.1:1883
+      privateKeyPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.key
+      certificationPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.crt
+      rootCaPath: /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
+      insecureSkipVerify: true
+      username:
+      password:
+      protocolVersion: 5
+      clientid: kuiper
+      qos: 1
+
+  # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
+  zmq.yaml: |
+
+    default:
+      server: tcp://127.0.0.1:5563
 
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
   edgex.yaml: |
@@ -130,20 +144,9 @@ data:
   # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
   random.yaml: |
 
-      dedup:
-        deduplicate: 50
-        interval: 100
-      default:
-        deduplicate: 0
-        interval: 1000
-        pattern:
-          count: 50
-        seed: 1
-      ext:
-        interval: 100
-
-  # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
-  zmq.yaml: |
-
     default:
-      server: tcp://127.0.0.1:5563
+      pattern:
+        count: 50
+      seed: 1
+      deduplicate: 0
+      interval: 1000

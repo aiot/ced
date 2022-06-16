@@ -30,12 +30,18 @@ RUN \
         # https://github.com/lf-edge/ekuiper/blob/${kuiperVersion}/Makefile#L50
         make build_with_edgex && \
         mv -fv _build/kuiper-${kuiperVersion}-linux-amd64 _build/kuiper && \
-        # # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/tdengine.html
-        # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/tdengine@v{{kubethings.aiot.cloud.tdengine.version}}.so extensions/sinks/tdengine/tdengine.go && \
+        # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
+        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/zmq.so extensions/sources/zmq/zmq.go && \
+        # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
+        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/random.so extensions/sources/random/random.go && \
+        # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/zmq.html
+        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/zmq.so extensions/sinks/zmq/zmq.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/file.html
         go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/file.so extensions/sinks/file/file.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/image.html
         go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/image.so extensions/sinks/image/image.go
+        # # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/tdengine.html
+        # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/tdengine@v{{kubethings.aiot.cloud.tdengine.version}}.so extensions/sinks/tdengine/tdengine.go && \
 
 
 # build image

@@ -363,10 +363,14 @@ data:
 
     auth.user.1.username = device
     auth.user.1.password = device
-    auth.user.2.username = edge-app
-    auth.user.2.password = edge-app
-    auth.user.3.username = mqttx
-    auth.user.3.password = mqttx
+    auth.user.2.username = neuron
+    auth.user.2.password = neuron
+    auth.user.3.username = edge-app
+    auth.user.3.password = edge-app
+    auth.user.4.username = kuiper
+    auth.user.4.password = kuiper
+    auth.user.5.username = mqttx
+    auth.user.5.password = mqttx
 
   auth-jwt.conf: |
 
