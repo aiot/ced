@@ -508,7 +508,7 @@ data:
     bridge.mqtt.mqttcloud.reconnect_interval = 20s
     bridge.mqtt.mqttcloud.clean_start = true
 
-    # bridge.mqtt.mqttcloud.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
+    # bridge.mqtt.mqttcloud.clientid = emqx-edge_${NODE_NAME}_${NODE_IP}
     bridge.mqtt.mqttcloud.bridge_mode = true
     # publish(push) message to mqtt-cloud
     bridge.mqtt.mqttcloud.forwards = bridge-test/#

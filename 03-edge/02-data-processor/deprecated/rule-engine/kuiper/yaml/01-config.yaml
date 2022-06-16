@@ -1,3 +1,4 @@
+# https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/deploy/docker/README.md#configuration
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -103,7 +104,7 @@ data:
         certificationPath: /usr/local/kuiper/etc/pki/mqtt-cloud.client.tls.crt
         username: kuiper
         password: kuiper
-        # clientid: ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
+        # clientid: kuiper_${NODE_NAME}_${NODE_IP}
         qos: 1
 
     edgex:
@@ -161,19 +162,15 @@ data:
       connectionSelector: edgex.mqtt
       topic: events
       messageType: event
-    mqtt_conf:
+    mqtt:
       connectionSelector: edgex.mqtt
       topic: events
       messageType: event
-    zmq_conf:
+    zmq:
       connectionSelector: edgex.zeromq
       topic: events
       messageType: event
-    application_conf:
-      connectionSelector: edgex.zeromq
-      topic: application
-      messageType: request
-    share_conf:
+    redis:
       connectionSelector: edgex.redis
       topic: events
       messageType: event

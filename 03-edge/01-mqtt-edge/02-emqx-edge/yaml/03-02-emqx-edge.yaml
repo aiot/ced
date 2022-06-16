@@ -293,7 +293,7 @@ spec:
                   export EMQX_BRIDGE__MQTT__MQTTCLOUD__ADDRESS=${bridgeMqttAddress}
                   eval echo -e "export EMQX_BRIDGE__MQTT__MQTTCLOUD__ADDRESS=${bridgeMqttAddress}" >> /etc/profile.d/emqx.sh
               fi
-              bridgeClientID="${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}"
+              bridgeClientID="emqx-edge_${NODE_NAME}_${NODE_IP}"
               export EMQX_BRIDGE__MQTT__MQTTCLOUD__CLIENTID=${bridgeClientID}
               eval echo -e "export EMQX_BRIDGE__MQTT__MQTTCLOUD__CLIENTID=${bridgeClientID}" >> /etc/profile.d/emqx.sh
 

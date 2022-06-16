@@ -16,7 +16,7 @@ data:
   NANOMQ_WEBHOOK__URL: https://nanomq-webhook-server.${POD_NAMESPACE}.svc.cluster.local
 
   NANOMQ_BRIDGE__MQTT__ADDRESS: mqtt-tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:1883
-  # NANOMQ_BRIDGE__MQTT__CLIENTID: ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
+  # NANOMQ_BRIDGE__MQTT__CLIENTID: nanomq_${NODE_NAME}_${NODE_IP}
 
 # https://nanomq.io/docs/zh/latest/config-description.html
 ---
@@ -119,7 +119,7 @@ data:
     bridge.mqtt.keepalive = 60
     bridge.mqtt.clean_start = true
 
-    # bridge.mqtt.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
+    # bridge.mqtt.clientid = nanomq_${NODE_NAME}_${NODE_IP}
     bridge.mqtt.bridge_mode = true
     # publish(push) message to mqtt-cloud
     bridge.mqtt.forwards = device001/#,device002/#

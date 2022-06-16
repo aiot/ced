@@ -192,7 +192,7 @@ spec:
               eval echo -e "bridge.mqtt.address = ${NANOMQ_BRIDGE__MQTT__ADDRESS}" >> ${configFilePath}/bridge.conf
               if [[ ${NANOMQ_BRIDGE__MQTT__CLIENTID} == "" ]]
               then
-                  eval echo -e "bridge.mqtt.clientid = ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}" >> ${configFilePath}/bridge.conf
+                  eval echo -e "bridge.mqtt.clientid = nanomq_${NODE_NAME}_${NODE_IP}" >> ${configFilePath}/bridge.conf
               else
                   eval echo -e "bridge.mqtt.clientid = ${NANOMQ_BRIDGE__MQTT__CLIENTID}" >> ${configFilePath}/bridge.conf
               fi
