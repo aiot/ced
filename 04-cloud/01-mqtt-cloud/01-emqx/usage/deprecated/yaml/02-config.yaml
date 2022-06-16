@@ -410,10 +410,12 @@ data:
     auth.user.1.password = cloud-app
     auth.user.2.username = edge-app
     auth.user.2.password = edge-app
-    auth.user.3.username = mqtt-edge
-    auth.user.3.password = mqtt-edge
-    auth.user.4.username = mqttx
-    auth.user.4.password = mqttx
+    auth.user.3.username = kuiper
+    auth.user.3.password = kuiper
+    auth.user.4.username = mqtt-edge
+    auth.user.4.password = mqtt-edge
+    auth.user.5.username = mqttx
+    auth.user.5.password = mqttx
 
   # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_auth_jwt/etc/emqx_auth_jwt.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-auth-jwt

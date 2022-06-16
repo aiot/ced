@@ -80,18 +80,78 @@ data:
       port: 20498
 
 
+  connection.yaml: |
+
+    mqtt:
+      localConnection:
+        server: tcp://127.0.0.1:1883
+        protocolVersion: 5
+        insecureSkipVerify: true
+        rootCaPath: /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
+        privateKeyPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.key
+        certificationPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.crt
+        username: kuiper
+        password: kuiper
+        clientid: kuiper
+        qos: 1
+      cloudConnection:
+        # server: tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
+        protocolVersion: 5
+        insecureSkipVerify: true
+        rootCaPath: /usr/local/kuiper/etc/pki/mqtt-cloud.ca.crt
+        privateKeyPath: /usr/local/kuiper/etc/pki/mqtt-cloud.client.tls.key
+        certificationPath: /usr/local/kuiper/etc/pki/mqtt-cloud.client.tls.crt
+        username: kuiper
+        password: kuiper
+        # clientid: ${POD_NAMESPACE}_${NODE_NAME}_${NODE_IP}
+        qos: 1
+
+    edgex:
+      mqttMsgBus: #connection key
+        protocol: tcp
+        server: 127.0.0.1
+        port: 1883
+        type: mqtt
+        optional:
+          KeepAlive: "50"
+      zeroMsgBus: #connection key
+        protocol: tcp
+        server: localhost
+        port: 5571
+        type: zero
+      redisMsgBus: #redis connection key
+        protocol: redis
+        server: 127.0.0.1
+        port: 6379
+        type: redis
+        #  Below is optional configurations settings for mqtt
+        #  type: mqtt
+        #  optional:
+        #    ClientId: client1
+        #    Username: user1
+        #    Password: password
+        #    Qos: 1
+        #    KeepAlive: 5000
+        #    Retained: true/false
+        #    ConnectionPayload:
+        #    CertFile:
+        #    KeyFile:
+        #    CertPEMBlock:
+        #    KeyPEMBlock:
+        #    SkipCertVerify: true/false
+
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/mqtt.html
-  mqtt_source.yaml: |
+  mqtt.yaml: |
 
     default:
       server: tcp://127.0.0.1:1883
+      protocolVersion: 5
+      insecureSkipVerify: true
+      rootCaPath: /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
       privateKeyPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.key
       certificationPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.crt
-      rootCaPath: /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
-      insecureSkipVerify: true
-      username:
-      password:
-      protocolVersion: 5
+      username: kuiper
+      password: kuiper
       clientid: kuiper
       qos: 1
 
@@ -104,42 +164,42 @@ data:
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
   edgex.yaml: |
 
-    application_conf:
-      messageType: request
-      port: 5571
-      protocol: tcp
-      server: localhost
-      topic: application
-      type: zero
     default:
-      messageType: event
-      port: 5563
-      protocol: redis
-      server: localhost
-      topic: events
-      type: redis
-    mqtt_conf:
-      optional:
-        ClientId: client1
-      port: 1883
+      type: mqtt
       protocol: tcp
       server: 127.0.0.1
-      topic: events
-      type: mqtt
-    share_conf:
-      connectionSelector: edgex.redisMsgBus
       port: 1883
-      protocol: tcp
-      server: 127.0.0.1
       topic: events
-      type: mqtt
-    zmq_conf:
       messageType: event
-      port: 5563
-      protocol: tcp
-      server: localhost
-      topic: events
+    application_conf:
       type: zero
+      protocol: tcp
+      server: 127.0.0.1
+      port: 5571
+      topic: application
+      messageType: request
+    mqtt_conf:
+      type: mqtt
+      protocol: tcp
+      server: 127.0.0.1
+      port: 1883
+      topic: events
+      optional:
+        ClientId: kuiper
+    zmq_conf:
+      type: zero
+      protocol: tcp
+      server: 127.0.0.1
+      port: 5563
+      topic: events
+      messageType: event
+    share_conf:
+      type: mqtt
+      protocol: tcp
+      server: 127.0.0.1
+      port: 1883
+      topic: events
+      connectionSelector: edgex.redisMsgBus
 
   # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
   random.yaml: |

@@ -53,8 +53,8 @@ spec:
           configMap:
             name: kuiper
             items:
-              - key: mqtt_source.yaml
-                path: mqtt_source.yaml
+              - key: mqtt.yaml
+                path: mqtt.yaml
               - key: kuiper.yaml
                 path: kuiper.yaml
               - key: client.yaml
@@ -92,6 +92,18 @@ spec:
                 path: ca.crt
             defaultMode: 0644
             optional: true
+        - name: cert-mqtt-cloud-client
+          secret:
+            secretName: emqx-client-cert-kuiper
+            items:
+              - key: tls.key
+                path: tls.key
+              - key: tls.crt
+                path: tls.crt
+              - key: ca.crt
+                path: ca.crt
+            defaultMode: 0644
+            optional: true
 
         - name: data
           hostPath:
@@ -105,7 +117,7 @@ spec:
 
           volumeMounts:
             - name: config
-              subPath: mqtt_source.yaml
+              subPath: mqtt.yaml
               mountPath: /usr/local/kuiper/etc/mqtt_source.yaml
               readOnly: false
             - name: config
@@ -152,6 +164,18 @@ spec:
             - name: cert-mqtt-edge-client
               subPath: ca.crt
               mountPath: /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
+              readOnly: true
+            - name: cert-mqtt-cloud-client
+              subPath: tls.key
+              mountPath: /usr/local/kuiper/etc/pki/mqtt-cloud.client.tls.key
+              readOnly: true
+            - name: cert-mqtt-cloud-client
+              subPath: tls.crt
+              mountPath: /usr/local/kuiper/etc/pki/mqtt-cloud.client.tls.crt
+              readOnly: true
+            - name: cert-mqtt-cloud-client
+              subPath: ca.crt
+              mountPath: /usr/local/kuiper/etc/pki/mqtt-cloud.ca.crt
               readOnly: true
 
             - name: data

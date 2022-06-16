@@ -133,6 +133,42 @@ kind: Certificate
 apiVersion: cert-manager.io/v1
 metadata:
   namespace: &app-namespace aiot-case
+  name: &app-name emqx-client-kuiper
+spec:
+  issuerRef:
+    kind: Issuer
+    group: cert-manager.io
+    name: emqx
+  commonName: *app-name
+  subject:
+    countries:
+      - "UNC"
+    provinces:
+      - "UNC"
+    localities:
+      - "UNC"
+    organizations:
+      - *app-namespace
+    organizationalUnits:
+      - "KubeStation:aiot@aiot.hk"
+  usages:
+    - digital signature
+    - key encipherment
+    - client auth
+  encodeUsagesInRequest: true
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    encoding: PKCS1
+    rotationPolicy: Always
+  duration: {{kube.cert.signingDuration}}
+  renewBefore: 360h    # 15d
+  secretName: emqx-client-cert-kuiper
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  namespace: &app-namespace aiot-case
   name: &app-name emqx-client-mqtt-edge
 spec:
   issuerRef:
