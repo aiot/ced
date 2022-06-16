@@ -29,9 +29,9 @@ data:
       restIp: 0.0.0.0
       restPort: 9081
       restTls:
+        cafile: /usr/local/kuiper/etc/pki/ca.crt
         keyfile: /usr/local/kuiper/etc/pki/tls.key
         certfile: /usr/local/kuiper/etc/pki/tls.crt
-        cafile: /usr/local/kuiper/etc/pki/ca.crt
       # https://ekuiper.org/docs/zh/latest/operation/config/authentication.html
       authentication: false
       # cli
@@ -42,10 +42,10 @@ data:
       prometheus: true
       prometheusPort: 20499
       # log
+      consoleLog: true
       fileLog: false
       rotateTime: 24
       maxAge: 72
-      consoleLog: true
       debug: false
 
     # https://ekuiper.org/docs/zh/latest/extension/portable/overview.html

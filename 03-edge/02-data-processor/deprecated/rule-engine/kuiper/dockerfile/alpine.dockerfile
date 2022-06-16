@@ -26,16 +26,16 @@ RUN \
     mv -fv ekuiper kuiper && cd kuiper && \
     git checkout ${kuiperVersion} && \
         # https://ekuiper.org/docs/zh/latest/features.html
-        # CGO_ENABLE="1" must be set, because kuiper depends on sqlite, for more details see https://ekuiper.org/docs/zh/latest/operation/compile/cross-compile.html
+        # CGO_ENABLED="1" must be set, because kuiper depends on sqlite, for more details see https://ekuiper.org/docs/zh/latest/operation/compile/cross-compile.html
         # https://github.com/lf-edge/ekuiper/blob/${kuiperVersion}/Makefile#L50
         make build_with_edgex && \
         mv -fv _build/kuiper-${kuiperVersion}-linux-amd64 _build/kuiper && \
         # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
-        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/zmq.so extensions/sources/zmq/zmq.go && \
+        CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/zmq.so extensions/sources/zmq/zmq.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
         go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/random.so extensions/sources/random/random.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/zmq.html
-        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/zmq.so extensions/sinks/zmq/zmq.go && \
+        CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/zmq.so extensions/sinks/zmq/zmq.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/file.html
         go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/file.so extensions/sinks/file/file.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/image.html
