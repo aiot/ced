@@ -83,7 +83,7 @@ data:
   connection.yaml: |
 
     mqtt:
-      localConnection:
+      edge:
         server: tcp://127.0.0.1:1883
         protocolVersion: 5
         insecureSkipVerify: true
@@ -94,7 +94,7 @@ data:
         password: kuiper
         clientid: kuiper
         qos: 1
-      cloudConnection:
+      cloud:
         # server: tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
         protocolVersion: 5
         insecureSkipVerify: true
@@ -107,7 +107,7 @@ data:
         qos: 1
 
     edgex:
-      mqttMsgBus:
+      mqtt:
         type: mqtt
         protocol: tcp
         server: 127.0.0.1
@@ -121,12 +121,12 @@ data:
           Password: kuiper
           ClientId: kuiper
           Qos: 1
-      zeroMsgBus:
+      zeromq:
         type: zero
         protocol: tcp
         server: 127.0.0.1
         port: 5571
-      redisMsgBus:
+      redis:
         type: redis
         protocol: redis
         server: 127.0.0.1
@@ -136,6 +136,7 @@ data:
   mqtt.yaml: |
 
     default:
+      # connectionSelector: mqtt.edge
       server: tcp://127.0.0.1:1883
       protocolVersion: 5
       insecureSkipVerify: true
@@ -157,10 +158,28 @@ data:
   edgex.yaml: |
 
     default:
+      # connectionSelector: edgex.mqtt
       type: mqtt
       protocol: tcp
       server: 127.0.0.1
       port: 1883
+      topic: events
+      messageType: event
+    mqtt_conf:
+      # connectionSelector: edgex.mqtt
+      type: mqtt
+      protocol: tcp
+      server: 127.0.0.1
+      port: 1883
+      topic: events
+      optional:
+        ClientId: kuiper
+    zmq_conf:
+      # connectionSelector: edgex.zeromq
+      type: zero
+      protocol: tcp
+      server: 127.0.0.1
+      port: 5563
       topic: events
       messageType: event
     application_conf:
@@ -170,28 +189,13 @@ data:
       port: 5571
       topic: application
       messageType: request
-    mqtt_conf:
-      type: mqtt
-      protocol: tcp
-      server: 127.0.0.1
-      port: 1883
-      topic: events
-      optional:
-        ClientId: kuiper
-    zmq_conf:
-      type: zero
-      protocol: tcp
-      server: 127.0.0.1
-      port: 5563
-      topic: events
-      messageType: event
     share_conf:
+      # connectionSelector: edgex.redis
       type: mqtt
       protocol: tcp
       server: 127.0.0.1
       port: 1883
       topic: events
-      connectionSelector: edgex.redisMsgBus
 
   # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
   random.yaml: |
