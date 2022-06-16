@@ -1,0 +1,49 @@
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name kuiper
+spec:
+  issuerRef:
+    kind: Issuer
+    group: cert-manager.io
+    name: kuiper
+  commonName: *app-name
+  subject:
+    countries:
+      - "UNC"
+    provinces:
+      - "UNC"
+    localities:
+      - "UNC"
+    organizations:
+      - *app-namespace
+    organizationalUnits:
+      - "KubeStation:aiot@aiot.hk"
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+  encodeUsagesInRequest: true
+  dnsNames:
+    - localhost
+    - kuiper
+    - kuiper.aiot-case
+    - kuiper.aiot-case.svc
+    - kuiper.aiot-case.svc.cluster.local
+    - "*.kuiper"
+    - "*.kuiper.aiot-case"
+    - "*.kuiper.aiot-case.svc"
+    - "*.kuiper.aiot-case.svc.cluster.local"
+  ipAddresses:
+    - 127.0.0.1
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    encoding: PKCS1
+    rotationPolicy: Always
+  duration: {{kube.cert.signingDuration}}
+  renewBefore: 360h    # 15d
+  secretName: kuiper-cert
