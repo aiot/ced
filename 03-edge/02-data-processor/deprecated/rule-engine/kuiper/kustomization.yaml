@@ -1,0 +1,5 @@
+resources:
+  - yaml/01-config.yaml
+  - yaml/02-ca.yaml
+  - yaml/03-01-cert.yaml
+  - yaml/03-02-kuiper.yaml
