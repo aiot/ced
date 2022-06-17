@@ -32,8 +32,8 @@ RUN \
         mv -fv _build/kuiper-${kuiperVersion}-linux-amd64 _build/kuiper && \
         # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
         CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/zmq.so extensions/sources/zmq/zmq.go && \
-        # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
-        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/random.so extensions/sources/random/random.go && \
+        # # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
+        # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/random.so extensions/sources/random/random.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/zmq.html
         CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/zmq.so extensions/sinks/zmq/zmq.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/file.html

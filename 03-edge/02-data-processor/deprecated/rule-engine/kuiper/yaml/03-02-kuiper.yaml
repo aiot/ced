@@ -63,6 +63,8 @@ spec:
                 path: mqtt.yaml
               - key: zeromq.yaml
                 path: zeromq.yaml
+              - key: neuron.yaml
+                path: neuron.yaml
               - key: edgex.yaml
                 path: edgex.yaml
               - key: random.yaml
@@ -136,8 +138,12 @@ spec:
               mountPath: /usr/local/kuiper/etc/mqtt_source.yaml
               readOnly: false
             - name: config
-              subPath: zmq.yaml
+              subPath: zeromq.yaml
               mountPath: /usr/local/kuiper/etc/sources/zmq.yaml
+              readOnly: false
+            - name: config
+              subPath: neuron.yaml
+              mountPath: /usr/local/kuiper/etc/sources/neuron.yaml
               readOnly: false
             - name: config
               subPath: edgex.yaml

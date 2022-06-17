@@ -17,6 +17,7 @@ metadata:
   name: kuiper
 immutable: false
 data:
+  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/kuiper.yaml
   # https://ekuiper.org/docs/zh/latest/operation/config/configuration_file.html
   kuiper.yaml: |
 
@@ -74,6 +75,7 @@ data:
         password: kuiper
         timeout: 2000
 
+  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/client.yaml
   client.yaml: |
 
     basic:
@@ -134,6 +136,7 @@ data:
         server: 127.0.0.1
         port: 6379
 
+  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/mqtt_source.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/mqtt.html
   mqtt.yaml: |
 
@@ -150,12 +153,17 @@ data:
       clientid: kuiper
       qos: 1
 
+  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/zmq.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
   zeromq.yaml: |
 
     default:
       server: tcp://127.0.0.1:5563
 
+  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/neuron.yaml
+  neuron.yaml: |
+
+  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/edgex.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
   edgex.yaml: |
 
@@ -176,6 +184,10 @@ data:
       topic: events
       messageType: event
 
+  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/httppull.yaml
+  httppull.yaml: |
+
+  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/random.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
   random.yaml: |
 
