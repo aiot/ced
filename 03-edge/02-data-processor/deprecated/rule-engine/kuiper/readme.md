@@ -45,7 +45,7 @@ helm template kuiper \
 
             > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/neuron.html
 
-            neuron 与 kuiper 必须运行在同一 edge 上, 因为 kuiper 与 neoron 之间基于 nanomsg 协议通信, 无法通过网络进行
+            neuron 与 kuiper 必须运行在同一 edge 上, 因为 kuiper 与 neoron 之间基于 nanomsg ipc 协议通信, 无法通过网络进行
 
         <strike>
 
