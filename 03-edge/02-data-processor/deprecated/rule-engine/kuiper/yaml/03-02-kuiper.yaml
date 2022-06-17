@@ -267,3 +267,212 @@ spec:
             timeoutSeconds: 2
             successThreshold: 1
             failureThreshold: 2
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name kuiper-manager
+  labels: &app-label
+    app.kubernetes.io/name: kuiper
+    app.kubernetes.io/component: dashboard
+    app.kubernetes.io/part-of: *app-namespace
+    app.kubernetes.io/managed-by: kube
+spec:
+  selector:
+    <<: *app-label
+  publishNotReadyAddresses: false
+  ports:
+    - name: server
+      protocol: TCP
+      port: 9082
+      targetPort: 9082
+  type: NodePort
+  sessionAffinity: ClientIP
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: &app-namespace aiot-case
+  name: &app-name kuiper-manager
+  # annotations:
+  #   kubereloader.kubestation.aiot.hk/auto: "true"
+spec:
+  replicas: 3
+  selector:
+    matchLabels: &app-label
+      app.kubernetes.io/name: kuiper
+      app.kubernetes.io/component: dashboard
+      app.kubernetes.io/part-of: *app-namespace
+      app.kubernetes.io/managed-by: kube
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  revisionHistoryLimit: 5
+
+  template:
+    metadata:
+      labels:
+        <<: *app-label
+      annotations:
+        co.elastic.logs/enabled: "false"
+        co.elastic.logs/encoding: utf-8
+
+    spec:
+      serviceAccountName: default
+      automountServiceAccountToken: false
+
+      terminationGracePeriodSeconds: 0
+      nodeSelector:
+        node-role.kubernetes.io/cloud: ""
+        node-role.kubernetes.io/aiot-case: ""
+      affinity:
+        # nodeAffinity:
+        #   requiredDuringSchedulingIgnoredDuringExecution:
+        #     nodeSelectorTerms:
+        #       - matchExpressions:
+        #           - key: node-role.kubernetes.io/cloud
+        #             values:
+        #               - ""
+        #             operator: In
+        #           - key: node-role.kubernetes.io/aiot-case
+        #             values:
+        #               - ""
+        #             operator: In
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    <<: *app-label
+      tolerations:
+        - operator: Exists
+
+      hostIPC: false
+      hostPID: false
+      hostNetwork: false
+
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        options:
+          - name: single-request-reopen
+
+      restartPolicy: Always
+
+      volumes:
+        - name: config
+          configMap:
+            name: kuiper-manager
+            defaultMode: 0644
+            optional: true
+
+        - name: cert
+          secret:
+            secretName: kuiper-manager-cert
+            defaultMode: 0644
+            optional: true
+
+      containers:
+        - image: {{kubethings.image.repository}}/kuiper-manager:{{kubethings.aiot.edge.kuiper.version}}
+          imagePullPolicy: {{kubethings.image.pullPolicy}}
+          name: *app-name
+
+          volumeMounts:
+            - name: config
+              subPath: conf.yaml
+              mountPath: /usr/local/kuiper-manager/etc/conf.yaml
+              readOnly: false
+
+            - name: cert
+              subPath: tls.key
+              mountPath: /usr/local/kuiper-manager/etc/pki/tls.key
+              readOnly: true
+            - name: cert
+              subPath: tls.crt
+              mountPath: /usr/local/kuiper-manager/etc/pki/tls.crt
+              readOnly: true
+            - name: cert
+              subPath: ca.crt
+              mountPath: /usr/local/kuiper-manager/etc/pki/ca.crt
+              readOnly: true
+
+          # envFrom:
+          #   - configMapRef:
+          #       name: kuiper-manager-env
+          #       optional: true
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
+          securityContext:
+            runAsGroup: 0
+            runAsUser: 0
+            runAsNonRoot: false
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+
+          stdin: false
+          tty: false
+          terminationMessagePolicy: FallbackToLogsOnError
+          terminationMessagePath: /dev/termination-log
+          command:
+            - /usr/local/kuiper-manager/kuiper-manager
+
+          ports:
+            - name: server
+              protocol: TCP
+              containerPort: &port-server 9082
+          startupProbe:
+            httpGet:
+              scheme: HTTPS
+              port: *port-server
+              path: /readyz
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 24
+          readinessProbe:
+            httpGet:
+              scheme: HTTPS
+              port: *port-server
+              path: /readyz
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 1
+          livenessProbe:
+            httpGet:
+              scheme: HTTPS
+              port: *port-server
+              path: /healthz
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 2

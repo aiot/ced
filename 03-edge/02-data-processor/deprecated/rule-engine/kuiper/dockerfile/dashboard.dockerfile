@@ -27,7 +27,7 @@ RUN \
 
 
 # build image
-FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:ALPINE_VERSION
+FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/ubuntu:UBUNTU_VERSION
 
 ARG kuiperManagerHome='/usr/local/kuiper-manager'
 ENV \

@@ -197,3 +197,37 @@ data:
       seed: 1
       deduplicate: 0
       interval: 1000
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: aiot-case
+  name: kuiper-manager
+immutable: false
+data:
+  conf.yaml: |
+
+    basic:
+      host: 0.0.0.0
+      port: 9082
+      tls:
+        cafile: /usr/local/kuiper-manager/pki/ca.crt
+        keyfile: /usr/local/kuiper-manager/pki/tls.key
+        certfile: /usr/local/kuiper-manager/pki/tls.crt
+
+    jwt:
+      secret: kuiper-manager
+      expiration: 15
+      refreshSecret: kuiper-manager
+      refreshExpiration: 24
+
+    accountLock:
+      countRangeMinutes: 5
+      maximumFailAttempts: 10
+      durationMinutes: 10
+
+    logger:
+      debug: false
+      consoleLog: true
+      fileLog: false
