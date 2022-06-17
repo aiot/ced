@@ -30,11 +30,11 @@ RUN \
     git checkout ${kuiperVersion} && \
         make build_with_edgex && \
         mv -fv _build/kuiper-${kuiperVersion}-linux-amd64 _build/kuiper && \
-        CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/zmq.so extensions/sources/zmq/zmq.go && \
+        # CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/zmq.so extensions/sources/zmq/zmq.go && \
         # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/random.so extensions/sources/random/random.go && \
-        CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/zmq.so extensions/sinks/zmq/zmq.go && \
-        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/file.so extensions/sinks/file/file.go && \
-        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/image.so extensions/sinks/image/image.go && \
+        # CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/zmq.so extensions/sinks/zmq/zmq.go && \
+        # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/file.so extensions/sinks/file/file.go && \
+        # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/image.so extensions/sinks/image/image.go && \
         # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/tdengine@v{{kubethings.aiot.cloud.tdengine.version}}.so extensions/sinks/tdengine/tdengine.go && \
     rm -rfv _build/kuiper/etc/mgmt/* && \
     openssl genrsa -out _build/kuiper/etc/mgmt/jwt.key 2048 && \

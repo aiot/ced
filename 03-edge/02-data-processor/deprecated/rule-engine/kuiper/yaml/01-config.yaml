@@ -7,7 +7,7 @@ metadata:
   name: kuiper-env
 immutable: false
 data:
-  # CONNECTION__MQTT__CLOUD__SERVER: tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
+  # CONNECTION__MQTT__CLOUD__SERVER: tcp://emqx.${POD_NAMESPACE}.svc.cluster.local:8883
   # CONNECTION__MQTT__CLOUD__CLIENTID: kuiper_${NODE_NAME}_${NODE_IP}
 
 # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/deploy/chart/kuiper/templates/configmap.yaml
@@ -24,7 +24,7 @@ data:
   kuiper.yaml: |
 
     basic:
-      # source and function(named sink in kuiper) plugin
+      # install source, rule(based on sql and function) and sink plugin online
       pluginHosts: https://packages.emqx.net
       # sql
       ignoreCase: false
@@ -121,31 +121,31 @@ data:
         # clientid: kuiper_${NODE_NAME}_${NODE_IP}
         qos: 1
 
-    edgex:
-      mqtt:
-        type: mqtt
-        protocol: tcp
-        server: 127.0.0.1
-        port: 1883
-        optional:
-          SkipCertVerify: true
-          CaFile: /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
-          KeyFile: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.key
-          CertFile: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.crt
-          Username: kuiper
-          Password: kuiper
-          ClientId: kuiper
-          Qos: 1
-      zeromq:
-        type: zero
-        protocol: tcp
-        server: 127.0.0.1
-        port: 5571
-      redis:
-        type: redis
-        protocol: redis
-        server: 127.0.0.1
-        port: 6379
+    # edgex:
+    #   mqtt:
+    #     type: mqtt
+    #     protocol: tcp
+    #     server: 127.0.0.1
+    #     port: 1883
+    #     optional:
+    #       SkipCertVerify: true
+    #       CaFile: /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
+    #       KeyFile: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.key
+    #       CertFile: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.crt
+    #       Username: kuiper
+    #       Password: kuiper
+    #       ClientId: kuiper
+    #       Qos: 1
+    #   zeromq:
+    #     type: zero
+    #     protocol: tcp
+    #     server: 127.0.0.1
+    #     port: 5571
+    #   redis:
+    #     type: redis
+    #     protocol: redis
+    #     server: 127.0.0.1
+    #     port: 6379
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/mqtt_source.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/mqtt.html
@@ -163,48 +163,52 @@ data:
       # password: kuiper
       # clientid: kuiper
       # qos: 1
+    edge:
+      connectionSelector: mqtt.edge
+    cloud:
+      connectionSelector: mqtt.cloud
 
-  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/zmq.yaml
-  # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
-  zeromq.yaml: |
+  # # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/zmq.yaml
+  # # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
+  # zeromq.yaml: |
 
-    default:
-      server: tcp://127.0.0.1:5563
+  #   default:
+  #     server: tcp://127.0.0.1:5563
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/neuron.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/neuron.html
   neuron.yaml: |
 
-  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/edgex.yaml
-  # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
-  # https://ekuiper.org/docs/zh/latest/edgex/edgex_rule_engine_tutorial.html
-  # https://ekuiper.org/docs/zh/latest/edgex/edgex_source_tutorial.html
-  edgex.yaml: |
+  # # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/edgex.yaml
+  # # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
+  # # https://ekuiper.org/docs/zh/latest/edgex/edgex_rule_engine_tutorial.html
+  # # https://ekuiper.org/docs/zh/latest/edgex/edgex_source_tutorial.html
+  # edgex.yaml: |
 
-    default:
-      connectionSelector: edgex.mqtt
-      topic: events
-      messageType: request
-    mqtt:
-      connectionSelector: edgex.mqtt
-      topic: events
-      messageType: request
-    zmq:
-      connectionSelector: edgex.zeromq
-      topic: events
-      messageType: request
-    redis:
-      connectionSelector: edgex.redis
-      topic: events
-      messageType: request
+  #   default:
+  #     connectionSelector: edgex.mqtt
+  #     topic: events
+  #     messageType: request
+  #   mqtt:
+  #     connectionSelector: edgex.mqtt
+  #     topic: events
+  #     messageType: request
+  #   zmq:
+  #     connectionSelector: edgex.zeromq
+  #     topic: events
+  #     messageType: request
+  #   redis:
+  #     connectionSelector: edgex.redis
+  #     topic: events
+  #     messageType: request
 
-  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/httppull.yaml
-  # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/http_pull.html
-  http-get.yaml: |
+  # # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/httppull.yaml
+  # # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/http_pull.html
+  # http-get.yaml: |
 
-  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/random.yaml
-  # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
-  random.yaml: |
+  # # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/random.yaml
+  # # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
+  # random.yaml: |
 
 ---
 kind: ConfigMap

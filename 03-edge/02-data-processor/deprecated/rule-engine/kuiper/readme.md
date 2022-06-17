@@ -1,7 +1,7 @@
 # kuiper
 
-> https://docs.emqx.com/zh/kuiper/latest/ <br/>
-https://github.com/lf-edge/ekuiper
+> https://github.com/lf-edge/ekuiper <br/>
+https://docs.emqx.com/zh/kuiper/latest/
 
 ## yaml reference
 
@@ -22,7 +22,7 @@ helm template kuiper \
 
 ## stream: 数据流
 
-1. source: `输入`
+1. `输入`: source
 
     > https://ekuiper.org/docs/zh/latest/concepts/sources/overview.html <br/>
     https://ekuiper.org/docs/zh/latest/rules/sources/overview.html
@@ -33,9 +33,13 @@ helm template kuiper \
 
             > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/mqtt.html
 
+        <strike>
+
         - zeromq
 
             > https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
+
+        </strike>
 
         - neuron
 
@@ -43,9 +47,15 @@ helm template kuiper \
 
             neuron 与 kuiper 必须运行在同一 edge 上, 因为 kuiper 与 neoron 之间基于 nanomsg 协议通信, 无法通过网络进行
 
+        <strike>
+
         - edgex
 
             > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
+
+        </strike>
+
+    <strike>
 
     - 状态数据
 
@@ -61,7 +71,9 @@ helm template kuiper \
 
             > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/file.html
 
-2. rule(based on sql and function): `计算`
+    </strike>
+
+2. `计算`: rule(based on sql and function)
 
     > https://ekuiper.org/docs/zh/latest/concepts/rules.html <br/>
     https://ekuiper.org/docs/zh/latest/rules/overview.html <br/>
@@ -77,19 +89,30 @@ helm template kuiper \
 
         - extension: 扩展
 
-3. sink: `输出`
+3. `输出`: sink
 
-    > https://ekuiper.org/docs/zh/latest/concepts/sinks.html
+    > https://ekuiper.org/docs/zh/latest/concepts/sinks.html <br/>
+    https://ekuiper.org/docs/zh/latest/rules/sinks/overview.html
 
     - 控制数据
 
         - mqtt
 
+        <strike>
+
         - zeromq
+
+        </strike>
 
         - neuron
 
+        <strike>
+
         - edgex
+
+        </strike>
+
+    <strike>
 
     - 状态数据
 
@@ -97,9 +120,13 @@ helm template kuiper \
 
         - database
 
+            - tdengine
+
         - file
 
         - log
+
+    </strike>
 
 ## api
 
