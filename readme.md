@@ -144,17 +144,29 @@
 
     3. 数据处理
 
-    - 流处理:
+    - 流处理
 
         > https://ekuiper.org/docs/zh/latest/concepts/streaming/overview.html
 
-        流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算.
+        流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算. 数据流具有以下属性:
 
-        - 时间
+        - 时间戳
+
+            > https://ekuiper.org/docs/zh/latest/concepts/streaming/time.html
+
+            - 事件时间: 事件发生时间
+
+            - 处理时间: kuiper 观察到事件的时间
 
         - 窗口
 
-    - 批处理:
+            > https://ekuiper.org/docs/zh/latest/concepts/streaming/windowing.html
+
+            - 时间窗口: 按时间段分割的窗口
+
+            - 计数窗口: 按元素计数分割的窗口
+
+    - 批处理
 
         与流处理相对应的是批处理
 

@@ -54,6 +54,7 @@ data:
 
     # https://ekuiper.org/docs/zh/latest/extension/portable/overview.html
     portable:
+      goBin: go
       pythonBin: python
 
     # https://ekuiper.org/docs/zh/latest/rules/overview.html
@@ -113,11 +114,6 @@ data:
         qos: 1
 
     edgex:
-      redis:
-        type: redis
-        protocol: redis
-        server: 127.0.0.1
-        port: 6379
       mqtt:
         type: mqtt
         protocol: tcp
@@ -137,6 +133,11 @@ data:
         protocol: tcp
         server: 127.0.0.1
         port: 5571
+      redis:
+        type: redis
+        protocol: redis
+        server: 127.0.0.1
+        port: 6379
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/mqtt_source.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/mqtt.html
@@ -168,24 +169,25 @@ data:
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/edgex.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
   # https://ekuiper.org/docs/zh/latest/edgex/edgex_rule_engine_tutorial.html
+  # https://ekuiper.org/docs/zh/latest/edgex/edgex_source_tutorial.html
   edgex.yaml: |
 
     default:
-      connectionSelector: edgex.redis
+      connectionSelector: edgex.mqtt
       topic: events
-      messageType: event
-    redis:
-      connectionSelector: edgex.redis
-      topic: events
-      messageType: event
+      messageType: request
     mqtt:
       connectionSelector: edgex.mqtt
       topic: events
-      messageType: event
+      messageType: request
     zmq:
       connectionSelector: edgex.zeromq
       topic: events
-      messageType: event
+      messageType: request
+    redis:
+      connectionSelector: edgex.redis
+      topic: events
+      messageType: request
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/httppull.yaml
   http-get.yaml: |
