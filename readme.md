@@ -144,10 +144,19 @@
 
     3. 数据处理
 
-        > 流处理: <br/>
+    - 流处理:
+
+        > https://ekuiper.org/docs/zh/latest/concepts/streaming/overview.html
+
         流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算.
 
-        > 批处理: 与流处理相对应的是批处理
+        - 时间
+
+        - 窗口
+
+    - 批处理:
+
+        与流处理相对应的是批处理
 
         1. `edge-app`
 
