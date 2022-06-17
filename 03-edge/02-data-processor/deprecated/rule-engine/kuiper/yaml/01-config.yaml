@@ -81,6 +81,7 @@ data:
       port: 20498
 
 
+  # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/connections/connection.yaml
   connection.yaml: |
 
     mqtt:

@@ -17,7 +17,7 @@ RUN \
     \
     apk update --allow-untrusted --purge --no-cache && \
     apk add --allow-untrusted --upgrade --no-cache \
-        git gcc make libc-dev binutils-gold pkgconfig sqlite zeromq-dev && \
+        git openssh-client gcc make libc-dev binutils-gold pkgconfig zeromq-dev sqlite openssl openssl-dev && \
     rm -rfv /var/cache/apk/* && \
     \
     kuiperVersion='KUIPER_VERSION' && \
@@ -39,9 +39,12 @@ RUN \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/file.html
         go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/file.so extensions/sinks/file/file.go && \
         # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/image.html
-        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/image.so extensions/sinks/image/image.go
+        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/image.so extensions/sinks/image/image.go && \
         # # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/tdengine.html
         # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/tdengine@v{{kubethings.aiot.cloud.tdengine.version}}.so extensions/sinks/tdengine/tdengine.go && \
+    rm -rfv _build/kuiper/etc/mgmt/* && \
+    openssl genrsa -out _build/kuiper/etc/mgmt/jwt.key 2048 && \
+    openssl rsa -in _build/kuiper/etc/mgmt/jwt.key -pubout -out _build/kuiper/etc/mgmt/jwt.pub
 
 
 # build image

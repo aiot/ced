@@ -19,7 +19,7 @@ RUN \
     apt update -y && \
     apt install -y --no-install-recommends \
         ca-certificates apt-transport-https apt-utils \
-        pkg-config sqlite3 libczmq-dev && \
+        pkg-config libczmq-dev sqlite3 && \
     apt autoremove -y && \
     rm -rfv /var/lib/apt/lists/* && \
     \
@@ -34,8 +34,11 @@ RUN \
         go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/random.so extensions/sources/random/random.go && \
         CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/zmq.so extensions/sinks/zmq/zmq.go && \
         go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/file.so extensions/sinks/file/file.go && \
-        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/image.so extensions/sinks/image/image.go
-        # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/tdengine@v{{kubethings.aiot.cloud.tdengine.version}}.so extensions/sinks/tdengine/tdengine.go
+        go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/image.so extensions/sinks/image/image.go && \
+        # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/tdengine@v{{kubethings.aiot.cloud.tdengine.version}}.so extensions/sinks/tdengine/tdengine.go && \
+    rm -rfv _build/kuiper/etc/mgmt/* && \
+    openssl genrsa -out _build/kuiper/etc/mgmt/jwt.key 2048 && \
+    openssl rsa -in _build/kuiper/etc/mgmt/jwt.key -pubout -out _build/kuiper/etc/mgmt/jwt.pub
 
 
 # build image
