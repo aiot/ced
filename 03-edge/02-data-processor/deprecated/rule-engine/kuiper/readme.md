@@ -24,23 +24,48 @@ helm template kuiper \
 
 1. source: `输入`
 
-    > https://ekuiper.org/docs/zh/latest/concepts/sources/overview.html
+    > https://ekuiper.org/docs/zh/latest/concepts/sources/overview.html <br/>
+    https://ekuiper.org/docs/zh/latest/rules/sources/overview.html
 
-    - mqtt
+    - 控制数据
 
-    - zeromq
+        - mqtt
 
-    - http-get
+            > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/mqtt.html
 
-    - file
+        - zeromq
 
-    - neuron
+            > https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
 
-    - edgex
+        - neuron
+
+            > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/neuron.html
+
+            neuron 与 kuiper 必须运行在同一 edge 上, 因为 kuiper 与 neoron 之间基于 nanomsg 协议通信, 无法通过网络进行
+
+        - edgex
+
+            > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
+
+    - 状态数据
+
+        - http-get
+
+            > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/http_pull.html
+
+        - database
+
+            > https://ekuiper.org/docs/zh/latest/rules/sources/plugin/sql.html
+
+        - file
+
+            > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/file.html
 
 2. rule(based on sql and function): `计算`
 
-    > https://ekuiper.org/docs/zh/latest/concepts/rules.html
+    > https://ekuiper.org/docs/zh/latest/concepts/rules.html <br/>
+    https://ekuiper.org/docs/zh/latest/rules/overview.html <br/>
+    https://ekuiper.org/docs/zh/latest/rules/rule_pipeline.html
 
     - sql: 查询
 

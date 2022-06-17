@@ -63,12 +63,14 @@ spec:
                 path: mqtt.yaml
               - key: zeromq.yaml
                 path: zeromq.yaml
-              - key: neuron.yaml
-                path: neuron.yaml
+              # - key: neuron.yaml
+              #   path: neuron.yaml
               - key: edgex.yaml
                 path: edgex.yaml
-              - key: random.yaml
-                path: random.yaml
+              # - key: http-get.yaml
+              #   path: http-get.yaml
+              # - key: random.yaml
+              #   path: random.yaml
             defaultMode: 0644
             optional: true
 
@@ -141,18 +143,22 @@ spec:
               subPath: zeromq.yaml
               mountPath: /usr/local/kuiper/etc/sources/zmq.yaml
               readOnly: false
-            - name: config
-              subPath: neuron.yaml
-              mountPath: /usr/local/kuiper/etc/sources/neuron.yaml
-              readOnly: false
+            # - name: config
+            #   subPath: neuron.yaml
+            #   mountPath: /usr/local/kuiper/etc/sources/neuron.yaml
+            #   readOnly: false
             - name: config
               subPath: edgex.yaml
               mountPath: /usr/local/kuiper/etc/sources/edgex.yaml
               readOnly: false
-            - name: config
-              subPath: random.yaml
-              mountPath: /usr/local/kuiper/etc/sources/random.yaml
-              readOnly: false
+            # - name: config
+            #   subPath: http-get.yaml
+            #   mountPath: /usr/local/kuiper/etc/sources/httppull.yaml
+            #   readOnly: false
+            # - name: config
+            #   subPath: random.yaml
+            #   mountPath: /usr/local/kuiper/etc/sources/random.yaml
+            #   readOnly: false
 
             - name: cert
               subPath: tls.key

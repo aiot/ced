@@ -58,15 +58,23 @@ data:
       pythonBin: python
 
     # https://ekuiper.org/docs/zh/latest/rules/overview.html
+    # https://ekuiper.org/docs/zh/latest/rules/state_and_fault_tolerance.html
     rule:
-      # https://ekuiper.org/docs/zh/latest/rules/state_and_fault_tolerance.html
-      qos: 0
+      qos: 1
       checkpointInterval: 300000
+      concurrency: 1
+      bufferLength: 1024
+      sendMetaToSink: true
       sendError: true
     sink:
-      disableCache: true
+      runAsync: false
+      concurrency: 1
+      bufferLength: 1024
+      retryInterval: 2000
+      retryCount: 3
       cacheThreshold: 10
       cacheTriggerCount: 15
+      disableCache: true
 
     store:
       type: sqlite
@@ -144,17 +152,17 @@ data:
   mqtt.yaml: |
 
     default:
-      # connectionSelector: mqtt.edge
-      server: tcp://127.0.0.1:1883
-      protocolVersion: 5
-      insecureSkipVerify: true
-      rootCaPath: /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
-      privateKeyPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.key
-      certificationPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.crt
-      username: kuiper
-      password: kuiper
-      clientid: kuiper
-      qos: 1
+      connectionSelector: mqtt.edge
+      # server: tcp://127.0.0.1:1883
+      # protocolVersion: 5
+      # insecureSkipVerify: true
+      # rootCaPath: /usr/local/kuiper/etc/pki/mqtt-edge.ca.crt
+      # privateKeyPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.key
+      # certificationPath: /usr/local/kuiper/etc/pki/mqtt-edge.client.tls.crt
+      # username: kuiper
+      # password: kuiper
+      # clientid: kuiper
+      # qos: 1
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/zmq.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
@@ -164,6 +172,7 @@ data:
       server: tcp://127.0.0.1:5563
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/neuron.yaml
+  # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/neuron.html
   neuron.yaml: |
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/edgex.yaml
@@ -190,18 +199,12 @@ data:
       messageType: request
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/httppull.yaml
+  # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/http_pull.html
   http-get.yaml: |
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/random.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
   random.yaml: |
-
-    default:
-      pattern:
-        count: 50
-      seed: 1
-      deduplicate: 0
-      interval: 1000
 
 ---
 kind: ConfigMap
