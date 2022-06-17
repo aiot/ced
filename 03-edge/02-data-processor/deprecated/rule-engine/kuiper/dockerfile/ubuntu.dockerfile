@@ -27,7 +27,7 @@ RUN \
     cd $(go env GOPATH) && \
     git clone --recurse --tags https://github.com/lf-edge/ekuiper.git && \
     mv -fv ekuiper kuiper && cd kuiper && \
-    git checkout ${kuiperVersion} && \
+    git checkout --recurse-submodules ${kuiperVersion} && \
         make build_with_edgex && \
         mv -fv _build/kuiper-${kuiperVersion}-linux-amd64 _build/kuiper && \
         # CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/zmq.so extensions/sources/zmq/zmq.go && \

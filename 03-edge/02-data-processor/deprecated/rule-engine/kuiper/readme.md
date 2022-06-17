@@ -9,7 +9,7 @@ https://docs.emqx.com/zh/kuiper/latest/
 git clone --recurse --tags git@github.com:lf-edge/ekuiper.git
 mv -fv ekuiper kuiper
 cd kuiper
-git checkout {{kubethings.aiot.edge.kuiper.version}}
+git checkout --recurse-submodules {{kubethings.aiot.edge.kuiper.version}}
 cd deploy/chart
 
 helm template kuiper \

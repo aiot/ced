@@ -24,7 +24,7 @@ RUN \
     cd $(go env GOPATH) && \
     git clone --recurse --tags https://github.com/lf-edge/ekuiper.git && \
     mv -fv ekuiper kuiper && cd kuiper && \
-    git checkout ${kuiperVersion} && \
+    git checkout --recurse-submodules ${kuiperVersion} && \
         # https://ekuiper.org/docs/zh/latest/features.html
         # CGO_ENABLED="1" must be set, because kuiper depends on sqlite, for more details see https://ekuiper.org/docs/zh/latest/operation/compile/cross-compile.html
         # https://github.com/lf-edge/ekuiper/blob/${kuiperVersion}/Makefile#L50

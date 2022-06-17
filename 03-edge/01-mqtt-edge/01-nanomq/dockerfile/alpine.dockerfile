@@ -21,7 +21,7 @@ RUN \
     cd /root/ && \
     git clone --recurse --tags https://github.com/emqx/nanomq.git && \
     cd nanomq/ && \
-    git checkout NANOMQ_VERSION && \
+    git checkout --recurse-submodules NANOMQ_VERSION && \
         mkdir -p -v build && \
         cd build && \
         cmake -G Ninja -DENABLE_JWT=OFF -DNNG_ENABLE_TLS=ON -DNNG_ENABLE_SQLITE=ON -DNOLOG=1 .. && \
