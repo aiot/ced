@@ -160,9 +160,18 @@
 
         - 窗口
 
-            > https://ekuiper.org/docs/zh/latest/concepts/streaming/windowing.html
+            > https://ekuiper.org/docs/zh/latest/concepts/streaming/windowing.html <br/>
+            https://ekuiper.org/docs/zh/latest/sqls/windows.html
 
             - 时间窗口: 按时间段分割的窗口
+
+                - 滚动窗口: 将数据流分割成不同的时间段
+
+                - 跳跃窗口
+
+                - 滑动窗口
+
+                - 会话窗口
 
             - 计数窗口: 按元素计数分割的窗口
 
