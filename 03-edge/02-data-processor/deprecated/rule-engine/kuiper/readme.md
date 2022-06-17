@@ -20,7 +20,7 @@ helm template kuiper \
     --set replicaCount='1' > kuiper.yaml
 ```
 
-## stream: 数据流
+## stream and rule: 数据流
 
 1. `输入`: source
 
@@ -73,7 +73,7 @@ helm template kuiper \
 
     </strike>
 
-2. `计算`: rule(based on sql and function)
+2. `计算`: function
 
     > https://ekuiper.org/docs/zh/latest/concepts/rules.html <br/>
     https://ekuiper.org/docs/zh/latest/rules/overview.html <br/>
@@ -81,13 +81,20 @@ helm template kuiper \
 
     - sql: 查询
 
-        > https://ekuiper.org/docs/zh/latest/concepts/sql.html
+        > https://ekuiper.org/docs/zh/latest/concepts/sql.html <br/>
+        https://ekuiper.org/docs/zh/latest/sqls/overview.html
 
-    - action: 业务逻辑
+    - action: 逻辑
 
         - function: 内置函数
 
         - extension: 扩展
+
+            > https://ekuiper.org/docs/zh/latest/extension/overview.html
+
+            - `使用外部服务作为函数扩展`
+
+                > https://ekuiper.org/docs/zh/latest/extension/external/external_func.html
 
 3. `输出`: sink
 
@@ -98,17 +105,25 @@ helm template kuiper \
 
         - mqtt
 
+            > https://ekuiper.org/docs/zh/latest/rules/sinks/builtin/mqtt.html
+
         <strike>
 
         - zeromq
+
+            > https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/zmq.html
 
         </strike>
 
         - neuron
 
+            > https://ekuiper.org/docs/zh/latest/rules/sinks/builtin/neuron.html
+
         <strike>
 
         - edgex
+
+            > https://ekuiper.org/docs/zh/latest/rules/sinks/builtin/edgex.html
 
         </strike>
 
@@ -118,13 +133,23 @@ helm template kuiper \
 
         - http-post
 
+            > https://ekuiper.org/docs/zh/latest/rules/sinks/builtin/rest.html
+
         - database
+
+            > https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/sql.html
 
             - tdengine
 
+                > https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/tdengine.html
+
         - file
 
+            > https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/file.html
+
         - log
+
+            > https://ekuiper.org/docs/zh/latest/rules/sinks/builtin/log.html
 
     </strike>
 
@@ -132,8 +157,45 @@ helm template kuiper \
 
 ### http
 
+> https://ekuiper.org/docs/zh/latest/operation/restapi/overview.html
+
+- stream
+
+    > https://ekuiper.org/docs/zh/latest/operation/restapi/streams.html
+
+- rule
+
+    > https://ekuiper.org/docs/zh/latest/operation/restapi/rules.html
+
+- extension
+
+    > https://ekuiper.org/docs/zh/latest/operation/restapi/plugins.html
+
+    - 使用外部服务作为函数扩展
+
+        > https://ekuiper.org/docs/zh/latest/operation/restapi/services.html
+
 #### ui
 
-> warning: kuiper-manager is not open source: https://hub.docker.com/r/emqx/ekuiper-manager
+> warning: kuiper-manager is not open source <br/>
+https://ekuiper.org/docs/zh/latest/operation/manager-ui/overview.html
 
-### cli
+### rpc
+
+> https://ekuiper.org/docs/zh/latest/operation/cli/overview.html
+
+- stream
+
+    > https://ekuiper.org/docs/zh/latest/operation/cli/streams.html
+
+- rule
+
+    > https://ekuiper.org/docs/zh/latest/operation/cli/rules.html
+
+- extension
+
+    > https://ekuiper.org/docs/zh/latest/operation/cli/plugins.html
+
+## dev
+
+> https://ekuiper.org/docs/zh/latest/CONTRIBUTING.html

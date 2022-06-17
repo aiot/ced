@@ -7,7 +7,7 @@ metadata:
   name: kuiper-env
 immutable: false
 data:
-  # CONNECTION__MQTT__CLOUD__SERVER: tcp://emqx.${POD_NAMESPACE}.svc.cluster.local:8883
+  # CONNECTION__MQTT__CLOUD__SERVER: ssl://emqx.${POD_NAMESPACE}.svc.cluster.local:8883
   # CONNECTION__MQTT__CLOUD__CLIENTID: kuiper_${NODE_NAME}_${NODE_IP}
 
 # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/deploy/chart/kuiper/templates/configmap.yaml
@@ -24,7 +24,7 @@ data:
   kuiper.yaml: |
 
     basic:
-      # install source, rule(based on sql and function) and sink plugin online
+      # install source, function and sink plugin online
       pluginHosts: https://packages.emqx.net
       # sql
       ignoreCase: false
@@ -52,6 +52,7 @@ data:
       maxAge: 72
       debug: false
 
+    # https://ekuiper.org/docs/zh/latest/extension/overview.html
     # https://ekuiper.org/docs/zh/latest/extension/portable/overview.html
     portable:
       goBin: go
@@ -109,8 +110,9 @@ data:
         password: kuiper
         clientid: kuiper
         qos: 1
+        sharedSubscription: true
       cloud:
-        # server: tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
+        # server: ssl://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
         protocolVersion: 5
         insecureSkipVerify: true
         rootCaPath: /usr/local/kuiper/etc/pki/mqtt-cloud.ca.crt
@@ -120,8 +122,14 @@ data:
         password: kuiper
         # clientid: kuiper_${NODE_NAME}_${NODE_IP}
         qos: 1
+        sharedSubscription: true
 
     # edgex:
+    #   redis:
+    #     type: redis
+    #     protocol: redis
+    #     server: 127.0.0.1
+    #     port: 6379
     #   mqtt:
     #     type: mqtt
     #     protocol: tcp
@@ -136,16 +144,12 @@ data:
     #       Password: kuiper
     #       ClientId: kuiper
     #       Qos: 1
+    #       sharedSubscription: true
     #   zeromq:
     #     type: zero
     #     protocol: tcp
     #     server: 127.0.0.1
     #     port: 5571
-    #   redis:
-    #     type: redis
-    #     protocol: redis
-    #     server: 127.0.0.1
-    #     port: 6379
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/mqtt_source.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/mqtt.html
@@ -163,6 +167,7 @@ data:
       # password: kuiper
       # clientid: kuiper
       # qos: 1
+      # sharedSubscription: true
     edge:
       connectionSelector: mqtt.edge
     cloud:
@@ -186,7 +191,11 @@ data:
   # edgex.yaml: |
 
   #   default:
-  #     connectionSelector: edgex.mqtt
+  #     connectionSelector: edgex.redis
+  #     topic: events
+  #     messageType: request
+  #   redis:
+  #     connectionSelector: edgex.redis
   #     topic: events
   #     messageType: request
   #   mqtt:
@@ -195,10 +204,6 @@ data:
   #     messageType: request
   #   zmq:
   #     connectionSelector: edgex.zeromq
-  #     topic: events
-  #     messageType: request
-  #   redis:
-  #     connectionSelector: edgex.redis
   #     topic: events
   #     messageType: request
 

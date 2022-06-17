@@ -245,7 +245,7 @@ spec:
             - |-
               if [[ ${CONNECTION__MQTT__CLOUD__SERVER} == "" ]]
               then
-                  mqttCloudAddress="tcp://emqx.${POD_NAMESPACE}.svc.cluster.local:8883"
+                  mqttCloudAddress="ssl://emqx.${POD_NAMESPACE}.svc.cluster.local:8883"
                   export CONNECTION__MQTT__CLOUD__SERVER=${mqttCloudAddress}
                   eval echo -e "export CONNECTION__MQTT__CLOUD__SERVER=${mqttCloudAddress}" >> /etc/profile.d/kuiper.sh
               fi
@@ -256,15 +256,17 @@ spec:
               /usr/local/kuiper/bin/kuiperd
 
           ports:
-            - name: http-api
+            - name: api-http
               protocol: TCP
-              containerPort: &port-http-api 9081
-            - name: cli-api
+              containerPort: &port-api-http 9081
+            - name: api-rpc
               protocol: TCP
-              containerPort: &port-cli-api 20498
+              containerPort: &port-api-rpc 20498
           startupProbe:
             httpGet:
-              port: *port-http-api
+              scheme: HTTPS
+              port: *port-api-http
+              path: /ping
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2
@@ -272,7 +274,9 @@ spec:
             failureThreshold: 24
           # readinessProbe:
           #   httpGet:
-          #     port: *port-http-api
+          #     scheme: HTTPS
+          #     port: *port-api-http
+          #     path: /ping
           #   initialDelaySeconds: 0
           #   periodSeconds: 5
           #   timeoutSeconds: 1
@@ -280,7 +284,9 @@ spec:
           #   failureThreshold: 1
           livenessProbe:
             httpGet:
-              port: *port-http-api
+              scheme: HTTPS
+              port: *port-api-http
+              path: /ping
             initialDelaySeconds: 0
             periodSeconds: 5
             timeoutSeconds: 2

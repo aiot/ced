@@ -30,6 +30,7 @@ RUN \
         # https://github.com/lf-edge/ekuiper/blob/${kuiperVersion}/Makefile#L50
         make build_with_edgex && \
         mv -fv _build/kuiper-${kuiperVersion}-linux-amd64 _build/kuiper && \
+        # # https://ekuiper.org/docs/zh/latest/extension/overview.html
         # # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/zmq.html
         # CGO_ENABLED="1" go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sources/zmq.so extensions/sources/zmq/zmq.go && \
         # # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html
@@ -42,6 +43,7 @@ RUN \
         # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/image.so extensions/sinks/image/image.go && \
         # # https://ekuiper.org/docs/zh/latest/rules/sinks/plugin/tdengine.html
         # go build -trimpath -modfile extensions.mod --buildmode=plugin -v -o _build/kuiper/plugins/sinks/tdengine@v{{kubethings.aiot.cloud.tdengine.version}}.so extensions/sinks/tdengine/tdengine.go && \
+    # https://ekuiper.org/docs/zh/latest/operation/config/authentication.html
     rm -rfv _build/kuiper/etc/mgmt/* && \
     openssl genrsa -out _build/kuiper/etc/mgmt/jwt.key 2048 && \
     openssl rsa -in _build/kuiper/etc/mgmt/jwt.key -pubout -out _build/kuiper/etc/mgmt/jwt.pub
@@ -58,6 +60,7 @@ ENV \
 WORKDIR ${kuiperHome}
 
 COPY \
+    # https://ekuiper.org/docs/zh/latest/operation/install/overview.html
     --from='builder' /go/kuiper/_build/kuiper/ ${kuiperHome}/
 
 RUN \
