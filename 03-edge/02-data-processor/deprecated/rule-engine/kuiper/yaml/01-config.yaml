@@ -7,6 +7,8 @@ metadata:
   name: kuiper-env
 immutable: false
 data:
+  # CONNECTION__MQTT__CLOUD__SERVER: tcp://mqtt-cloud.${POD_NAMESPACE}.svc.cluster.local:8883
+  # CONNECTION__MQTT__CLOUD__CLIENTID: kuiper_${NODE_NAME}_${NODE_IP}
 
 # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/deploy/chart/kuiper/templates/configmap.yaml
 ---
@@ -111,6 +113,11 @@ data:
         qos: 1
 
     edgex:
+      redis:
+        type: redis
+        protocol: redis
+        server: 127.0.0.1
+        port: 6379
       mqtt:
         type: mqtt
         protocol: tcp
@@ -130,11 +137,6 @@ data:
         protocol: tcp
         server: 127.0.0.1
         port: 5571
-      redis:
-        type: redis
-        protocol: redis
-        server: 127.0.0.1
-        port: 6379
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/mqtt_source.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/mqtt.html
@@ -165,10 +167,15 @@ data:
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/edgex.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
+  # https://ekuiper.org/docs/zh/latest/edgex/edgex_rule_engine_tutorial.html
   edgex.yaml: |
 
     default:
-      connectionSelector: edgex.mqtt
+      connectionSelector: edgex.redis
+      topic: events
+      messageType: event
+    redis:
+      connectionSelector: edgex.redis
       topic: events
       messageType: event
     mqtt:
@@ -179,13 +186,9 @@ data:
       connectionSelector: edgex.zeromq
       topic: events
       messageType: event
-    redis:
-      connectionSelector: edgex.redis
-      topic: events
-      messageType: event
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/httppull.yaml
-  httppull.yaml: |
+  http-get.yaml: |
 
   # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/etc/sources/random.yaml
   # https://ekuiper.org/docs/zh/latest/rules/sources/plugin/random.html

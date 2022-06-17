@@ -52,7 +52,11 @@
 
         - `传感器`
 
+            温度、湿度等是 `json 数据`
+
         - `摄像头`
+
+            图片、视频等是`二进制数据`
 
         - ···
 
@@ -169,11 +173,11 @@
 
         2. `edge-ai`
 
-            edge-ai 是 "edge-app 自动指令" 的数据源. edge-ai 负责以下能力:
+            edge-ai `预训练模型`相当于负责特定逻辑的 edge-app 智能函数. edge-ai 负责以下能力:
 
             1. "edge-app 自动指令" 的数据源
 
-                edge-ai 根据 device 上报的 things 数据, 对 device 状态进行预测, 将预测的 device 最佳参数反馈到 edge-app. edge-app 将 device 最佳参数下发到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic).
+                edge-app 将 device 上报的 things 数据传给 edge-ai, edge-ai 对 device 状态进行预测, 将预测的 device 最佳参数返回 edge-app. edge-app 将 device 最佳参数下发到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic).
 
             qa:
 

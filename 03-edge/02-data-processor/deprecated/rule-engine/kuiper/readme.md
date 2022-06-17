@@ -20,6 +20,44 @@ helm template kuiper \
     --set replicaCount='1' > kuiper.yaml
 ```
 
-# kuiper-ui
+## stream: 数据流
+
+1. source: 数据源
+
+    - mqtt
+
+    - zeromq
+
+    - http-get
+
+    - neuron
+
+2. rule(based on sql and function): 数据处理
+
+    - sql: 查询
+
+    - action: 动作
+
+        - function: 内置函数
+
+        - extension: 扩展
+
+3. sink: 处理结果发送目标
+
+    - mqtt
+
+    - zeromq
+
+    - http-post
+
+    - neuron
+
+## api
+
+### http
+
+#### ui
 
 > warning: kuiper-manager is not open source: https://hub.docker.com/r/emqx/ekuiper-manager
+
+### cli
