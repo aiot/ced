@@ -35,6 +35,11 @@ docker rmi golang:1.17-alpine
 # # docker rmi lfedge/ekuiper:${kuiperVersion}-slim
 
 
+# build kuiper-manager image
+buildImage dashboard.dockerfile ${imageRepository}/kuiper-manager:${kuiperVersion}
+docker rmi emqx/ekuiper-manager:${kuiperVersion}
+
+
 #
 docker rmi {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/alpine:${alpineVersion} || true
 docker rmi {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/ubuntu:${ubuntuVersion} || true
