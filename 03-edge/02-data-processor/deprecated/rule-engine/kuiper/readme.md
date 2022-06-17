@@ -22,7 +22,9 @@ helm template kuiper \
 
 ## stream: 数据流
 
-1. source: 数据源
+1. source: `输入`
+
+    > https://ekuiper.org/docs/zh/latest/concepts/sources/overview.html
 
     - mqtt
 
@@ -30,27 +32,49 @@ helm template kuiper \
 
     - http-get
 
+    - file
+
     - neuron
 
-2. rule(based on sql and function): 数据处理
+    - edgex
+
+2. rule(based on sql and function): `计算`
+
+    > https://ekuiper.org/docs/zh/latest/concepts/rules.html
 
     - sql: 查询
 
-    - action: 动作
+        > https://ekuiper.org/docs/zh/latest/concepts/sql.html
+
+    - action: 业务逻辑
 
         - function: 内置函数
 
         - extension: 扩展
 
-3. sink: 处理结果发送目标
+3. sink: `输出`
 
-    - mqtt
+    > https://ekuiper.org/docs/zh/latest/concepts/sinks.html
 
-    - zeromq
+    - 控制数据
 
-    - http-post
+        - mqtt
 
-    - neuron
+        - zeromq
+
+        - neuron
+
+        - edgex
+
+    - 状态数据
+
+        - http-post
+
+        - database
+
+        - file
+
+        - log
 
 ## api
 
