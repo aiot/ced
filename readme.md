@@ -412,7 +412,7 @@
 
                     考虑到 "edge-app 自动指令" 可能因为 edge-ai 模型更新不及时而导致准确性略差, cloud-app 可以根据 cloud-ai 的预测自动下发指令到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
 
-                    > note:
+                    > &#x270F; note:
                     >
                     > 1. 为什么有了 "edge-app 自动指令", 还需要 "cloud-app 自动指令"
                     >
@@ -424,13 +424,13 @@
 
                     在 digital-twin 上可以调用 cloud-app 对 device 手动下发指令.
 
-                    > note:
+                    > &#x270F; note:
                     >
                     > 1. device 参数通常情况下由 edge-ai 和 cloud-ai 自动调整, 若 digital-twin 的使用者观察到 device 的参数明显反常, 认为 ai 的预测出现了错误, 可以对 device 手动下发指令.
                     >
                     >     edge-app 在向 device 下发指令时, 应优先考虑 cloud-app 下发的指令, 再考虑 edge-app 下发的指令. 若 "cloud-app 指令" 和 "edge-app 指令" 同时存在, 则 "edge-app 指令" 将被忽略.
 
-                    > warning:
+                    > &#x26A0; warning:
                     >
                     > 1. 建议不要在 digital-twin 上对 device 手动下发指令, 应优先考虑使用 ai 自动更改 device 参数.
                     >
