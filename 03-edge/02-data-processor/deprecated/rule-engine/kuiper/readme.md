@@ -45,13 +45,21 @@ helm template kuiper \
 
             > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/neuron.html
 
-            neuron 与 kuiper 必须运行在同一 edge 上, 因为 kuiper 与 neoron 之间基于 nanomsg ipc 协议通信, 无法通过网络进行
+            kuiper 与 neuron 必须运行在同一 edge 上, 因为 kuiper 与 neoron 之间基于 nanomsg ipc 协议通信, 无法通过网络进行
+
+            - `通过 neuron 向 device 发送指令`
+
+                > `https://ekuiper.org/docs/zh/latest/tutorials/neuron/neuron_integration_tutorial.html`
 
         <strike>
 
         - edgex
 
             > https://ekuiper.org/docs/zh/latest/rules/sources/builtin/edgex.html
+
+            - 通过 edgex 向 device 发送指令
+
+                > https://ekuiper.org/docs/zh/latest/edgex/edgex_rule_engine_command.html
 
         </strike>
 
@@ -92,7 +100,7 @@ helm template kuiper \
 
             > https://ekuiper.org/docs/zh/latest/extension/overview.html
 
-            - `使用外部服务作为函数扩展`
+            - `使用外部服务(例如 edge-ai)作为函数扩展`
 
                 > https://ekuiper.org/docs/zh/latest/extension/external/external_func.html
 
