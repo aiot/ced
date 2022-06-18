@@ -1,6 +1,6 @@
 # `AIoT`
 
-1. &#x20E3; `things`
+1. &#x0031; `things`
 
     things 即万物, 是 device 的数据源. things 包括两种类型数据:
 
