@@ -50,8 +50,9 @@
 
 ### QoS: Quality of Service (服务质量)
 
-> https://www.emqx.io/docs/zh/v4.4/advanced/retransmission.html <br/>
-https://www.emqx.com/zh/blog/introduction-to-mqtt-qos
+> https://www.emqx.io/docs/zh/v4.4/advanced/retransmission.html
+>
+> https://www.emqx.com/zh/blog/introduction-to-mqtt-qos
 
 - 0
 

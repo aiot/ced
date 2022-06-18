@@ -1,7 +1,8 @@
 # emqx
 
-> https://www.emqx.io/docs/zh/v4.4/, https://docs.emqx.com/zh/enterprise/v4.4/ <br/>
-https://github.com/emqx/emqx
+> https://www.emqx.io/docs/zh/v4.4/, https://docs.emqx.com/zh/enterprise/v4.4/
+>
+> https://github.com/emqx/emqx
 
 ## architecture
 
@@ -133,9 +134,11 @@ app 调用 emqx api 可以实现以下能力:
 
 - `消息持久化`
 
-    > https://www.emqx.io/docs/zh/v4.4/backend/backend.html <br/>
-    https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html <br/>
-    https://www.emqx.com/zh/blog/emqx-plug-in-persistence-series-4-postgresql-data-persistence
+    > https://www.emqx.io/docs/zh/v4.4/backend/backend.html
+    >
+    > https://docs.emqx.com/zh/enterprise/v4.4/backend/backend_pgsql.html
+    >
+    > https://www.emqx.com/zh/blog/emqx-plug-in-persistence-series-4-postgresql-data-persistence
 
 ## client
 

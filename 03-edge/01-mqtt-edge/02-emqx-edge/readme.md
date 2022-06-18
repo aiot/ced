@@ -1,7 +1,8 @@
 # emqx-edge
 
-> the document of emqx-edge seems no longer maintenance: <br/>
-~~https://docs.emqx.io/en/edge/latest/, https://github.com/emqx/emqx-edge-docs/blob/master/zh_CN/~~
+> the document of emqx-edge seems no longer maintenance:
+>
+> ~~https://docs.emqx.io/en/edge/latest/, https://github.com/emqx/emqx-edge-docs/blob/master/zh_CN/~~
 
 note: emqx-edge 的本质就是 emqx, 只是在编译时比 emqx 少编译了一些模块.
 
@@ -19,8 +20,9 @@ warning: emqx-edge 有以下非常不合理的地方
 
 - `消息桥接`
 
-    > https://www.emqx.io/docs/zh/v4.4/advanced/bridge.html <br/>
-    https://www.emqx.io/docs/zh/v4.4/bridge/bridge-mqtt.html
+    > https://www.emqx.io/docs/zh/v4.4/advanced/bridge.html
+    >
+    > https://www.emqx.io/docs/zh/v4.4/bridge/bridge-mqtt.html
 
     emqx-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud)
 

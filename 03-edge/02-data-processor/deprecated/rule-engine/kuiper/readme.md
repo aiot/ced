@@ -1,7 +1,8 @@
 # kuiper
 
-> https://github.com/lf-edge/ekuiper <br/>
-https://docs.emqx.com/zh/kuiper/latest/
+> https://github.com/lf-edge/ekuiper
+>
+> https://docs.emqx.com/zh/kuiper/latest/
 
 ## yaml reference
 
@@ -24,8 +25,9 @@ helm template kuiper \
 
 1. `输入`: source
 
-    > https://ekuiper.org/docs/zh/latest/concepts/sources/overview.html <br/>
-    https://ekuiper.org/docs/zh/latest/rules/sources/overview.html
+    > https://ekuiper.org/docs/zh/latest/concepts/sources/overview.html
+    >
+    > https://ekuiper.org/docs/zh/latest/rules/sources/overview.html
 
     - 控制数据
 
@@ -83,14 +85,17 @@ helm template kuiper \
 
 2. `计算`: function
 
-    > https://ekuiper.org/docs/zh/latest/concepts/rules.html <br/>
-    https://ekuiper.org/docs/zh/latest/rules/overview.html <br/>
-    https://ekuiper.org/docs/zh/latest/rules/rule_pipeline.html
+    > https://ekuiper.org/docs/zh/latest/concepts/rules.html
+    >
+    > https://ekuiper.org/docs/zh/latest/rules/overview.html
+    >
+    > https://ekuiper.org/docs/zh/latest/rules/rule_pipeline.html
 
     - sql: 查询
 
-        > https://ekuiper.org/docs/zh/latest/concepts/sql.html <br/>
-        https://ekuiper.org/docs/zh/latest/sqls/overview.html
+        > https://ekuiper.org/docs/zh/latest/concepts/sql.html
+        >
+        > https://ekuiper.org/docs/zh/latest/sqls/overview.html
 
     - action: 逻辑
 
@@ -110,8 +115,9 @@ helm template kuiper \
 
 3. `输出`: sink
 
-    > https://ekuiper.org/docs/zh/latest/concepts/sinks.html <br/>
-    https://ekuiper.org/docs/zh/latest/rules/sinks/overview.html
+    > https://ekuiper.org/docs/zh/latest/concepts/sinks.html
+    >
+    > https://ekuiper.org/docs/zh/latest/rules/sinks/overview.html
 
     - 控制数据
 
@@ -189,8 +195,9 @@ helm template kuiper \
 
 #### ui
 
-> warning: kuiper-manager is not open source <br/>
-https://ekuiper.org/docs/zh/latest/operation/manager-ui/overview.html
+> warning: kuiper-manager is not open source
+>
+> https://ekuiper.org/docs/zh/latest/operation/manager-ui/overview.html
 
 ### rpc
 
