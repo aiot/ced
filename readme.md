@@ -217,6 +217,12 @@
 
                 首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级.
 
+            reference:
+
+            - `在 kuiper 中以函数形式调用 tensor-flow lite 预训练模型`
+
+                - https://ekuiper.org/docs/zh/latest/tutorials/ai/tensorflow_lite_tutorial.html
+
 4. `cloud`
 
     1. `mqtt-cloud`: 消息队列

@@ -104,6 +104,10 @@ helm template kuiper \
 
                 > https://ekuiper.org/docs/zh/latest/extension/external/external_func.html
 
+                - `以函数形式调用 tensor-flow lite 预训练模型`
+
+                    > https://ekuiper.org/docs/zh/latest/tutorials/ai/tensorflow_lite_tutorial.html
+
 3. `输出`: sink
 
     > https://ekuiper.org/docs/zh/latest/concepts/sinks.html <br/>
