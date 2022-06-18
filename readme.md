@@ -146,7 +146,7 @@
 
         3. 数据处理
 
-        - `流处理`
+        - `流处理` (与流处理相对应的是批处理)
 
             > https://ekuiper.org/docs/zh/latest/concepts/streaming/overview.html
 
@@ -176,10 +176,6 @@
                     - 会话窗口
 
                 - 计数窗口: 按元素计数分割的窗口
-
-        - 批处理
-
-            与流处理相对应的是批处理
 
             1. `edge-app`
 
