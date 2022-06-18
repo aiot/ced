@@ -62,9 +62,13 @@
 
             - wifi
 
+        <strike>
+
         2. device 集成在 edge 上, 通过`有线通信`将 things 数据上报到 edge
 
             - LAN(网线)
+
+        </strike>
 
     - 软件(软件工程)
 
@@ -99,6 +103,8 @@
     - 硬件(通信工程)
 
         - 基于 `Raspberry Pi` 构建 edge 硬件
+
+            - https://www.emqx.com/zh/blog/smart-home-hub-on-raspberry-pi
 
     - 软件(软件工程)
 
