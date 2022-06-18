@@ -84,144 +84,150 @@
 
 3. `edge`
 
-    ~~edge 在`经典IoT`中称为边缘网关~~. edge 负责以下能力:
+    edge ~~在`经典IoT`中称为边缘网关~~, 包括软件和硬件两部分:
 
-    <!-- <div align="center">
-        <img src="https://static.emqx.com/_nuxt/img/banner-en-bg.4968787.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/banner-en-bg.4968787.png" />
-    </div> -->
+    - 软件层面, edge 负责以下能力:
 
-    <strike>
-
-    1. 数据转换: 通常应用于`工业互联网`
-
-        若上报到 edge 的数据不是 device 上报, 而是 things(如工控机) 直接上报的, 则需要由运行于 edge 上的`数据格式转换软件`将 things 数据格式转换为 mqtt 数据格式, 然后发送到 mqtt-edge.
-
-        同样, 对 things 下发指令, 也需要由运行于 edge 上的数据格式转换软件将 mqtt 数据格式转换为 things 数据格式.
-
-    </strike>
-
-    2. `mqtt-edge`: 消息队列
-
-        mqtt-edge 是 edge-app 的数据源
-
-        功能:
-
-        - 必要: 支持`证书认证`
-
-            - mqtt-edge 作为 server 时, 支持 client(如 device) 使用证书认证
-
-            - mqtt-edge 作为 client 向其他 mqtt-server(如 mqtt-cloud) 转发(桥接) message 时, 支持使用证书向其他 mqtt-server 发起认证
+        <!-- <div align="center">
+            <img src="https://static.emqx.com/_nuxt/img/banner-en-bg.4968787.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/banner-en-bg.4968787.png" />
+        </div> -->
 
         <strike>
 
-        - 可选: 支持`消息桥接`
+        1. 数据转换: 通常应用于`工业互联网`
 
-            mqtt-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud)
+            若上报到 edge 的数据不是 device 上报, 而是 things(如工控机) 直接上报的, 则需要由运行于 edge 上的`数据格式转换软件`将 things 数据格式转换为 mqtt 数据格式, 然后发送到 mqtt-edge.
 
-            > 消息桥接是非必要功能: <br/>
-            > 1. 出于实时性考虑, 一些 things 数据必须在 edge 侧就近处理; <br/>
-            > 2. 出于安全考虑, 一些敏感 things 数据(如家庭摄像头)必须限制在 edge 侧处理, 因此不一定(实际上多数情况是一定不)所有 device 采集的 things 数据都需要转发(桥接)到 mqtt-cloud; <br/>
-            > 3. 出于网络原因, 转发(桥接)大量 things 数据到 mqtt-cloud 在速度和成本上都是不具有现实可行性的; <br/>
-            > 4. 应当确保 mqtt-edge 的唯一操作入口是 edge-app, 确需转发到 mqtt-cloud 的少量原始 things 数据可以通过 edge-app 完成.
+            同样, 对 things 下发指令, 也需要由运行于 edge 上的数据格式转换软件将 mqtt 数据格式转换为 things 数据格式.
 
-            - 支持`消息缓存`
+        </strike>
 
-                mqtt-edge 与 mqtt-cloud 断连时, client(如 device) 发布的 message(称为`离线消息`) 不丢失, 连接恢复后继续转发(桥接)
+        2. `mqtt-edge`: 消息队列
 
-                - 缓存到磁盘
+            mqtt-edge 是 edge-app 的数据源
 
-                    建议缓存到磁盘
+            功能:
 
-                - ~~缓存到数据库(如 sqlite)~~
+            - 必要: 支持`证书认证`
 
-            </strike>
+                - mqtt-edge 作为 server 时, 支持 client(如 device) 使用证书认证
 
-        - 必要: 支持 http api
+                - mqtt-edge 作为 client 向其他 mqtt-server(如 mqtt-cloud) 转发(桥接) message 时, 支持使用证书向其他 mqtt-server 发起认证
 
-            - 支持通过 api 关闭非法连接
+            <strike>
 
-            - 支持一个 dashboard(managed-by-cloud) 管理多个 mqtt-server 实例
+            - 可选: 支持`消息桥接`
 
-    3. 数据处理
+                mqtt-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud)
 
-    - 流处理
+                > 消息桥接是非必要功能: <br/>
+                > 1. 出于实时性考虑, 一些 things 数据必须在 edge 侧就近处理; <br/>
+                > 2. 出于安全考虑, 一些敏感 things 数据(如家庭摄像头)必须限制在 edge 侧处理, 因此不一定(实际上多数情况是一定不)所有 device 采集的 things 数据都需要转发(桥接)到 mqtt-cloud; <br/>
+                > 3. 出于网络原因, 转发(桥接)大量 things 数据到 mqtt-cloud 在速度和成本上都是不具有现实可行性的; <br/>
+                > 4. 应当确保 mqtt-edge 的唯一操作入口是 edge-app, 确需转发到 mqtt-cloud 的少量原始 things 数据可以通过 edge-app 完成.
 
-        > https://ekuiper.org/docs/zh/latest/concepts/streaming/overview.html
+                - 支持`消息缓存`
 
-        流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算. 数据流具有以下属性:
+                    mqtt-edge 与 mqtt-cloud 断连时, client(如 device) 发布的 message(称为`离线消息`) 不丢失, 连接恢复后继续转发(桥接)
 
-        - 时间戳
+                    - 缓存到磁盘
 
-            > https://ekuiper.org/docs/zh/latest/concepts/streaming/time.html
+                        建议缓存到磁盘
 
-            - 事件时间: 事件发生时间
+                    - ~~缓存到数据库(如 sqlite)~~
 
-            - 处理时间: kuiper 观察到事件的时间
+                </strike>
 
-        - 窗口
+            - 必要: 支持 http api
 
-            > https://ekuiper.org/docs/zh/latest/concepts/streaming/windowing.html <br/>
-            https://ekuiper.org/docs/zh/latest/sqls/windows.html
+                - 支持通过 api 关闭非法连接
 
-            - 时间窗口: 按时间段分割的窗口
+                - 支持一个 dashboard(managed-by-cloud) 管理多个 mqtt-server 实例
 
-                - 滚动窗口: 将数据流分割成不同的时间段
+        3. 数据处理
 
-                - 跳跃窗口
+        - `流处理`
 
-                - 滑动窗口
+            > https://ekuiper.org/docs/zh/latest/concepts/streaming/overview.html
 
-                - 会话窗口
+            流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算. 数据流具有以下属性:
 
-            - 计数窗口: 按元素计数分割的窗口
+            - 时间戳
 
-    - 批处理
+                > https://ekuiper.org/docs/zh/latest/concepts/streaming/time.html
 
-        与流处理相对应的是批处理
+                - 事件时间: 事件发生时间
 
-        1. `edge-app`
+                - 处理时间: kuiper 观察到事件的时间
 
-            > edge-app 是必需且不能少的. 由于云边网络不稳定, 在 edge 与 cloud 网络断开时, 必须存在 edge-app 对 device 采集的 things 数据进行实时处理.
+            - 窗口
 
-            edge-app 是 mqtt-edge 的唯一操作入口, 是 edge-ai 的数据源. edge-app ~~取代经典 IoT 中的`规则引擎`(也称`规则流水线`)(一种基于 sql 实时处理(提取、转换、聚合、路由)查询自 mqtt-edge 的 things 数据的`低代码`工具),~~ 负责以下能力:
+                > https://ekuiper.org/docs/zh/latest/concepts/streaming/windowing.html <br/>
+                https://ekuiper.org/docs/zh/latest/sqls/windows.html
 
-            1. 处理查询自 mqtt-edge 的 things 数据
+                - 时间窗口: 按时间段分割的窗口
 
-                - 转发 edge-ai 需要的 things 数据至 edge-ai, 进行预测
+                    - 滚动窗口: 将数据流分割成不同的时间段
 
-                - 压缩并转发非敏感 things 数据至 mqtt-cloud. cloud-app 将查询自 mqtt-cloud 的非敏感 things 数据持久化到时序数据库
+                    - 跳跃窗口
 
-            2. 指令下发
+                    - 滑动窗口
 
-                1. 自动下发
+                    - 会话窗口
 
-                    将 edge-ai 预测的 device 最佳参数下发到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
+                - 计数窗口: 按元素计数分割的窗口
 
-                2. 转发 "digital-twin 手动指令"
+        - 批处理
 
-                    转发 "digital-twin 手动指令" 到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
+            与流处理相对应的是批处理
 
-        2. `edge-ai`
+            1. `edge-app`
 
-            edge-ai `预训练模型`相当于负责特定逻辑的 edge-app 智能函数. edge-ai 负责以下能力:
+                > edge-app 是必需且不能少的. 由于云边网络不稳定, 在 edge 与 cloud 网络断开时, 必须存在 edge-app 对 device 采集的 things 数据进行实时处理.
 
-            1. "edge-app 自动指令" 的数据源
+                edge-app 是 mqtt-edge 的唯一操作入口, 是 edge-ai 的数据源. edge-app ~~取代经典 IoT 中的`规则引擎`(也称`规则流水线`)(一种基于 sql 实时处理(提取、转换、聚合、路由)查询自 mqtt-edge 的 things 数据的`低代码`工具),~~ 负责以下能力:
 
-                edge-app 将 device 上报的 things 数据传给 edge-ai, edge-ai 对 device 状态进行预测, 将预测的 device 最佳参数返回 edge-app. edge-app 将 device 最佳参数下发到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic).
+                1. 处理查询自 mqtt-edge 的 things 数据
 
-            qa:
+                    - 转发 edge-ai 需要的 things 数据至 edge-ai, 进行预测
 
-            1. edge-ai 可以直接操作 mqtt-edge 对 device 下发指令吗?
+                    - 压缩并转发非敏感 things 数据至 mqtt-cloud. cloud-app 将查询自 mqtt-cloud 的非敏感 things 数据持久化到时序数据库
 
-                不可以.
+                2. 指令下发
 
-                首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级.
+                    1. 自动下发
 
-            reference:
+                        将 edge-ai 预测的 device 最佳参数下发到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
 
-            - `在 kuiper 中以函数形式调用 tensor-flow lite 预训练模型`
+                    2. 转发 "digital-twin 手动指令"
 
-                - https://ekuiper.org/docs/zh/latest/tutorials/ai/tensorflow_lite_tutorial.html
+                        转发 "digital-twin 手动指令" 到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
+
+            2. `edge-ai`
+
+                edge-ai `预训练模型`相当于负责特定逻辑的 edge-app 智能函数. edge-ai 负责以下能力:
+
+                1. "edge-app 自动指令" 的数据源
+
+                    edge-app 将 device 上报的 things 数据传给 edge-ai, edge-ai 对 device 状态进行预测, 将预测的 device 最佳参数返回 edge-app. edge-app 将 device 最佳参数下发到 device (下发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic).
+
+                qa:
+
+                1. edge-ai 可以直接操作 mqtt-edge 对 device 下发指令吗?
+
+                    不可以.
+
+                    首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级.
+
+                reference:
+
+                - `在 kuiper 中以函数形式调用 tensor-flow lite 预训练模型`
+
+                    - https://ekuiper.org/docs/zh/latest/tutorials/ai/tensorflow_lite_tutorial.html
+
+    - 硬件层面
+
+        - 基于 Raspberry Pi 构建 edge 硬件
 
 4. `cloud`
 
