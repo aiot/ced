@@ -70,7 +70,9 @@
 
         device 是 mqtt-edge 的数据源, 负责以下能力:
 
-        1. `数据采集`(data-acquisition): 采集 things 数据
+        1. `数据采集`(data-acquisition)
+
+            采集 things 数据
 
             - `传感器`
 
@@ -82,7 +84,9 @@
 
             - ···
 
-        2. `数据上报`(data-reporting): 以 mqtt 格式上报 things 数据至 edge
+        2. `数据上报`(data-reporting)
+
+            以 mqtt 格式上报 things 数据至 edge
 
             功能:
 
@@ -120,7 +124,7 @@
 
             功能:
 
-            - 必要: 支持`证书认证`
+            - &#x2705; 必要: 支持`证书认证`
 
                 - mqtt-edge 作为 server 时, 支持 client(如 device) 使用证书认证
 
@@ -128,7 +132,7 @@
 
             <strike>
 
-            - 可选: 支持`消息桥接`
+            - &#x274E; 可选: 支持`消息桥接`
 
                 mqtt-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud)
 
@@ -154,7 +158,7 @@
 
                 </strike>
 
-            - 必要: 支持 http api
+            - &#x2705; 必要: 支持 http api
 
                 - 支持通过 api 关闭非法连接
 
@@ -254,7 +258,7 @@
 
         > https://docs.emqx.com/zh/enterprise/v4.4/introduction/checklist.html
 
-        - 必要: 支持证书认证
+        - &#x2705; 必要: 支持证书认证
 
             - mqtt-cloud 作为 server 时, 支持 client(如 edge-app、mqtt-edge) 使用证书认证
 
@@ -262,7 +266,7 @@
 
         <strike>
 
-        - 可选: 支持 message 持久化
+        - &#x274E; 可选: 支持 message 持久化
 
             支持 message 持久化到数据库, 供 cloud-app 查询
 
@@ -280,7 +284,7 @@
 
         </strike>
 
-        - 必要: 支持 http api
+        - &#x2705; 必要: 支持 http api
 
             - 支持通过 api 关闭非法连接
 
@@ -354,7 +358,7 @@
 
     4. `交互应用`(interact-app)
 
-        1. `digital-twin`: `数字孪生`
+        1. `digital-twin(数字孪生)`
 
             digital-twin 是 cloud-app 的前端. digital-twin 负责以下能力:
 
