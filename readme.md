@@ -44,6 +44,8 @@
 
         - ···
 
+---
+
 2. `device`
 
     device 即智能设备, 是 mqtt-edge 的数据源. device 负责以下能力:
@@ -81,6 +83,8 @@
         - 有线
 
             - LAN(网线)
+
+---
 
 3. `edge`
 
@@ -120,10 +124,14 @@
 
                 mqtt-edge 作为 client 转发(桥接) message 到其他 mqtt-server(如 mqtt-cloud)
 
-                > 消息桥接是非必要功能: <br/>
-                > 1. 出于实时性考虑, 一些 things 数据必须在 edge 侧就近处理; <br/>
-                > 2. 出于安全考虑, 一些敏感 things 数据(如家庭摄像头)必须限制在 edge 侧处理, 因此不一定(实际上多数情况是一定不)所有 device 采集的 things 数据都需要转发(桥接)到 mqtt-cloud; <br/>
-                > 3. 出于网络原因, 转发(桥接)大量 things 数据到 mqtt-cloud 在速度和成本上都是不具有现实可行性的; <br/>
+                > 消息桥接是非必要功能:
+                >
+                > 1. 出于实时性考虑, 一些 things 数据必须在 edge 侧就近处理;
+                >
+                > 2. 出于安全考虑, 一些敏感 things 数据(如家庭摄像头)必须限制在 edge 侧处理, 因此不一定(实际上多数情况是一定不)所有 device 采集的 things 数据都需要转发(桥接)到 mqtt-cloud;
+                >
+                > 3. 出于网络原因, 转发(桥接)大量 things 数据到 mqtt-cloud 在速度和成本上都是不具有现实可行性的;
+                >
                 > 4. 应当确保 mqtt-edge 的唯一操作入口是 edge-app, 确需转发到 mqtt-cloud 的少量原始 things 数据可以通过 edge-app 完成.
 
                 - 支持`消息缓存`
@@ -146,36 +154,40 @@
 
         3. 数据处理
 
-        - `流处理` (与流处理相对应的是批处理)
+            - `流处理`
 
-            > https://ekuiper.org/docs/zh/latest/concepts/streaming/overview.html
+                > https://ekuiper.org/docs/zh/latest/concepts/streaming/overview.html
 
-            流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算. 数据流具有以下属性:
+                流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算. 数据流具有以下属性:
 
-            - 时间戳
+                - 时间戳
 
-                > https://ekuiper.org/docs/zh/latest/concepts/streaming/time.html
+                    > https://ekuiper.org/docs/zh/latest/concepts/streaming/time.html
 
-                - 事件时间: 事件发生时间
+                    - 事件时间: 事件发生时间
 
-                - 处理时间: kuiper 观察到事件的时间
+                    - 处理时间: kuiper 观察到事件的时间
 
-            - 窗口
+                - 窗口
 
-                > https://ekuiper.org/docs/zh/latest/concepts/streaming/windowing.html <br/>
-                https://ekuiper.org/docs/zh/latest/sqls/windows.html
+                    > https://ekuiper.org/docs/zh/latest/concepts/streaming/windowing.html <br/>
+                    https://ekuiper.org/docs/zh/latest/sqls/windows.html
 
-                - 时间窗口: 按时间段分割的窗口
+                    - 时间窗口: 按时间段分割的窗口
 
-                    - 滚动窗口: 将数据流分割成不同的时间段
+                        - 滚动窗口: 将数据流分割成不同的时间段
 
-                    - 跳跃窗口
+                        - 跳跃窗口
 
-                    - 滑动窗口
+                        - 滑动窗口
 
-                    - 会话窗口
+                        - 会话窗口
 
-                - 计数窗口: 按元素计数分割的窗口
+                    - 计数窗口: 按元素计数分割的窗口
+
+            - 批处理
+
+                与流处理相对应的是批处理
 
             1. `edge-app`
 
@@ -224,6 +236,8 @@
     - 硬件层面
 
         - 基于 Raspberry Pi 构建 edge 硬件
+
+---
 
 4. `cloud`
 
@@ -368,15 +382,20 @@
 
             2. `指令下发`
 
-                > `指令优先级`: <br/>
-                > 1. digital-twin 手动指令 <br/>
-                > 2. cloud-app 自动指令 <br/>
+                > `指令优先级`:
+                >
+                > 1. digital-twin 手动指令
+                >
+                > 2. cloud-app 自动指令
+                >
                 > 3. edge-app 自动指令
 
                 ---
 
-                > "cloud-app 自动指令" 与 "edge-app 自动指令" 的优缺点 <br/>
-                > - "cloud-app 自动指令": 实时性差, 准确性高 <br/>
+                > "cloud-app 自动指令" 与 "edge-app 自动指令" 的优缺点:
+                >
+                > - "cloud-app 自动指令": 实时性差, 准确性高
+                >
                 > - "edge-app 自动指令": 实时性高, 准确性略差
 
                 ---
@@ -387,23 +406,30 @@
 
                     考虑到 "edge-app 自动指令" 可能因为 edge-ai 模型更新不及时而导致准确性略差, cloud-app 可以根据 cloud-ai 的预测自动下发指令到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic)
 
-                    > note: <br/>
-                    > 1. 为什么有了 "edge-app 自动指令", 还需要 "cloud-app 自动指令" <br/>
-                    >     cloud-ai 的预测比 edge-ai 更准确, "cloud-app 自动指令" 主要作为 "edge-app 自动指令" 的辅助工具, 在 cloud-edge 网络良好的情况下, 可以修正 "edge-app 自动指令". <br/>
+                    > note:
+                    >
+                    > 1. 为什么有了 "edge-app 自动指令", 还需要 "cloud-app 自动指令"
+                    >
+                    >     cloud-ai 的预测比 edge-ai 更准确, "cloud-app 自动指令" 主要作为 "edge-app 自动指令" 的辅助工具, 在 cloud-edge 网络良好的情况下, 可以修正 "edge-app 自动指令".
+                    >
                     >     但通常情况下, cloud-edge 之间的网络质量是不能保证, "cloud-app 自动指令" 不能保证实时性, 所以 "edge-app 自动指令" 起主要作用, "cloud-app 自动指令" 只是 "edge-app 自动指令" 的辅助.
 
                 2. `手动下发`
 
                     在 digital-twin 上可以调用 cloud-app 对 device 手动下发指令.
 
-                    > note: <br/>
-                    > 1. device 参数通常情况下由 edge-ai 和 cloud-ai 自动调整, 若 digital-twin 的使用者观察到 device 的参数明显反常, 认为 ai 的预测出现了错误, 可以对 device 手动下发指令. <br/>
+                    > note:
+                    >
+                    > 1. device 参数通常情况下由 edge-ai 和 cloud-ai 自动调整, 若 digital-twin 的使用者观察到 device 的参数明显反常, 认为 ai 的预测出现了错误, 可以对 device 手动下发指令.
+                    >
                     >     edge-app 在向 device 下发指令时, 应优先考虑 cloud-app 下发的指令, 再考虑 edge-app 下发的指令. 若 "cloud-app 指令" 和 "edge-app 指令" 同时存在, 则 "edge-app 指令" 将被忽略.
 
                     ---
 
-                    > warning: <br/>
-                    > 1. 建议不要在 digital-twin 上对 device 手动下发指令, 应优先考虑使用 ai 自动更改 device 参数. <br/>
+                    > warning:
+                    >
+                    > 1. 建议不要在 digital-twin 上对 device 手动下发指令, 应优先考虑使用 ai 自动更改 device 参数.
+                    >
                     >     若发现 device 状态有明显错误, 应考虑修正 ai 模型.
 
         2. `mobile-app`
