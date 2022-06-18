@@ -44,8 +44,6 @@
 
         - ···
 
----
-
 2. `device`
 
     device 即智能设备, 是 mqtt-edge 的数据源. device 负责以下能力:
@@ -83,8 +81,6 @@
         - 有线
 
             - LAN(网线)
-
----
 
 3. `edge`
 
@@ -154,40 +150,43 @@
 
         3. 数据处理
 
-            - `流处理`
-
-                > https://ekuiper.org/docs/zh/latest/concepts/streaming/overview.html
-
-                流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算. 数据流具有以下属性:
-
-                - 时间戳
-
-                    > https://ekuiper.org/docs/zh/latest/concepts/streaming/time.html
-
-                    - 事件时间: 事件发生时间
-
-                    - 处理时间: kuiper 观察到事件的时间
-
-                - 窗口
-
-                    > https://ekuiper.org/docs/zh/latest/concepts/streaming/windowing.html <br/>
-                    https://ekuiper.org/docs/zh/latest/sqls/windows.html
-
-                    - 时间窗口: 按时间段分割的窗口
-
-                        - 滚动窗口: 将数据流分割成不同的时间段
-
-                        - 跳跃窗口
-
-                        - 滑动窗口
-
-                        - 会话窗口
-
-                    - 计数窗口: 按元素计数分割的窗口
-
-            - 批处理
-
-                与流处理相对应的是批处理
+            > 知识铺垫
+            >
+            > - `流处理`
+            >
+            >     > https://ekuiper.org/docs/zh/latest/concepts/streaming/overview.html
+            >
+            >     流处理基于事件机制, 每个数据流相当于一个事件, 每个事件触发一次计算. 数据流具有以下属性:
+            >
+            >     - 时间戳
+            >
+            >         > https://ekuiper.org/docs/zh/latest/concepts/streaming/time.html
+            >
+            >         - 事件时间: 事件发生时间
+            >
+            >         - 处理时间: kuiper 观察到事件的时间
+            >
+            >     - 窗口
+            >
+            >         > https://ekuiper.org/docs/zh/latest/concepts/streaming/windowing.html
+            >         >
+            >         > https://ekuiper.org/docs/zh/latest/sqls/windows.html
+            >
+            >         - 时间窗口: 按时间段分割的窗口
+            >
+            >             - 滚动窗口: 将数据流分割成不同的时间段
+            >
+            >             - 跳跃窗口
+            >
+            >             - 滑动窗口
+            >
+            >             - 会话窗口
+            >
+            >         - 计数窗口: 按元素计数分割的窗口
+            >
+            > - 批处理
+            >
+            >     与流处理相对应的是批处理
 
             1. `edge-app`
 
@@ -237,8 +236,6 @@
 
         - 基于 Raspberry Pi 构建 edge 硬件
 
----
-
 4. `cloud`
 
     1. `mqtt-cloud`: 消息队列
@@ -261,8 +258,9 @@
 
             支持 message 持久化到数据库, 供 cloud-app 查询
 
-            > mqtt-cloud 持久化 message 到数据库是非必要功能: <br/>
-            强烈建议不要让 mqtt-cloud 与数据库交互, 与数据库交互的一切动作都应当由 cloud-app 完成, 确保对数据库而言只有一个操作入口.
+            > mqtt-cloud 持久化 message 到数据库是非必要功能:
+            >
+            > 强烈建议不要让 mqtt-cloud 与数据库交互, 与数据库交互的一切动作都应当由 cloud-app 完成, 确保对数据库而言只有一个操作入口.
 
             - 时序数据库
 
@@ -390,15 +388,11 @@
                 >
                 > 3. edge-app 自动指令
 
-                ---
-
                 > "cloud-app 自动指令" 与 "edge-app 自动指令" 的优缺点:
                 >
                 > - "cloud-app 自动指令": 实时性差, 准确性高
                 >
                 > - "edge-app 自动指令": 实时性高, 准确性略差
-
-                ---
 
                 在 digital-twin 上可以选择是否开启 "cloud-app 自动指令", 默认开启.
 
@@ -423,8 +417,6 @@
                     > 1. device 参数通常情况下由 edge-ai 和 cloud-ai 自动调整, 若 digital-twin 的使用者观察到 device 的参数明显反常, 认为 ai 的预测出现了错误, 可以对 device 手动下发指令.
                     >
                     >     edge-app 在向 device 下发指令时, 应优先考虑 cloud-app 下发的指令, 再考虑 edge-app 下发的指令. 若 "cloud-app 指令" 和 "edge-app 指令" 同时存在, 则 "edge-app 指令" 将被忽略.
-
-                    ---
 
                     > warning:
                     >
