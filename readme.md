@@ -46,11 +46,29 @@
 
 2. `device`
 
-    device 即智能设备, 包括硬件和软件两部分:
+    device 即智能设备, 包括硬件(`通信工程`)和软件(`软件工程`)两部分:
 
-    - 硬件层面
+    - 硬件(通信工程)
 
-    - 软件层面, device 是 mqtt-edge 的数据源, 负责以下能力:
+        device 与 edge 之间的通信可以有两种方式:
+
+        1. device 与 edge 分离, 通过`无线通信`将 things 数据上报到 edge
+
+            - LoRA
+
+            - NB-IoT
+
+            - 3/4/5G
+
+            - wifi
+
+        2. device 集成在 edge 上, 通过`有线通信`将 things 数据上报到 edge
+
+            - LAN(网线)
+
+    - 软件(软件工程)
+
+        device 是 mqtt-edge 的数据源, 负责以下能力:
 
         1. `数据采集`(data-acquisition): 采集 things 数据
 
@@ -66,24 +84,6 @@
 
         2. `数据上报`(data-reporting): 以 mqtt 格式上报 things 数据至 edge
 
-            > 知识铺垫
-            >
-            > 1. 通信方式:
-            >
-            >     1. 无线
-            >
-            >         - LoRA
-            >
-            >         - NB-IoT
-            >
-            >         - 3/4/5G
-            >
-            >         - wifi
-            >
-            >     2. 有线
-            >
-            >         - LAN(网线)
-
             功能:
 
             - device 离线, message 不丢失, 上线后 message 自动发布到 mqtt-edge
@@ -92,11 +92,13 @@
 
     edge ~~在`经典IoT`中称为边缘网关,~~ 包括硬件和软件两部分:
 
-    - 硬件层面
+    - 硬件(通信工程)
 
         - 基于 `Raspberry Pi` 构建 edge 硬件
 
-    - 软件层面, edge 负责以下能力:
+    - 软件(软件工程)
+
+        edge 负责以下能力:
 
         <!-- <div align="center">
             <img src="https://static.emqx.com/_nuxt/img/banner-en-bg.4968787.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/banner-en-bg.4968787.png" />
