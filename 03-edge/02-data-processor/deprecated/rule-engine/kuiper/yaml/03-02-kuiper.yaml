@@ -1,3 +1,5 @@
+# https://ekuiper.org/docs/zh/latest/tutorials/deploy/openyurt_tutorial.html
+
 # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/deploy/chart/usr/local/kuiper/templates/sevice.yaml
 # https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/deploy/chart/usr/local/kuiper/templates/StatefulSet.yaml
 ---
@@ -293,6 +295,7 @@ spec:
             successThreshold: 1
             failureThreshold: 2
 
+# https://github.com/lf-edge/ekuiper/blob/{{kubethings.aiot.edge.kuiper.version}}/docs/zh_CN/tutorials/deploy/kmanager.yaml
 ---
 kind: Service
 apiVersion: v1
