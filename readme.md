@@ -46,45 +46,55 @@
 
 2. `device`
 
-    device 即智能设备, 是 mqtt-edge 的数据源. device 负责以下能力:
+    device 即智能设备, 包括硬件和软件两部分:
 
-    1. `数据采集`(data-acquisition): 采集 things 数据
+    - 硬件层面
 
-        - `传感器`
+    - 软件层面, device 是 mqtt-edge 的数据源, 负责以下能力:
 
-            温度、湿度等是 `json 数据`
+        1. `数据采集`(data-acquisition): 采集 things 数据
 
-        - `摄像头`
+            - `传感器`
 
-            图片、视频等是`二进制数据`
+                温度、湿度等是 `json 数据`
 
-        - ···
+            - `摄像头`
 
-    2. `数据上报`(data-reporting): 以 mqtt 格式上报 things 数据至 edge
+                图片、视频等是`二进制数据`
 
-        功能:
+            - ···
 
-        - device 离线, message 不丢失, 上线后 message 自动发布到 mqtt-edge
+        2. `数据上报`(data-reporting): 以 mqtt 格式上报 things 数据至 edge
 
-        通信方式:
+            > 知识铺垫
+            >
+            > 1. 通信方式:
+            >
+            >     1. 无线
+            >
+            >         - LoRA
+            >
+            >         - NB-IoT
+            >
+            >         - 3/4/5G
+            >
+            >         - wifi
+            >
+            >     2. 有线
+            >
+            >         - LAN(网线)
 
-        - 无线
+            功能:
 
-            - LoRA
-
-            - NB-IoT
-
-            - 2/3/4/5G
-
-            - wifi
-
-        - 有线
-
-            - LAN(网线)
+            - device 离线, message 不丢失, 上线后 message 自动发布到 mqtt-edge
 
 3. `edge`
 
-    edge ~~在`经典IoT`中称为边缘网关~~, 包括软件和硬件两部分:
+    edge ~~在`经典IoT`中称为边缘网关,~~ 包括硬件和软件两部分:
+
+    - 硬件层面
+
+        - 基于 `Raspberry Pi` 构建 edge 硬件
 
     - 软件层面, edge 负责以下能力:
 
@@ -231,10 +241,6 @@
                 - `在 kuiper 中以函数形式调用 tensor-flow lite 预训练模型`
 
                     - https://ekuiper.org/docs/zh/latest/tutorials/ai/tensorflow_lite_tutorial.html
-
-    - 硬件层面
-
-        - 基于 Raspberry Pi 构建 edge 硬件
 
 4. `cloud`
 
