@@ -86,19 +86,33 @@
 
         2. `数据上报`(data-reporting)
 
-            通过 mqtt 上报 things 数据至 edge. things 数据可以有两种格式:
-
-            - `json`
-
-                通过传感器采集的温度、湿度等是 json 数据
-
-            - `二进制`
-
-                通过摄像头采集的图片、视频等是二进制数据
+            通过 mqtt 上报 things 数据至 edge.
 
             功能:
 
             - device 离线, message 不丢失, 上线后 message 自动发布到 mqtt-edge
+
+            <br/>
+
+            > things 数据可以有两种格式:
+            >
+            > - `json`
+            >
+            >     通过传感器采集的温度、湿度等是 json 数据
+            >
+            > - `二进制`
+            >
+            >     通过摄像头采集的图片、视频等是二进制数据
+
+            > device 应具备以下属性:
+            >
+            > - deviceGroup
+            >
+            > - deviceID
+
+            > mqtt topic:
+            >
+            > 可以是: device/{deviceGroup}/{deviceID}/msg
 
 3. `edge`
 
