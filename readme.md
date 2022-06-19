@@ -60,11 +60,11 @@
 
             - 3/4/5G
 
-            - wifi
+            - WiFi
 
         <strike>
 
-        2. device 集成在 edge 上, 通过`有线通信`将 things 数据上报到 edge
+        2. 传感器、摄像头等集成在 edge 主板上, 没有单独的 device, 通过`有线通信`将 things 数据上报到 edge
 
             - LAN(网线)
 
@@ -80,17 +80,21 @@
 
             - `传感器`
 
-                温度、湿度等是 `json 数据`
-
             - `摄像头`
-
-                图片、视频等是`二进制数据`
 
             - ···
 
         2. `数据上报`(data-reporting)
 
-            以 mqtt 格式上报 things 数据至 edge
+            通过 mqtt 上报 things 数据至 edge. things 数据可以有两种格式:
+
+            - `json`
+
+                通过传感器采集的温度、湿度等是 json 数据
+
+            - `二进制`
+
+                通过摄像头采集的图片、视频等是二进制数据
 
             功能:
 
