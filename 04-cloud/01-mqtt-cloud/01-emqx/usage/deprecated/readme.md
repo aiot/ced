@@ -11,5 +11,7 @@ helm template emqx \
     --namespace aiot-case \
     --name-template emqx \
     --set service.type='NodePort' \
-    --set persistence.enabled=true > emqx.yaml
+    --set persistence.enabled=true \
+    --set podSecurityContext.enabled=false \
+    --set metrics.enabled=true > emqx.yaml
 ```

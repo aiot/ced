@@ -1,0 +1,3 @@
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/service-monitor.yaml
+
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/secret.yaml

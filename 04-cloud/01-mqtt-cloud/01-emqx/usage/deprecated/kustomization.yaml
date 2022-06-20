@@ -4,3 +4,5 @@ resources:
   - yaml/03-ca.yaml
   - yaml/04-01-cert.yaml
   - yaml/04-02-emqx.yaml
+  # - yaml/05-prom.yaml
+  # - yaml/06-grafana.yaml
