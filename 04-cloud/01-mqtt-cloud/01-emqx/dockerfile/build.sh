@@ -30,9 +30,9 @@ buildImage emqx.dockerfile ${imageRepository}/emqx:${emqxVersion}
 docker rmi emqx/emqx:${emqxVersion}
 
 
-# build emqx-edge image
-buildImage emqx-edge.dockerfile ${imageRepository}/emqx-edge:${emqxVersion}
-docker rmi emqx/emqx-edge:${emqxVersion}
+# # build emqx-edge image
+# buildImage emqx-edge.dockerfile ${imageRepository}/emqx-edge:${emqxVersion}
+# docker rmi emqx/emqx-edge:${emqxVersion}
 
 
 # build emqx-operator image
