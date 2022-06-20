@@ -13,6 +13,9 @@ RUN \
     \
     emqxVersion='EMQX_VERSION' && \
     \
+    chown -R root:root ${emqxHome}/ && \
+    rm -rfv emqx-edge-${emqxVersion}.tar.gz || true && \
+    \
     cd ${emqxHome}/bin/ && \
     rm -rfv \
         emqx.cmd \
@@ -20,7 +23,6 @@ RUN \
         emqx_ctl.cmd \
         emqx_ctl-${emqxVersion} \
         nodetool-${emqxVersion} \
-        cuttlefish-${emqxVersion} \
         install_upgrade.escript-${emqxVersion} && \
     ln -sfv emqx emqx-${emqxVersion} && \
     mv -fv emqx_ctl emqx-ctl && \
@@ -29,20 +31,17 @@ RUN \
     ln -sfv nodetool nodetool-${emqxVersion} && \
     mv -fv node_dump node-dump && \
     ln -sfv node-dump node_dump && \
-    ln -sfv cuttlefish cuttlefish-${emqxVersion} && \
     mv -fv install_upgrade.escript install-upgrade.escript && \
     ln -sfv install-upgrade.escript install_upgrade.escript && \
     ln -sfv install-upgrade.escript install_upgrade.escript-${emqxVersion} && \
     \
     cd ${emqxHome}/etc/ && \
-    cp -rfv emqx.conf emqx.ref.conf && \
+    mv -fv emqx-example-en.conf emqx.ref.conf && \
+    cp -rfv emqx.conf emqx.example.conf && \
     mkdir -p -v emqx.conf.d/ && \
     rm -rfv certs && \
     mkdir -p -v pki/ pki/jwt/ && \
-    ln -sfv pki certs && \
-    \
-    cd ${emqxHome}/ && \
-    chown -R root:root ${emqxHome}/
+    ln -sfv pki certs
 
 
 # build image
@@ -50,7 +49,7 @@ FROM {{kubefactory.domain.public.free}}/{{kubefactory.infraImage.repository}}/al
 
 ARG emqxHome='/opt/emqx'
 ENV \
-    # CUTTLEFISH_ENV_OVERRIDE_PREFIX='EMQX_' \
+    # HOCON_ENV_OVERRIDE_PREFIX='EMQX_' \
     EMQX_HOME="${emqxHome}"
 
 WORKDIR ${emqxHome}/
