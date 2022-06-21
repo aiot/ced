@@ -40,7 +40,7 @@ RUN \
     \
     cd ${emqxHome}/etc/ && \
     mkdir -p -v emqx.conf.d/ && \
-    mv -fv emqx-example-en.conf emqx.ref.conf && \
+    mv -fv emqx-example-en.conf emqx.default.conf && \
     rm -rfv certs && \
     mkdir -p -v pki/ pki/jwt/ && \
     ln -sfv pki certs
