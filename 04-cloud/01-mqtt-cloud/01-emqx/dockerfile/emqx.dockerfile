@@ -39,7 +39,7 @@ RUN \
     ln -sfv install-upgrade.escript install_upgrade.escript-${emqxVersion} && \
     \
     cd ${emqxHome}/etc/ && \
-    mkdir -p -v emqx.conf.d/ && \
+    mkdir -p -v conf.d/ && \
     mv -fv emqx-example-en.conf emqx.default.conf && \
     rm -rfv certs && \
     mkdir -p -v pki/ pki/jwt/ && \
