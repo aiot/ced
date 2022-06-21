@@ -18,10 +18,10 @@ RUN \
     \
     cd ${emqxHome}/bin/ && \
     rm -rfv \
-        emqx.cmd \
         emqx-${emqxVersion} \
-        emqx_ctl.cmd \
+        emqx.cmd \
         emqx_ctl-${emqxVersion} \
+        emqx_ctl.cmd \
         nodetool-${emqxVersion} \
         install_upgrade.escript-${emqxVersion} && \
     ln -sfv emqx emqx-${emqxVersion} && \
@@ -36,9 +36,8 @@ RUN \
     ln -sfv install-upgrade.escript install_upgrade.escript-${emqxVersion} && \
     \
     cd ${emqxHome}/etc/ && \
-    mv -fv emqx-example-en.conf emqx.ref.conf && \
-    cp -rfv emqx.conf emqx.example.conf && \
     mkdir -p -v emqx.conf.d/ && \
+    mv -fv emqx-example-en.conf emqx.ref.conf && \
     rm -rfv certs && \
     mkdir -p -v pki/ pki/jwt/ && \
     ln -sfv pki certs
