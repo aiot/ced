@@ -52,7 +52,7 @@
 
         device 与 edge 之间的通信可以有两种方式:
 
-        1. device 与 edge 分离, 通过`无线通信`将 things 数据上报到 edge
+        1. device 与 edge 分离 ~~(在经典 IoT 中称为边缘网关的子设备)~~, 通过`无线通信`将 things 数据上报到 edge
 
             - LoRA
 
