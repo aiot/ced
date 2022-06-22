@@ -84,25 +84,27 @@
 
             - RT-Thread
 
+                https://github.com/rt-thread/rt-thread
+
             - RIOT
 
-            - Ubuntu Core
+                https://github.com/riot-os/riot
 
-            - 华为
+            - TencentOS tiny
 
-                - LiteOS
+                https://github.com/openatomfoundation/tencentos-tiny
+
+                https://cloud.tencent.com/document/product/1098
+
+            - LiteOS
+
+                https://github.com/liteos/liteos
 
                 - HarmonyOS
 
-            - 阿里巴巴
+            - AliOS Things
 
-                - AliOS Things
-
-            - 腾讯
-
-                - TencentOS tiny
-
-                    https://cloud.tencent.com/document/product/1098
+                https://github.com/alibaba/alios-things
 
         - 应用
 
