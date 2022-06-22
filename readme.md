@@ -48,73 +48,105 @@
 
     device 即智能设备, 包括硬件(`通信工程`)和软件(`软件工程`)两部分:
 
-    - 硬件(通信工程)
+    - 硬件
 
-        device 与 edge 之间的通信可以有两种方式:
+        - 电力
 
-        1. device 与 edge 分离 ~~(在经典 IoT 中称为边缘网关的子设备)~~, 通过`无线通信`将 things 数据上报到 edge
+            - 电池
 
-            - &#x1F3C6; `LoRA`
+        - 通信
 
-            - NB-IoT
+            device 与 edge 之间的通信可以有两种方式:
 
-            - 3/4/5G
+            1. device 与 edge 分离 ~~(在经典 IoT 中称为边缘网关的子设备)~~, 通过`无线通信`将 things 数据上报到 edge
 
-                物联网卡
+                - &#x1F3C6; `LoRA`
 
-            - WiFi
+                - ~~NB-IoT~~
 
-        <strike>
+                - 3/4/5G
 
-        2. 传感器、摄像头等集成在 edge 主板上, 没有单独的 device, 通过`有线通信`将 things 数据上报到 edge
+                    物联网卡
 
-            - LAN(网线)
+                - WiFi
 
-        </strike>
+            <strike>
 
-    - 软件(软件工程)
+            2. 传感器、摄像头等集成在 edge 主板上, 没有单独的 device, 通过`有线通信`将 things 数据上报到 edge
 
-        device 是 mqtt-edge 的数据源, 负责以下能力:
+                - LAN(网线)
 
-        1. `数据采集`(data-acquisition)
+            </strike>
 
-            采集 things 数据
+    - 软件
 
-            - `传感器`
+        - RTOS: 操作系统
 
-            - `摄像头`
+            - RT-Thread
 
-            - ···
+            - RIOT
 
-        2. `数据上报`(data-reporting)
+            - Ubuntu Core
 
-            通过 mqtt 上报 things 数据至 edge.
+            - 华为
 
-            功能:
+                - LiteOS
 
-            - device 离线, message 不丢失, 上线后 message 自动发布到 mqtt-edge
+                - HarmonyOS
 
-            <br/>
+            - 阿里巴巴
 
-            > things 数据可以有两种格式:
-            >
-            > - `json`
-            >
-            >     通过传感器采集的温度、湿度等是 json 数据
-            >
-            > - `二进制`
-            >
-            >     通过摄像头采集的图片、视频等是二进制数据
+                - AliOS Things
 
-            > device 应具备以下属性:
-            >
-            > - deviceGroup
-            >
-            > - deviceID
+            - 腾讯
 
-            > mqtt topic:
-            >
-            > 可以是: device/$deviceGroup/$deviceID/msg
+                - TencentOS tiny
+
+                    https://cloud.tencent.com/document/product/1098
+
+        - 应用
+
+            device 是 mqtt-edge 的数据源, 负责以下能力:
+
+            1. `数据采集`(data-acquisition)
+
+                采集 things 数据
+
+                - `传感器`
+
+                - `摄像头`
+
+                - ···
+
+            2. `数据上报`(data-reporting)
+
+                通过 mqtt 上报 things 数据至 edge.
+
+                功能:
+
+                - device 离线, message 不丢失, 上线后 message 自动发布到 mqtt-edge
+
+                <br/>
+
+                > things 数据可以有两种格式:
+                >
+                > - `json`
+                >
+                >     通过传感器采集的温度、湿度等是 json 数据
+                >
+                > - `二进制`
+                >
+                >     通过摄像头采集的图片、视频等是二进制数据
+
+                > device 应具备以下属性:
+                >
+                > - deviceGroup
+                >
+                > - deviceID
+
+                > mqtt topic:
+                >
+                > 可以是: device/$deviceGroup/$deviceID/msg
 
 3. `edge`
 
