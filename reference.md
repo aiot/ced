@@ -4,7 +4,7 @@
 
 <div align="center">
     <img src="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" />
-    <a href="https://github.com/emqx/edge-stack/blob/master/README-CN.md" target="_blank">https://github.com/emqx/edge-stack/blob/master/README-CN.md</a>
+    <a href="https://github.com/emqx/edge-stack/blob/master/README-CN.md">https://github.com/emqx/edge-stack/blob/master/README-CN.md</a>
 </div>
 
 - kuiper 与 AWS Intelligence of Things 的结合
