@@ -2,7 +2,7 @@
 # https://docs.emqx.com/zh/enterprise/v4.4/getting-started/config.html
 # https://www.emqx.io/docs/zh/v4.4/tutorial/tune.html
 
-# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/configmap.env.yaml
+# https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/configmap.yaml
 # https://www.emqx.io/docs/zh/v4.4/configuration/environment-variable.html
 ---
 kind: ConfigMap
@@ -15,7 +15,7 @@ data:
   KUBERNETES_SERVICE_HOST: kube-apiserver.kube-system.svc.cluster.local
   KUBERNETES_SERVICE_PORT: "{{kube.apiserver.port}}"
 
-  EMQX_CLUSTER__DISCOVERY: k8s
+  EMQX_CLUSTER__DISCOVERY_STRATEGY: k8s
   EMQX_CLUSTER__K8S__APISERVER: https://kube-apiserver.kube-system.svc.cluster.local:{{kube.apiserver.port}}
   EMQX_CLUSTER__K8S__APP_NAME: emqx
   EMQX_CLUSTER__K8S__ADDRESS_TYPE: hostname
@@ -38,7 +38,7 @@ metadata:
   name: emqx
 immutable: false
 data:
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/etc/emqx.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx/etc/emqx.conf
   emqx.conf: |
 
     # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#mqtt
@@ -371,7 +371,7 @@ data:
     log.rotation = on
     # CONFIG_SECTION_END=logger
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/etc/ssl_dist.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx/etc/ssl_dist.conf
   ssl-dist.conf: |
 
     [
@@ -422,8 +422,7 @@ data:
   # https://www.emqx.io/docs/zh/v4.4/advanced/auth-jwt.html
   auth-jwt.conf: |
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/etc/acl.conf
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/deploy/charts/emqx/templates/configmap.acl.yaml
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_authz/etc/acl.conf
   # https://www.emqx.io/docs/zh/v4.4/advanced/acl-file.html
   acl.conf: |
 
@@ -464,7 +463,7 @@ data:
     # management.default_application.secret = mqtt-cloud
     management.max_row_limit = 10240
 
-  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/lib-ce/emqx_dashboard/etc/emqx_dashboard.conf
+  # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_dashboard/etc/emqx_dashboard.conf
   # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#插件-emqx-dashboard
   # https://www.emqx.io/docs/zh/v4.4/getting-started/dashboard.html
   dashboard.conf: |

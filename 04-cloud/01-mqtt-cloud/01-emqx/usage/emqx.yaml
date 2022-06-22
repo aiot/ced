@@ -107,17 +107,17 @@ spec:
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
-    - name: EMQX_DASHBOARD__DEFAULT_USER__LOGIN
+    - name: EMQX_DASHBOARD__DEFAULT_USERNAME
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
-    - name: EMQX_DASHBOARD__DEFAULT_USER__PASSWORD
+    - name: EMQX_DASHBOARD__DEFAULT_PASSWORD
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
 
   emqxTemplate:
-    # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/etc/emqx.conf
+    # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx/etc/emqx.conf
     listener:
       ports:
         # https://www.emqx.io/docs/zh/v4.4/configuration/configuration.html#tcpexternal
@@ -141,7 +141,7 @@ spec:
       #       ca.crt:
       type: ClusterIP
 
-    # # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/etc/acl.conf
+    # # https://github.com/emqx/emqx/blob/v{{kubethings.aiot.cloud.emqx.version}}/apps/emqx_authz/etc/acl.conf
     # # https://www.emqx.io/docs/zh/v4.4/advanced/acl-file.html
     # acl:
     #   - permission: allow
