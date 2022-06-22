@@ -1,6 +1,6 @@
-# emqx-cloud
+# emqx
 
-# 案例
+## 案例
 
 <div align="center">
     <img src="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" style="width: 98%;" alt="https://static.emqx.com/_nuxt/img/integrate.1997e7f.png" />
@@ -20,3 +20,15 @@
 - emqx 工业互联网
 
     https://www.emqx.com/zh/blog/emq-industrial-internet-cloud-edge-integrated-solution#解决方案2-云边协同工业互联网平台
+
+# 远景
+
+# AWS
+
+# 腾讯云
+
+# 阿里云
+
+# 百度云
+
+# 涂鸦智能
