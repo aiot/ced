@@ -238,7 +238,7 @@
 
                     - 转发 edge-ai 需要的 things 数据至 edge-ai, 进行预测
 
-                    - 压缩并转发非敏感 things 数据至 mqtt-cloud. cloud-app 将查询自 mqtt-cloud 的非敏感 things 数据持久化到时序数据库
+                    - 压缩并转发非敏感 things 数据至 mqtt-cloud.
 
                 2. 指令下发
 
@@ -362,7 +362,9 @@
 
             1. "cloud-app 自动指令" 的数据源
 
-                cloud-ai 对 device 经 edge 上报的 things 数据进行仿真模拟和预测, 将预测的 device 最佳参数反馈到 cloud-app. cloud-app 将 device 最佳参数下发到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic), 并写入时序数据库.
+                cloud-ai 对 device 经 edge 上报的 things 数据进行仿真模拟和预测, 将预测的 device 最佳参数反馈到 cloud-app.
+
+                cloud-app 将 device 最佳参数下发到 device (先下发到 mqtt-cloud, mqtt-cloud 再转发到 mqtt-edge, device 订阅 mqtt-edge 相关 topic), 并写入时序数据库.
 
             2. `模型训练`
 
@@ -376,9 +378,11 @@
 
                 首先应当确保 mqtt-edge 的唯一操作入口是 edge-app; 其次所有的指令都应当通过 edge-app 下发, 因为要判断指令优先级.
 
-    3. `时序数据库`(time-series-database)
+    3. `时序数据库`(tsdb: time-series-database)
 
-        时序数据库是 digital-twin 的数据源
+        > 与数据库交互的通常为`非实时应用`
+
+        时序数据库是 digital-twin 的数据源.
 
     4. `交互应用`(interact-app)
 
