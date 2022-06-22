@@ -1,5 +1,13 @@
 # emqx
 
+## emqx cloud
+
+https://docs.emqx.com/zh/cloud/latest/
+
+## emqx fabric
+
+https://docs.emqx.com/zh/fabric/latest/
+
 ## 案例
 
 <div align="center">
