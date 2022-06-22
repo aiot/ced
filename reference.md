@@ -33,6 +33,8 @@ https://docs.emqx.com/zh/fabric/latest/
 
 # AWS
 
+# 微软云
+
 # 腾讯云
 
 # 阿里云

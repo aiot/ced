@@ -54,11 +54,13 @@
 
         1. device 与 edge 分离 ~~(在经典 IoT 中称为边缘网关的子设备)~~, 通过`无线通信`将 things 数据上报到 edge
 
-            - LoRA
+            - &#xF3C6; `LoRA`
 
             - NB-IoT
 
             - 3/4/5G
+
+                物联网卡
 
             - WiFi
 
