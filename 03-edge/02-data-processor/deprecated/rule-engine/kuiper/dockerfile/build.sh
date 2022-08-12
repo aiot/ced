@@ -5,7 +5,7 @@ alpineVersion='{{kubefactory.infraImage.alpine.version}}'
 ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
 imageRepository='{{kubethings.image.repository}}'
 
-buildImage() {
+function buildImage() {
     sed --in-place \
         --expression="s/KUIPER_VERSION/${kuiperVersion}/g" \
         --expression="s/ALPINE_VERSION/${alpineVersion}/g" \

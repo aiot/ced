@@ -6,7 +6,7 @@ alpineVersion='{{kubefactory.infraImage.alpine.version}}'
 ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
 imageRepository='{{kubethings.image.repository}}'
 
-buildImage() {
+function buildImage() {
     sed --in-place \
         --expression="s/EMQX_VERSION/${emqxVersion}/g" \
         --expression="s/EMQX_OPERATOR_VERSION/${emqxOperatorVersion}/g" \

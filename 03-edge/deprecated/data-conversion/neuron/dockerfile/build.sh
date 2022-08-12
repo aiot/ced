@@ -5,7 +5,7 @@ alpineVersion='{{kubefactory.infraImage.alpine.version}}'
 ubuntuVersion='{{kubefactory.infraImage.ubuntu.version}}'
 imageRepository='{{kubethings.image.repository}}'
 
-buildImage() {
+function buildImage() {
     sed --in-place \
         --expression="s/NEURON_VERSION/${neuronVersion}/g" \
         --expression="s/ALPINE_VERSION/${alpineVersion}/g" \
